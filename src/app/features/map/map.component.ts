@@ -20,7 +20,7 @@ import { MockDataService } from '../../core/services/mock-data.service';
     `
       :host { display: block; height: 100%; min-height: calc(100vh - 60px); }
       .map-container { position: relative; width: 100%; height: 100%; min-height: 100%; }
-      .map { width: 100%; height: 100%; min-height: 300px; display: block; }
+      .map { width: 100%; height: 100%; min-height: 300px; display: block; background: #e4e4e4; }
       .map-overlay {
         position: absolute;
         top: 1rem;
@@ -52,7 +52,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   constructor(private mockData: MockDataService) {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.initMap(), 100);
+    requestAnimationFrame(() => {
+      setTimeout(() => this.initMap(), 150);
+    });
   }
 
   ngOnDestroy(): void {
@@ -62,35 +64,46 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private async initMap(): Promise<void> {
-    const L = await import('leaflet');
+    try {
+      const L = await import('leaflet');
 
-    const events = this.mockData.getEvents();
-    const astana = { lat: 51.1694, lng: 71.4494 };
+      const events = this.mockData.getEvents();
+      const astana = { lat: 51.1694, lng: 71.4494 };
 
-    const mapEl = this.mapRef?.nativeElement;
-    if (!mapEl) return;
+      const mapEl = this.mapRef?.nativeElement;
+      if (!mapEl) return;
 
-    const mapElParent = mapEl.parentElement;
-    if (mapElParent) {
-      mapElParent.style.height = '100%';
-      mapElParent.style.minHeight = '100vh';
+      const container = mapEl.parentElement;
+      const w = container?.offsetWidth ?? window.innerWidth;
+      const h = Math.max(container?.offsetHeight ?? 400, 300);
+      mapEl.style.width = `${w}px`;
+      mapEl.style.height = `${h}px`;
+
+      const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
+      const iconRetinaUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png';
+      const shadowUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
+      L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
+
+      this.map = L.map(mapEl).setView([astana.lat, astana.lng], 12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap',
+      }).addTo(this.map);
+
+      this.map.whenReady(() => {
+        this.map?.invalidateSize();
+      });
+      setTimeout(() => this.map?.invalidateSize(), 300);
+
+      events.forEach((ev) => {
+        const marker = L.marker([ev.lat, ev.lng])
+          .addTo(this.map!)
+          .bindPopup(
+            `<strong>${ev.title}</strong><br>${ev.place}<br><a href="/events/${ev.id}">Подробнее</a>`
+          );
+        this.markers.push(marker);
+      });
+    } catch (err) {
+      console.error('Map init error', err);
     }
-    mapEl.style.minHeight = '300px';
-
-    this.map = L.map(mapEl).setView([astana.lat, astana.lng], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-    }).addTo(this.map);
-
-    setTimeout(() => this.map?.invalidateSize(), 200);
-
-    events.forEach((ev) => {
-      const marker = L.marker([ev.lat, ev.lng])
-        .addTo(this.map!)
-        .bindPopup(
-          `<strong>${ev.title}</strong><br>${ev.place}<br><a href="/events/${ev.id}">Подробнее</a>`
-        );
-      this.markers.push(marker);
-    });
   }
 }
