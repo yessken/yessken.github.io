@@ -18,8 +18,9 @@ import { MockDataService } from '../../core/services/mock-data.service';
   `,
   styles: [
     `
-      .map-container { position: relative; width: 100%; height: 100vh; }
-      .map { width: 100%; height: 100%; }
+      :host { display: block; height: 100%; min-height: calc(100vh - 60px); }
+      .map-container { position: relative; width: 100%; height: 100%; min-height: 100%; }
+      .map { width: 100%; height: 100%; min-height: 300px; display: block; }
       .map-overlay {
         position: absolute;
         top: 1rem;
@@ -51,7 +52,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   constructor(private mockData: MockDataService) {}
 
   ngAfterViewInit(): void {
-    this.initMap();
+    setTimeout(() => this.initMap(), 100);
   }
 
   ngOnDestroy(): void {
@@ -69,10 +70,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     const mapEl = this.mapRef?.nativeElement;
     if (!mapEl) return;
 
+    const mapElParent = mapEl.parentElement;
+    if (mapElParent) {
+      mapElParent.style.height = '100%';
+      mapElParent.style.minHeight = '100vh';
+    }
+    mapEl.style.minHeight = '300px';
+
     this.map = L.map(mapEl).setView([astana.lat, astana.lng], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
     }).addTo(this.map);
+
+    setTimeout(() => this.map?.invalidateSize(), 200);
 
     events.forEach((ev) => {
       const marker = L.marker([ev.lat, ev.lng])
