@@ -1,12 +1,18 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { TelegramService } from './core/services/telegram.service';
+import { OpenFromBotComponent } from './features/open-from-bot/open-from-bot.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, OpenFromBotComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
-export class App {
-  protected readonly title = signal('tusa-map');
+export class App implements OnInit {
+  constructor(protected telegram: TelegramService) {}
+
+  ngOnInit(): void {
+    this.telegram.init();
+  }
 }

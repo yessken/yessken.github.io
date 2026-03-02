@@ -1,0 +1,48 @@
+:host {
+  --tg-bg: #fff;
+  --tg-text: #000;
+  --tg-button: #0088cc;
+  --tg-button-text: #fff;
+  font-family: system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--tg-bg);
+  color: var(--tg-text);
+}
+
+.content {
+  flex: 1;
+  padding-bottom: 60px;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem;
+  background: var(--tg-bg);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.bottom-nav a {
+  font-size: 0.75rem;
+  color: var(--tg-text);
+  text-decoration: none;
+  opacity: 0.7;
+  padding: 0.25rem 0.5rem;
+}
+
+.bottom-nav a.active {
+  opacity: 1;
+  font-weight: 600;
+  color: var(--tg-button);
+}

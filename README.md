@@ -1,6 +1,12 @@
 # TusaMap
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+Карта тусовок Астаны — Telegram Web App. Бот: [@chobby_astanabot](https://t.me/chobby_astanabot).
+
+**Токен бота** хранится только на бэкенде (переменные окружения), в репозитории его нет.
+
+## GitHub Pages
+
+Сайт публикуется на **https://yessken.github.io/** через GitHub Actions при пуше в `main`. В репозитории должны быть в корне: `package.json`, `angular.json`, `src/`, `.github/workflows/deploy-pages.yml`. В настройках репозитория: **Settings → Pages → Source**: GitHub Actions.
 
 ## Development server
 
