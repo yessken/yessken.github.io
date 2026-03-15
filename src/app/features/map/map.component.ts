@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { TelegramService } from '../../core/services/telegram.service';
 
+declare const L: typeof import('leaflet');
+
 @Component({
   selector: 'app-map',
   standalone: true,
@@ -106,13 +108,32 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     try {
       await waitForSize();
-      const L = await import('leaflet');
+      const win = typeof window !== 'undefined' ? (window as unknown as { L?: typeof L }) : {};
+      const Llib: typeof L = win.L ?? (await import('leaflet').then((m: { default?: typeof L }) => m.default ?? (m as typeof L)));
+      this.buildMap(Llib, mapEl, []);
       this.data.getEvents().subscribe((events) => {
-        this.buildMap(L, mapEl, events);
+        this.addMarkers(Llib, events);
       });
     } catch (err) {
       console.error('Map init error', err);
     }
+  }
+
+  private addMarkers(
+    L: typeof import('leaflet'),
+    events: { id: string; title: string; place: string; lat: number; lng: number }[]
+  ): void {
+    if (!this.map) return;
+    this.markers.forEach((m) => m.remove());
+    this.markers = [];
+    events.forEach((ev) => {
+      const marker = L.marker([ev.lat, ev.lng])
+        .addTo(this.map!)
+        .bindPopup(
+          `<strong>${ev.title}</strong><br>${ev.place}<br><a href="/events/${ev.id}">Подробнее</a>`
+        );
+      this.markers.push(marker);
+    });
   }
 
   private buildMap(
@@ -156,13 +177,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       window.addEventListener('resize', this.boundInvalidate);
     }
 
-    events.forEach((ev) => {
-      const marker = L.marker([ev.lat, ev.lng])
-        .addTo(this.map!)
-        .bindPopup(
-          `<strong>${ev.title}</strong><br>${ev.place}<br><a href="/events/${ev.id}">Подробнее</a>`
-        );
-      this.markers.push(marker);
-    });
+    this.addMarkers(L, events);
   }
 }
