@@ -10,7 +10,7 @@ import type { EventItem } from '../../core/types/event.model';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="events-list">
-      <h1>Мероприятия</h1>
+      <h1>Сходки</h1>
       <div class="filters">
         <select (change)="category = $any($event.target).value">
           <option value="">Все категории</option>
@@ -21,7 +21,7 @@ import type { EventItem } from '../../core/types/event.model';
       </div>
       <div class="cards">
         @for (event of filteredEvents(); track event.id) {
-          <a [routerLink]="['/events', event.id]" class="card">
+          <a [routerLink]="['/events', event.id]" class="card" queryParamsHandling="preserve">
             <img [src]="event.imageUrl" [alt]="event.title" />
             <div class="card-body">
               <span class="category">{{ event.category }}</span>
@@ -43,12 +43,12 @@ import type { EventItem } from '../../core/types/event.model';
       .cards { display: flex; flex-direction: column; gap: 1rem; }
       .card {
         display: block;
-        background: var(--tg-bg, #fff);
+        background: var(--tg-surface, #252529);
         border-radius: 12px;
         overflow: hidden;
         text-decoration: none;
-        color: var(--tg-text, #000);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        color: var(--tg-text, #e4e4e7);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       }
       .card img { width: 100%; height: 140px; object-fit: cover; }
       .card-body { padding: 1rem; }

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   template: `
     <div class="open-from-bot">
       <h1>TusaMap</h1>
-      <p>Откройте приложение из Telegram-бота, чтобы увидеть карту тусовок Астаны и покупать билеты.</p>
+      <p>Откройте приложение из Telegram-бота, чтобы увидеть карту сходок Астаны и вписываться на сходки.</p>
       <a class="tg-link" href="https://t.me/chobby_astanabot" target="_blank" rel="noopener">Открыть в Telegram</a>
     </div>
   `,
@@ -20,8 +20,8 @@ import { Component } from '@angular/core';
         justify-content: center;
         padding: 1.5rem;
         text-align: center;
-        background: var(--tg-bg, #fff);
-        color: var(--tg-text, #000);
+        background: var(--tg-bg, #1a1a1e);
+        color: var(--tg-text, #e4e4e7);
       }
       h1 { font-size: 1.75rem; margin-bottom: 1rem; }
       p { margin-bottom: 1.5rem; opacity: 0.9; max-width: 320px; }

@@ -10,7 +10,7 @@ import type { Ticket } from '../../core/types/event.model';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="my-tickets">
-      <h1>Мои билеты</h1>
+      <h1>Мои планы</h1>
       @if (tickets().length) {
         <div class="ticket-list">
           @for (t of tickets(); track t.id) {
@@ -20,13 +20,13 @@ import type { Ticket } from '../../core/types/event.model';
               @if (t.qrCode) {
                 <p class="qr">Код: {{ t.qrCode }}</p>
               }
-              <a [routerLink]="['/events', t.eventId]">О мероприятии</a>
+              <a [routerLink]="['/events', t.eventId]" queryParamsHandling="preserve">О сходке</a>
             </div>
           }
         </div>
       } @else {
-        <p>У вас пока нет билетов.</p>
-        <a routerLink="/events">Смотреть мероприятия</a>
+        <p>У вас пока нет планов.</p>
+        <a routerLink="/events" queryParamsHandling="preserve">Смотреть сходки</a>
       }
     </div>
   `,
@@ -37,9 +37,9 @@ import type { Ticket } from '../../core/types/event.model';
       .ticket-list { display: flex; flex-direction: column; gap: 1rem; }
       .ticket {
         padding: 1rem;
-        background: var(--tg-bg, #fff);
+        background: var(--tg-surface, #252529);
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       }
       .ticket h3 { margin: 0 0 0.25rem; font-size: 1.1rem; }
       .meta { margin: 0.25rem 0; font-size: 0.9rem; opacity: 0.9; }

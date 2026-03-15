@@ -1,8 +1,9 @@
 :host {
-  --tg-bg: #fff;
-  --tg-text: #000;
-  --tg-button: #0088cc;
+  --tg-bg: #1a1a1e;
+  --tg-text: #e4e4e7;
+  --tg-button: #3b82f6;
   --tg-button-text: #fff;
+  --tg-surface: #252529;
   font-family: system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
 }
@@ -31,7 +32,7 @@
   justify-content: space-around;
   padding: 0.5rem;
   background: var(--tg-bg);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 100;
 }
 

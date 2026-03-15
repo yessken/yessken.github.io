@@ -10,7 +10,7 @@ import { DataService } from '../../core/services/data.service';
   imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="create-event">
-      <h1>Создать мероприятие</h1>
+      <h1>Создать сходку</h1>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <label>Название <input formControlName="title" type="text" /></label>
         <label>Описание <textarea formControlName="description"></textarea></label>
@@ -33,7 +33,7 @@ import { DataService } from '../../core/services/data.service';
         <button type="submit" [disabled]="form.invalid">Создать</button>
       </form>
       @if (success()) {
-        <p class="success">Мероприятие создано. Переход к списку...</p>
+        <p class="success">Сходка создана. Переход к списку...</p>
       }
     </div>
   `,

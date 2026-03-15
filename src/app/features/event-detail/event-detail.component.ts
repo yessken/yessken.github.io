@@ -19,11 +19,24 @@ import type { EventItem } from '../../core/types/event.model';
           <p class="address">{{ ev.address }}</p>
           <p class="description">{{ ev.description }}</p>
           <p class="price">{{ ev.price ? ev.price + ' ₸' : 'Бесплатно' }}</p>
-          <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy">Купить билет</a>
+          <div class="going-row">
+            @if (ev.goingCount !== undefined && ev.goingCount > 0) {
+              <span class="going-count">{{ ev.goingCount }} {{ goingLabel(ev.goingCount) }}</span>
+            }
+            <button
+              type="button"
+              class="btn-going"
+              [class.active]="ev.userGoing"
+              (click)="toggleGoing(ev)"
+              [disabled]="goingLoading()">
+              {{ ev.userGoing ? 'Я иду' : 'Я пойду' }}
+            </button>
+          </div>
+          <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Вписаться</a>
         </div>
       </div>
     } @else {
-      <p>Мероприятие не найдено.</p>
+      <p>Сходка не найдена.</p>
     }
   `,
   styles: [
@@ -36,6 +49,23 @@ import type { EventItem } from '../../core/types/event.model';
       .meta, .address { margin: 0.25rem 0; font-size: 0.95rem; opacity: 0.9; }
       .description { margin: 1rem 0; }
       .price { font-size: 1.1rem; font-weight: 600; margin: 1rem 0; }
+      .going-row { display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0; flex-wrap: wrap; }
+      .going-count { font-size: 0.9rem; opacity: 0.9; }
+      .btn-going {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 2px solid var(--tg-button, #0088cc);
+        background: transparent;
+        color: var(--tg-button, #0088cc);
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .btn-going.active {
+        background: var(--tg-button, #0088cc);
+        color: var(--tg-button-text, #fff);
+      }
+      .btn-going:disabled { opacity: 0.6; cursor: not-allowed; }
       .btn-buy {
         display: inline-block;
         padding: 0.75rem 1.5rem;
@@ -50,6 +80,7 @@ import type { EventItem } from '../../core/types/event.model';
 })
 export class EventDetailComponent implements OnInit {
   event = signal<EventItem | null>(null);
+  goingLoading = signal(false);
 
   constructor(
     private route: ActivatedRoute,
@@ -59,5 +90,24 @@ export class EventDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) this.data.getEventById(id).subscribe((ev) => this.event.set(ev ?? null));
+  }
+
+  goingLabel(n: number): string {
+    const last = n % 10;
+    const last2 = n % 100;
+    if (last === 1 && last2 !== 11) return 'человек идёт';
+    if (last >= 2 && last <= 4 && (last2 < 12 || last2 > 14)) return 'человека идут';
+    return 'человек идут';
+  }
+
+  toggleGoing(ev: EventItem): void {
+    if (this.goingLoading()) return;
+    this.goingLoading.set(true);
+    this.data.setGoing(ev.id).subscribe((res) => {
+      this.goingLoading.set(false);
+      if (res) {
+        this.event.update((e) => (e ? { ...e, goingCount: res.goingCount, userGoing: res.userGoing } : e));
+      }
+    });
   }
 }

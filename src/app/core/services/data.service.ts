@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { MockDataService } from './mock-data.service';
 import { EventsApiService } from './events-api.service';
-import type { EventItem, Ticket } from '../types/event.model';
+import type { EventItem, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -41,5 +41,15 @@ export class DataService {
     const ev = this.mock.getEventById(eventId);
     if (!ev) return of(null);
     return of(this.mock.addTicket({ eventId: ev.id, eventTitle: ev.title, eventDate: ev.date, eventPlace: ev.place }));
+  }
+
+  getTelegramGroups(): Observable<TelegramGroupItem[]> {
+    if (this.useApi) return this.api.getTelegramGroups();
+    return of([]);
+  }
+
+  setGoing(eventId: string): Observable<{ goingCount: number; userGoing: boolean } | null> {
+    if (this.useApi) return this.api.setGoing(eventId);
+    return of(this.mock.setGoing(eventId));
   }
 }

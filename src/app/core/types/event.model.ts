@@ -12,6 +12,10 @@ export interface EventItem {
   price: number | null;
   imageUrl: string;
   organizerName: string;
+  /** Количество человек, которые нажали «Я пойду» (приходит с API) */
+  goingCount?: number;
+  /** Текущий пользователь нажал «Я пойду» (приходит с API) */
+  userGoing?: boolean;
 }
 
 export interface Ticket {
@@ -22,4 +26,12 @@ export interface Ticket {
   eventPlace: string;
   qrCode?: string;
   purchasedAt: string;
+}
+
+export interface TelegramGroupItem {
+  id: string;
+  title: string;
+  username?: string;
+  inviteLink: string;
+  memberCount: number;
 }

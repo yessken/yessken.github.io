@@ -6,6 +6,7 @@ import { BuyTicketComponent } from './features/buy-ticket/buy-ticket.component';
 import { MyTicketsComponent } from './features/my-tickets/my-tickets.component';
 import { CreateEventComponent } from './features/create-event/create-event.component';
 import { ProfileComponent } from './features/profile/profile.component';
+import { TgGroupsComponent } from './features/tg-groups/tg-groups.component';
 
 export const routes: Routes = [
   { path: '', component: MapComponent },
@@ -13,6 +14,7 @@ export const routes: Routes = [
   { path: 'events/:id', component: EventDetailComponent },
   { path: 'events/:id/buy', component: BuyTicketComponent },
   { path: 'my-tickets', component: MyTicketsComponent },
+  { path: 'tg-groups', component: TgGroupsComponent },
   { path: 'create-event', component: CreateEventComponent },
   { path: 'profile', component: ProfileComponent },
   { path: '**', redirectTo: '' },

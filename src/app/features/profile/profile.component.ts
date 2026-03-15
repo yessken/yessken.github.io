@@ -25,10 +25,10 @@ import { TelegramService } from '../../core/services/telegram.service';
         <p>Данные из Telegram (в боте будет отображаться ваш аккаунт).</p>
       }
       <nav>
-        <a routerLink="/">Карта</a>
-        <a routerLink="/events">Мероприятия</a>
-        <a routerLink="/my-tickets">Мои билеты</a>
-        <a routerLink="/create-event">Создать мероприятие</a>
+        <a routerLink="/" queryParamsHandling="preserve">Карта</a>
+        <a routerLink="/events" queryParamsHandling="preserve">Сходки</a>
+        <a routerLink="/my-tickets" queryParamsHandling="preserve">Мои планы</a>
+        <a routerLink="/create-event" queryParamsHandling="preserve">Создать сходку</a>
       </nav>
     </div>
   `,

@@ -6,11 +6,12 @@
       <router-outlet />
     </main>
     <nav class="bottom-nav">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Карта</a>
-      <a routerLink="/events" routerLinkActive="active">Мероприятия</a>
-      <a routerLink="/my-tickets" routerLinkActive="active">Билеты</a>
-      <a routerLink="/create-event" routerLinkActive="active">Создать</a>
-      <a routerLink="/profile" routerLinkActive="active">Профиль</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" queryParamsHandling="preserve">Карта</a>
+      <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve">Сходки</a>
+      <a routerLink="/tg-groups" routerLinkActive="active" queryParamsHandling="preserve">ТГ группы</a>
+      <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve">Мои планы</a>
+      <a routerLink="/create-event" routerLinkActive="active" queryParamsHandling="preserve">Создать</a>
+      <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve">Профиль</a>
     </nav>
   </div>
 }

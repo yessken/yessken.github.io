@@ -11,7 +11,7 @@ import type { EventItem } from '../../core/types/event.model';
   template: `
     @if (event(); as ev) {
       <div class="buy-ticket">
-        <h1>Оформление билета</h1>
+        <h1>Вписаться на сходку</h1>
         <p class="event-title">{{ ev.title }}</p>
         <p class="price">{{ ev.price ? ev.price + ' ₸' : 'Бесплатно' }}</p>
         <div class="methods">
@@ -19,10 +19,10 @@ import type { EventItem } from '../../core/types/event.model';
           <button type="button" class="method" (click)="payByTon()">Оплата Ton</button>
         </div>
         <p class="hint">Пока заглушка: оплата будет подключена после бэкенда.</p>
-        <a routerLink="/my-tickets" class="link">Мои билеты</a>
+        <a routerLink="/my-tickets" class="link" queryParamsHandling="preserve">Мои планы</a>
       </div>
     } @else {
-      <p>Мероприятие не найдено.</p>
+      <p>Сходка не найдена.</p>
     }
   `,
   styles: [

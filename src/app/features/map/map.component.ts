@@ -14,8 +14,8 @@ declare const L: typeof import('leaflet');
     <div class="map-container">
       <div #mapRef class="map"></div>
       <div class="map-overlay">
-        <h2>Тусовки Астаны</h2>
-        <a routerLink="/events" class="link-list">Список мероприятий</a>
+        <h2>Сходки Астаны</h2>
+        <a routerLink="/events" class="link-list" queryParamsHandling="preserve">Список сходок</a>
       </div>
     </div>
   `,
@@ -23,7 +23,7 @@ declare const L: typeof import('leaflet');
     `
       :host { display: block; height: 100%; min-height: calc(100vh - 60px); min-height: calc(100dvh - 60px); }
       .map-container { position: relative; width: 100%; height: 100%; min-height: 300px; min-height: 60vh; }
-      .map { width: 100%; height: 100%; min-height: 300px; min-height: 60vh; display: block; background: #e4e4e4; -webkit-tap-highlight-color: transparent; }
+      .map { width: 100%; height: 100%; min-height: 300px; min-height: 60vh; display: block; background: var(--tg-surface, #252529); -webkit-tap-highlight-color: transparent; }
       .map-overlay {
         position: absolute;
         top: 1rem;
@@ -35,7 +35,7 @@ declare const L: typeof import('leaflet');
         pointer-events: none;
       }
       .map-overlay * { pointer-events: auto; }
-      h2 { margin: 0; font-size: 1.25rem; background: var(--tg-bg, #fff); padding: 0.5rem 0.75rem; border-radius: 8px; }
+      h2 { margin: 0; font-size: 1.25rem; background: var(--tg-bg, #1a1a1e); padding: 0.5rem 0.75rem; border-radius: 8px; }
       .link-list {
         padding: 0.5rem 0.75rem;
         background: var(--tg-button, #0088cc);
@@ -130,7 +130,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       const marker = L.marker([ev.lat, ev.lng])
         .addTo(this.map!)
         .bindPopup(
-          `<strong>${ev.title}</strong><br>${ev.place}<br><a href="/events/${ev.id}">Подробнее</a>`
+          `<strong>${ev.title}</strong><br>${ev.place}<br><a href="/events/${ev.id}${typeof window !== 'undefined' ? window.location.search : ''}">Подробнее</a>`
         );
       this.markers.push(marker);
     });
@@ -157,8 +157,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
 
     this.map = L.map(mapEl).setView([astana.lat, astana.lng], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '© OpenStreetMap © CARTO',
     }).addTo(this.map);
 
     this.boundInvalidate = (): void => {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { TelegramService } from './telegram.service';
-import type { EventItem, Ticket } from '../types/event.model';
+import type { EventItem, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -69,5 +69,20 @@ export class EventsApiService {
     return this.http.post<Ticket>(`${this.base}/api/tickets`, { eventId }, { headers: this.headers() }).pipe(
       catchError(() => of(null))
     );
+  }
+
+  getTelegramGroups(): Observable<TelegramGroupItem[]> {
+    if (!this.base) return of([]);
+    return this.http
+      .get<TelegramGroupItem[]>(`${this.base}/api/telegram-groups`, { headers: this.headers() })
+      .pipe(catchError(() => of([])));
+  }
+
+  /** Переключить «Я пойду» для сходки. Возвращает актуальные goingCount и userGoing. */
+  setGoing(eventId: string): Observable<{ goingCount: number; userGoing: boolean } | null> {
+    if (!this.base) return of(null);
+    return this.http
+      .post<{ goingCount: number; userGoing: boolean }>(`${this.base}/api/events/${eventId}/going`, {}, { headers: this.headers() })
+      .pipe(catchError(() => of(null)));
   }
 }
