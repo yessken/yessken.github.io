@@ -20,8 +20,8 @@ import { TelegramService } from '../../core/services/telegram.service';
   styles: [
     `
       :host { display: block; height: 100%; min-height: calc(100vh - 60px); min-height: calc(100dvh - 60px); }
-      .map-container { position: relative; width: 100%; height: 100%; min-height: 100%; }
-      .map { width: 100%; height: 100%; min-height: 300px; display: block; background: #e4e4e4; -webkit-tap-highlight-color: transparent; }
+      .map-container { position: relative; width: 100%; height: 100%; min-height: 300px; min-height: 60vh; }
+      .map { width: 100%; height: 100%; min-height: 300px; min-height: 60vh; display: block; background: #e4e4e4; -webkit-tap-highlight-color: transparent; }
       .map-overlay {
         position: absolute;
         top: 1rem;
@@ -86,7 +86,26 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private async initMap(): Promise<void> {
     const mapEl = this.mapRef?.nativeElement;
     if (!mapEl) return;
+    const container = mapEl.parentElement;
+    if (!container) return;
+
+    const waitForSize = (): Promise<void> => {
+      return new Promise((resolve) => {
+        const check = (attempt = 0): void => {
+          const w = container.offsetWidth || window.innerWidth;
+          const h = container.offsetHeight || this.getViewportHeight() - 80;
+          if ((w > 0 && h > 0) || attempt > 25) {
+            resolve();
+            return;
+          }
+          setTimeout(() => check(attempt + 1), 100);
+        };
+        check();
+      });
+    };
+
     try {
+      await waitForSize();
       const L = await import('leaflet');
       this.data.getEvents().subscribe((events) => {
         this.buildMap(L, mapEl, events);
@@ -103,10 +122,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   ): void {
     const astana = { lat: 51.1694, lng: 71.4494 };
     const container = mapEl.parentElement;
-    const w = container?.offsetWidth ?? window.innerWidth;
-    const containerH = container?.offsetHeight ?? 0;
+    const rawW = container?.offsetWidth ?? 0;
+    const rawH = container?.offsetHeight ?? 0;
     const viewportH = this.getViewportHeight();
-    const h = Math.max(containerH, viewportH - 80, 300);
+    const w = rawW > 0 ? rawW : window.innerWidth;
+    const h = Math.max(rawH, viewportH - 80, 300);
     mapEl.style.width = `${w}px`;
     mapEl.style.height = `${h}px`;
 

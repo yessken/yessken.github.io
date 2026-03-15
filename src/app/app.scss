@@ -19,6 +19,7 @@
   flex: 1;
   padding-bottom: 60px;
   min-height: 0;
+  min-height: 60vh; /* чтобы карта имела высоту в Telegram WebView на мобильных */
 }
 
 .bottom-nav {
