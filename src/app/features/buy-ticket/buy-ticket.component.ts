@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MockDataService } from '../../core/services/mock-data.service';
+import { DataService } from '../../core/services/data.service';
 import type { EventItem } from '../../core/types/event.model';
 
 @Component({
@@ -51,13 +51,13 @@ export class BuyTicketComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private mockData: MockDataService,
+    private data: DataService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) this.event.set(this.mockData.getEventById(id) ?? null);
+    if (id) this.data.getEventById(id).subscribe((ev) => this.event.set(ev ?? null));
   }
 
   payByCard(): void {

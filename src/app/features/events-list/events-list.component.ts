@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MockDataService } from '../../core/services/mock-data.service';
+import { DataService } from '../../core/services/data.service';
+import type { EventItem } from '../../core/types/event.model';
 
 @Component({
   selector: 'app-events-list',
@@ -57,14 +58,19 @@ import { MockDataService } from '../../core/services/mock-data.service';
     `,
   ],
 })
-export class EventsListComponent {
+export class EventsListComponent implements OnInit {
   category = '';
+  events = signal<EventItem[]>([]);
 
-  constructor(private mockData: MockDataService) {}
+  constructor(private data: DataService) {}
+
+  ngOnInit(): void {
+    this.data.getEvents().subscribe((list) => this.events.set(list));
+  }
 
   filteredEvents = () => {
-    const events = this.mockData.getEvents();
-    if (!this.category) return events;
-    return events.filter((e) => e.category === this.category);
+    const list = this.events();
+    if (!this.category) return list;
+    return list.filter((e) => e.category === this.category);
   };
 }

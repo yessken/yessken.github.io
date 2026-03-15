@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MockDataService } from '../../core/services/mock-data.service';
+import { DataService } from '../../core/services/data.service';
+import type { Ticket } from '../../core/types/event.model';
 
 @Component({
   selector: 'app-my-tickets',
@@ -47,8 +48,12 @@ import { MockDataService } from '../../core/services/mock-data.service';
     `,
   ],
 })
-export class MyTicketsComponent {
-  tickets = () => this.mockData.getTickets();
+export class MyTicketsComponent implements OnInit {
+  tickets = signal<Ticket[]>([]);
 
-  constructor(private mockData: MockDataService) {}
+  constructor(private data: DataService) {}
+
+  ngOnInit(): void {
+    this.data.getTickets().subscribe((list) => this.tickets.set(list));
+  }
 }

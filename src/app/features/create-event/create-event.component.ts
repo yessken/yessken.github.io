@@ -1,13 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { MockDataService } from '../../core/services/mock-data.service';
+import { Router } from '@angular/router';
+import { DataService } from '../../core/services/data.service';
 
 @Component({
   selector: 'app-create-event',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="create-event">
       <h1>Создать мероприятие</h1>
@@ -33,7 +33,7 @@ import { MockDataService } from '../../core/services/mock-data.service';
         <button type="submit" [disabled]="form.invalid">Создать</button>
       </form>
       @if (success()) {
-        <p class="success">Мероприятие создано (мок). Переход к списку...</p>
+        <p class="success">Мероприятие создано. Переход к списку...</p>
       }
     </div>
   `,
@@ -65,7 +65,7 @@ export class CreateEventComponent {
 
   constructor(
     private fb: FormBuilder,
-    private mockData: MockDataService,
+    private data: DataService,
     private router: Router
   ) {
     this.form = this.fb.group({
@@ -87,7 +87,7 @@ export class CreateEventComponent {
   onSubmit(): void {
     if (this.form.invalid) return;
     const v = this.form.value;
-    this.mockData.addEvent({
+    this.data.createEvent({
       title: v.title,
       description: v.description,
       date: v.date,
@@ -100,8 +100,9 @@ export class CreateEventComponent {
       price: v.price ? Number(v.price) : null,
       imageUrl: v.imageUrl || 'https://picsum.photos/400/200',
       organizerName: v.organizerName,
+    }).subscribe((created) => {
+      this.success.set(true);
+      setTimeout(() => this.router.navigate(['/events']), 1500);
     });
-    this.success.set(true);
-    setTimeout(() => this.router.navigate(['/events']), 1500);
   }
 }
