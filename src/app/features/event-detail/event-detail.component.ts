@@ -54,26 +54,29 @@ import type { EventItem } from '../../core/types/event.model';
       .btn-going {
         padding: 0.5rem 1rem;
         border-radius: 8px;
-        border: 2px solid var(--tg-button, #0088cc);
+        border: 2px solid var(--tg-button, #00FF41);
         background: transparent;
-        color: var(--tg-button, #0088cc);
+        color: var(--tg-button, #00FF41);
         font-size: 0.95rem;
         font-weight: 500;
         cursor: pointer;
+        box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
       }
       .btn-going.active {
-        background: var(--tg-button, #0088cc);
-        color: var(--tg-button-text, #fff);
+        background: var(--tg-button, #00FF41);
+        color: var(--tg-button-text, #0a0a0c);
+        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
       .btn-going:disabled { opacity: 0.6; cursor: not-allowed; }
       .btn-buy {
         display: inline-block;
         padding: 0.75rem 1.5rem;
-        background: var(--tg-button, #0088cc);
-        color: var(--tg-button-text, #fff);
+        background: var(--tg-button, #00FF41);
+        color: var(--tg-button-text, #0a0a0c);
         border-radius: 8px;
         text-decoration: none;
         font-weight: 500;
+        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
     `,
   ],

@@ -58,11 +58,12 @@ import type { TelegramGroupItem } from '../../core/types/event.model';
       .join {
         flex-shrink: 0;
         padding: 0.5rem 1rem;
-        background: var(--tg-button, #0088cc);
-        color: var(--tg-button-text, #fff);
+        background: var(--tg-button, #00FF41);
+        color: var(--tg-button-text, #0a0a0c);
         border-radius: 8px;
         text-decoration: none;
         font-size: 0.9rem;
+        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
     `,
   ],

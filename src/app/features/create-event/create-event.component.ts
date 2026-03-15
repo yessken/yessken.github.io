@@ -47,8 +47,9 @@ import { DataService } from '../../core/services/data.service';
       button {
         margin-top: 0.5rem;
         padding: 0.75rem;
-        background: var(--tg-button, #0088cc);
-        color: var(--tg-button-text, #fff);
+        background: var(--tg-button, #00FF41);
+        color: var(--tg-button-text, #0a0a0c);
+        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
         border: none;
         border-radius: 8px;
         font-size: 1rem;

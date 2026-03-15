@@ -38,11 +38,12 @@ declare const L: typeof import('leaflet');
       h2 { margin: 0; font-size: 1.25rem; background: var(--tg-bg, #1a1a1e); padding: 0.5rem 0.75rem; border-radius: 8px; }
       .link-list {
         padding: 0.5rem 0.75rem;
-        background: var(--tg-button, #0088cc);
-        color: var(--tg-button-text, #fff);
+        background: var(--tg-button, #00FF41);
+        color: var(--tg-button-text, #0a0a0c);
         border-radius: 8px;
         text-decoration: none;
         font-size: 0.9rem;
+        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
     `,
   ],

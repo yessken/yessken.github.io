@@ -34,15 +34,16 @@ import type { EventItem } from '../../core/types/event.model';
       .methods { display: flex; flex-direction: column; gap: 0.75rem; }
       .method {
         padding: 0.75rem 1rem;
-        background: var(--tg-button, #0088cc);
-        color: var(--tg-button-text, #fff);
+        background: var(--tg-button, #00FF41);
+        color: var(--tg-button-text, #0a0a0c);
+        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
         border: none;
         border-radius: 8px;
         font-size: 1rem;
         cursor: pointer;
       }
       .hint { margin-top: 1rem; font-size: 0.85rem; opacity: 0.8; }
-      .link { display: inline-block; margin-top: 1rem; color: var(--tg-button, #0088cc); }
+      .link { display: inline-block; margin-top: 1rem; color: var(--tg-button, #00FF41); text-shadow: var(--tg-glow-text, 0 0 8px #00FF41); }
     `,
   ],
 })

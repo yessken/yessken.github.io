@@ -41,7 +41,7 @@ import { TelegramService } from '../../core/services/telegram.service';
       .name { font-weight: 600; margin: 0.25rem 0; }
       .username, .tg-id { margin: 0.25rem 0; font-size: 0.9rem; opacity: 0.9; }
       nav { display: flex; flex-direction: column; gap: 0.5rem; }
-      nav a { color: var(--tg-button, #0088cc); }
+      nav a { color: var(--tg-button, #00FF41); text-shadow: var(--tg-glow-text, 0 0 6px #00FF41); }
     `,
   ],
 })

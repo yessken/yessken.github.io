@@ -1,9 +1,11 @@
 :host {
   --tg-bg: #1a1a1e;
   --tg-text: #e4e4e7;
-  --tg-button: #3b82f6;
-  --tg-button-text: #fff;
+  --tg-button: #00FF41;
+  --tg-button-text: #0a0a0c;
   --tg-surface: #252529;
+  --tg-glow: 0 0 12px #00FF41, 0 0 24px rgba(0, 255, 65, 0.35);
+  --tg-glow-text: 0 0 8px #00FF41;
   font-family: system-ui, -apple-system, sans-serif;
   box-sizing: border-box;
 }
@@ -48,4 +50,5 @@
   opacity: 1;
   font-weight: 600;
   color: var(--tg-button);
+  text-shadow: var(--tg-glow-text);
 }

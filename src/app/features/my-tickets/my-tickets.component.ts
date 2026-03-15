@@ -44,7 +44,7 @@ import type { Ticket } from '../../core/types/event.model';
       .ticket h3 { margin: 0 0 0.25rem; font-size: 1.1rem; }
       .meta { margin: 0.25rem 0; font-size: 0.9rem; opacity: 0.9; }
       .qr { margin: 0.5rem 0; font-family: monospace; }
-      .ticket a { color: var(--tg-button, #0088cc); font-size: 0.9rem; }
+      .ticket a { color: var(--tg-button, #00FF41); font-size: 0.9rem; text-shadow: var(--tg-glow-text, 0 0 6px #00FF41); }
     `,
   ],
 })
