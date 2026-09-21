@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 
@@ -31,6 +31,17 @@ import { DataService } from '../../core/services/data.service';
         <label>Цена (₸), 0 = бесплатно <input formControlName="price" type="number" min="0" /></label>
         <label>URL обложки <input formControlName="imageUrl" type="url" /></label>
         <label>Имя организатора <input formControlName="organizerName" type="text" /></label>
+        <fieldset formArrayName="ticketCategories">
+          <legend>Тарифы билетов</legend>
+          @for (category of ticketCategories.controls; track category; let index = $index) {
+            <div class="ticket-tier" [formGroupName]="index">
+              <input formControlName="name" placeholder="Например, VIP" aria-label="Название тарифа" />
+              <input formControlName="price" type="number" min="0" placeholder="Цена, ₸" aria-label="Цена тарифа" />
+              <input formControlName="capacity" type="number" min="1" placeholder="Количество мест" aria-label="Лимит тарифа" />
+            </div>
+          }
+          <button type="button" class="add-tier" (click)="addTicketCategory()">Добавить тариф</button>
+        </fieldset>
         <button type="submit" [disabled]="form.invalid">Отправить на проверку</button>
       </form>
       @if (success()) {
@@ -46,6 +57,11 @@ import { DataService } from '../../core/services/data.service';
       form { display: flex; flex-direction: column; gap: 0.75rem; }
       label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.9rem; }
       input, textarea, select { padding: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+      fieldset { border: 1px solid rgba(255,255,255,.14); border-radius: 8px; padding: .75rem; }
+      legend { padding: 0 .35rem; font-size: .85rem; }
+      .ticket-tier { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: .4rem; margin-bottom: .5rem; }
+      .ticket-tier input { min-width: 0; }
+      .add-tier { width: 100%; background: transparent; color: var(--tg-text, #e4e4e7); box-shadow: none; border: 1px solid var(--tg-button, #aabd7e); font-size: .85rem; }
       button {
         margin-top: 0.5rem;
         padding: 0.75rem;
@@ -84,7 +100,24 @@ export class CreateEventComponent {
       price: [0],
       imageUrl: ['https://picsum.photos/400/200'],
       organizerName: ['Организатор'],
+      ticketCategories: this.fb.array([this.createTicketCategory('Стандарт', 0, 100)]),
     });
+  }
+
+  get ticketCategories(): FormArray {
+    return this.form.get('ticketCategories') as FormArray;
+  }
+
+  private createTicketCategory(name = '', price = 0, capacity = 100): FormGroup {
+    return this.fb.group({
+      name: [name, [Validators.required, Validators.maxLength(80)]],
+      price: [price, [Validators.required, Validators.min(0)]],
+      capacity: [capacity, [Validators.required, Validators.min(1)]],
+    });
+  }
+
+  addTicketCategory(): void {
+    this.ticketCategories.push(this.createTicketCategory());
   }
 
   onSubmit(): void {
@@ -103,6 +136,15 @@ export class CreateEventComponent {
       price: v.price ? Number(v.price) : null,
       imageUrl: v.imageUrl || 'https://picsum.photos/400/200',
       organizerName: v.organizerName,
+      ticketCategories: v.ticketCategories.map((category: { name: string; price: number; capacity: number }) => ({
+        id: '',
+        eventId: '',
+        name: category.name,
+        price: Number(category.price),
+        capacity: Number(category.capacity),
+        sold: 0,
+        isActive: true,
+      })),
     }).subscribe((created) => {
       this.success.set(true);
       setTimeout(() => this.router.navigate(['/events']), 1500);
