@@ -31,6 +31,7 @@ import { DataService } from '../../core/services/data.service';
         <label>Цена (₸), 0 = бесплатно <input formControlName="price" type="number" min="0" /></label>
         <label>URL обложки <input formControlName="imageUrl" type="url" /></label>
         <label>Имя организатора <input formControlName="organizerName" type="text" /></label>
+        <label>Email для связи <input formControlName="organizerEmail" type="email" placeholder="name@example.com" /></label>
         <fieldset formArrayName="ticketCategories">
           <legend>Тарифы билетов</legend>
           @for (category of ticketCategories.controls; track category; let index = $index) {
@@ -100,6 +101,7 @@ export class CreateEventComponent {
       price: [0],
       imageUrl: ['https://picsum.photos/400/200'],
       organizerName: ['Организатор'],
+      organizerEmail: ['', Validators.email],
       ticketCategories: this.fb.array([this.createTicketCategory('Стандарт', 0, 100)]),
     });
   }

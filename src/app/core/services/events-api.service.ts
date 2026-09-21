@@ -58,6 +58,7 @@ export class EventsApiService {
       price: event.price,
       imageUrl: event.imageUrl,
       organizerName: event.organizerName,
+      organizerEmail: event.organizerEmail,
       ticketCategories: event.ticketCategories ?? [],
     };
     return this.http.post<EventItem>(`${this.base}/api/events`, body, { headers: this.headers() }).pipe(

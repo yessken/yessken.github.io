@@ -12,6 +12,7 @@ export interface EventItem {
   price: number | null;
   imageUrl: string;
   organizerName: string;
+  organizerEmail?: string;
   /** Количество человек, которые нажали «Я пойду» (приходит с API) */
   goingCount?: number;
   /** Текущий пользователь нажал «Я пойду» (приходит с API) */
