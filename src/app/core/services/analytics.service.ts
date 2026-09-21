@@ -5,6 +5,7 @@ export type FunnelEvent = 'catalog_view' | 'event_open' | 'checkout_view' | 'pay
 interface StoredFunnelEvent {
   name: FunnelEvent;
   eventId?: string;
+  ref?: string;
   createdAt: string;
 }
 
@@ -12,10 +13,11 @@ interface StoredFunnelEvent {
 export class AnalyticsService {
   private readonly storageKey = 'tusa-funnel-events';
 
-  track(name: FunnelEvent, eventId?: string): void {
+  track(name: FunnelEvent, eventId?: string, ref?: string): void {
     if (typeof window === 'undefined') return;
     const events = this.read();
-    events.push({ name, eventId, createdAt: new Date().toISOString() });
+    const currentRef = ref ?? (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('ref') ?? undefined : undefined);
+    events.push({ name, eventId, ref: currentRef, createdAt: new Date().toISOString() });
     window.localStorage.setItem(this.storageKey, JSON.stringify(events.slice(-500)));
   }
 

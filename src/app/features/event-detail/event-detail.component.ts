@@ -123,9 +123,9 @@ export class EventDetailComponent implements OnInit {
   }
 
   async share(ev: EventItem): Promise<void> {
-    const url = typeof window !== 'undefined' ? window.location.href : '';
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/events/${ev.id}?ref=tusa-event-${ev.id}` : '';
     const text = `${ev.title} — ${ev.date} в ${ev.place}. Билеты в TUSA.`;
-    this.analytics.track('event_share', ev.id);
+    this.analytics.track('event_share', ev.id, `tusa-event-${ev.id}`);
     try {
       if (typeof navigator !== 'undefined' && navigator.share) {
         await navigator.share({ title: ev.title, text, url });
