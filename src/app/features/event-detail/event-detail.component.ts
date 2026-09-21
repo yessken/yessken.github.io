@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { AnalyticsService } from '../../core/services/analytics.service';
 import type { EventItem } from '../../core/types/event.model';
+import QRCode from 'qrcode';
 
 @Component({
   selector: 'app-event-detail',
@@ -34,6 +35,14 @@ import type { EventItem } from '../../core/types/event.model';
             </button>
           </div>
           <button type="button" class="btn-share" (click)="share(ev)">{{ shareLabel() }}</button>
+          <button type="button" class="btn-tools" (click)="toolsVisible.update((visible) => !visible)">Материалы для публикации</button>
+          @if (toolsVisible()) {
+            <div class="share-tools">
+              @if (qrCode()) { <img class="event-qr" [src]="qrCode()" [alt]="'QR-код события ' + ev.title" /> }
+              <textarea readonly [value]="shareText(ev)"></textarea>
+              <button type="button" class="copy-text" (click)="copyShareText(ev)">{{ copyLabel() }}</button>
+            </div>
+          }
           <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Получить билет</a>
         </div>
       </div>
@@ -81,6 +90,10 @@ import type { EventItem } from '../../core/types/event.model';
         box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
       .btn-share { display: block; margin: .75rem 0; padding: .65rem 1rem; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; background: transparent; color: var(--tg-text, #e4e4e7); cursor: pointer; }
+      .btn-tools, .copy-text { display: block; width: 100%; margin: .5rem 0; padding: .6rem .8rem; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); cursor: pointer; }
+      .share-tools { padding: .75rem; margin: .5rem 0 1rem; background: var(--tg-surface, #252529); border-radius: 8px; }
+      .event-qr { display: block; width: 150px; height: 150px; margin: 0 auto .75rem; background: white; }
+      .share-tools textarea { width: 100%; min-height: 84px; box-sizing: border-box; resize: vertical; padding: .6rem; border: 1px solid rgba(255,255,255,.14); border-radius: 6px; background: transparent; color: var(--tg-text, #e4e4e7); font: inherit; }
     `,
   ],
 })
@@ -88,6 +101,9 @@ export class EventDetailComponent implements OnInit {
   event = signal<EventItem | null>(null);
   goingLoading = signal(false);
   shareLabel = signal('Поделиться событием');
+  copyLabel = signal('Скопировать текст');
+  toolsVisible = signal(false);
+  qrCode = signal('');
 
   constructor(
     private route: ActivatedRoute,
@@ -99,7 +115,10 @@ export class EventDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.analytics.track('event_open', id);
-      this.data.getEventById(id).subscribe((ev) => this.event.set(ev ?? null));
+      this.data.getEventById(id).subscribe((ev) => {
+        this.event.set(ev ?? null);
+        if (ev) this.generateQr(ev);
+      });
     }
   }
 
@@ -138,5 +157,22 @@ export class EventDetailComponent implements OnInit {
       this.shareLabel.set('Не удалось поделиться');
       setTimeout(() => this.shareLabel.set('Поделиться событием'), 2200);
     }
+  }
+
+  shareText(ev: EventItem): string {
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/events/${ev.id}?ref=tusa-event-${ev.id}` : '';
+    return `${ev.title}\n${ev.date} · ${ev.time} · ${ev.place}\nБилеты в TUSA: ${url}`;
+  }
+
+  async copyShareText(ev: EventItem): Promise<void> {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) return;
+    await navigator.clipboard.writeText(this.shareText(ev));
+    this.copyLabel.set('Текст скопирован');
+    setTimeout(() => this.copyLabel.set('Скопировать текст'), 2200);
+  }
+
+  private async generateQr(ev: EventItem): Promise<void> {
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/events/${ev.id}?ref=tusa-event-${ev.id}` : ev.id;
+    this.qrCode.set(await QRCode.toDataURL(url, { width: 220, margin: 1, errorCorrectionLevel: 'M' }));
   }
 }
