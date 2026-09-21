@@ -64,9 +64,9 @@ export class EventsApiService {
     );
   }
 
-  purchaseTicket(eventId: string, paymentMethod: 'kaspi' | 'telegram' = 'kaspi'): Observable<Ticket | null> {
+  purchaseTicket(eventId: string, ticketCategoryId: string, quantity: number, promoCode: string, paymentMethod: 'kaspi' | 'telegram' = 'kaspi'): Observable<Ticket | null> {
     if (!this.base) return of(null);
-    return this.http.post<Ticket>(`${this.base}/api/tickets`, { eventId, paymentMethod }, { headers: this.headers() }).pipe(
+    return this.http.post<Ticket>(`${this.base}/api/tickets`, { eventId, ticketCategoryId, quantity, promoCode: promoCode || null, paymentMethod }, { headers: this.headers() }).pipe(
       catchError(() => of(null))
     );
   }

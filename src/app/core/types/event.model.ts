@@ -16,6 +16,18 @@ export interface EventItem {
   goingCount?: number;
   /** Текущий пользователь нажал «Я пойду» (приходит с API) */
   userGoing?: boolean;
+  ticketCategories?: TicketCategory[];
+}
+
+export interface TicketCategory {
+  id: string;
+  eventId: string;
+  name: string;
+  description?: string;
+  price: number;
+  capacity: number;
+  sold: number;
+  isActive: boolean;
 }
 
 export interface Ticket {
@@ -27,6 +39,15 @@ export interface Ticket {
   qrCode?: string;
   purchasedAt: string;
   paymentMethod?: 'kaspi' | 'telegram';
+  paymentStatus?: 'pending' | 'paid' | 'failed' | 'expired' | 'refunded';
+  ticketCategoryId?: string;
+  ticketCategoryName?: string;
+  quantity?: number;
+  baseAmount?: number;
+  discountAmount?: number;
+  commissionAmount?: number;
+  totalAmount?: number;
+  promoCode?: string;
 }
 
 export interface TelegramGroupItem {

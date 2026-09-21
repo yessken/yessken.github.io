@@ -18,6 +18,10 @@ export class MockDataService {
       price: 3500,
       imageUrl: 'https://picsum.photos/400/200?random=1',
       organizerName: 'Астана Events',
+      ticketCategories: [
+        { id: '1-standard', eventId: '1', name: 'Стандарт', description: 'Обычный вход', price: 3500, capacity: 300, sold: 46, isActive: true },
+        { id: '1-vip', eventId: '1', name: 'VIP', description: 'Отдельная зона и быстрый вход', price: 7000, capacity: 40, sold: 8, isActive: true },
+      ],
     },
     {
       id: '2',
@@ -33,6 +37,7 @@ export class MockDataService {
       price: 0,
       imageUrl: 'https://picsum.photos/400/200?random=2',
       organizerName: 'Jazz Astana',
+      ticketCategories: [{ id: '2-entry', eventId: '2', name: 'Вход', description: 'Свободная регистрация', price: 0, capacity: 500, sold: 120, isActive: true }],
     },
     {
       id: '3',
@@ -48,6 +53,10 @@ export class MockDataService {
       price: 5000,
       imageUrl: 'https://picsum.photos/400/200?random=3',
       organizerName: 'Loft Club',
+      ticketCategories: [
+        { id: '3-dance', eventId: '3', name: 'Танцпол', description: 'Основная зона', price: 5000, capacity: 250, sold: 73, isActive: true },
+        { id: '3-vip', eventId: '3', name: 'VIP', description: 'Комфортная зона', price: 10000, capacity: 30, sold: 5, isActive: true },
+      ],
     },
     {
       id: '4',
@@ -63,6 +72,7 @@ export class MockDataService {
       price: 2500,
       imageUrl: 'https://picsum.photos/400/200?random=4',
       organizerName: 'Comedy Astana',
+      ticketCategories: [{ id: '4-standard', eventId: '4', name: 'Стандарт', description: 'Место в зале', price: 2500, capacity: 180, sold: 31, isActive: true }],
     },
   ];
 
