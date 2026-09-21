@@ -21,9 +21,9 @@ declare const L: typeof import('leaflet');
   `,
   styles: [
     `
-      :host { display: block; height: 100%; min-height: calc(100vh - 60px); min-height: calc(100dvh - 60px); }
-      .map-container { position: relative; width: 100%; height: 100%; min-height: 300px; min-height: 60vh; }
-      .map { width: 100%; height: 100%; min-height: 300px; min-height: 60vh; display: block; background: var(--tg-surface, #252529); -webkit-tap-highlight-color: transparent; }
+      :host { display: block; height: calc(100dvh - 112px); min-height: 0; }
+      .map-container { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; }
+      .map { width: 100%; height: 100%; min-height: 0; display: block; background: var(--tg-surface, #252529); -webkit-tap-highlight-color: transparent; }
       .map-overlay {
         position: absolute;
         top: 1rem;
@@ -35,7 +35,7 @@ declare const L: typeof import('leaflet');
         pointer-events: none;
       }
       .map-overlay * { pointer-events: auto; }
-      h2 { margin: 0; font-size: 1.25rem; background: var(--tg-bg, #1a1a1e); padding: 0.5rem 0.75rem; border-radius: 8px; }
+      h2 { margin: 0; font-size: 1.1rem; background: var(--tg-bg, #1a1a1e); padding: 0.55rem 0.75rem; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.3); }
       .link-list {
         padding: 0.5rem 0.75rem;
         background: var(--tg-button, #00FF41);
@@ -128,7 +128,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.markers.forEach((m) => m.remove());
     this.markers = [];
     events.forEach((ev) => {
-      const marker = L.marker([ev.lat, ev.lng])
+      const markerIcon = L.divIcon({
+        className: 'tusa-marker',
+        html: '<span></span>',
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+        popupAnchor: [0, -12],
+      });
+      const marker = L.marker([ev.lat, ev.lng], { icon: markerIcon })
         .addTo(this.map!)
         .bindPopup(
           `<strong>${ev.title}</strong><br>${ev.place}<br><a href="/events/${ev.id}${typeof window !== 'undefined' ? window.location.search : ''}">Подробнее</a>`
@@ -148,18 +155,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     const rawH = container?.offsetHeight ?? 0;
     const viewportH = this.getViewportHeight();
     const w = rawW > 0 ? rawW : window.innerWidth;
-    const h = Math.max(rawH, viewportH - 80, 300);
+    const h = Math.max(rawH, 300);
     mapEl.style.width = `${w}px`;
     mapEl.style.height = `${h}px`;
 
-    const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
-    const iconRetinaUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png';
-    const shadowUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
-    L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
-
     this.map = L.map(mapEl).setView([astana.lat, astana.lng], 12);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '© OpenStreetMap © CARTO',
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
     this.boundInvalidate = (): void => {
