@@ -160,8 +160,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     mapEl.style.height = `${h}px`;
 
     this.map = L.map(mapEl).setView([astana.lat, astana.lng], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png', {
       attribution: '© OpenStreetMap contributors',
+      detectRetina: true,
     }).addTo(this.map);
 
     this.boundInvalidate = (): void => {
