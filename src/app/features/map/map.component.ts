@@ -27,13 +27,13 @@ declare const L: typeof import('leaflet');
       .map-overlay {
         position: absolute;
         top: 1rem;
-        left: 1rem;
+        left: 4.5rem;
         right: 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
         pointer-events: none;
-        z-index: 500;
+        z-index: 1000;
       }
       .map-overlay * { pointer-events: auto; }
       h2 { margin: 0; font-size: 1.1rem; background: rgba(255,255,255,.9); color: #202522; padding: 0.55rem 0.75rem; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.22); }

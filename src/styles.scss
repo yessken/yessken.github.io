@@ -26,6 +26,18 @@ html, body {
   background: #e7e5df;
 }
 
+.leaflet-tile-pane::before {
+  content: 'Загрузка карты…';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #687067;
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: -1;
+}
+
 .tusa-marker span {
   width: 7px;
   height: 7px;
