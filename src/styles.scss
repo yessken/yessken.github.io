@@ -13,9 +13,13 @@ html, body {
   place-items: center;
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
-  background: #c9f24b;
+  background: #f27b68;
   border: 2px solid #11150d;
   box-shadow: 0 3px 10px rgba(0, 0, 0, .35);
+}
+
+.leaflet-tile-pane {
+  filter: saturate(.62) contrast(.94) brightness(.96);
 }
 
 .tusa-marker span {
