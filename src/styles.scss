@@ -19,7 +19,11 @@ html, body {
 }
 
 .leaflet-tile-pane {
-  filter: grayscale(.55) saturate(.42) contrast(.9) brightness(.78);
+  filter: saturate(.88) contrast(.98) brightness(1.02);
+}
+
+.leaflet-container {
+  background: #e7e5df;
 }
 
 .tusa-marker span {
