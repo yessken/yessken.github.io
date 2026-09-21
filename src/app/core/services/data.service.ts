@@ -8,8 +8,9 @@ import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class DataService {
   private get useApi(): boolean {
-    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('mock') === '1') {
-      return false;
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mock') === '1' && params.get('api') !== '1') return false;
     }
     return !!environment.apiUrl?.trim();
   }
