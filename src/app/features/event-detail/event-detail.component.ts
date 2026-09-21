@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 import type { EventItem } from '../../core/types/event.model';
 
 @Component({
@@ -29,14 +30,14 @@ import type { EventItem } from '../../core/types/event.model';
               [class.active]="ev.userGoing"
               (click)="toggleGoing(ev)"
               [disabled]="goingLoading()">
-              {{ ev.userGoing ? 'Я иду' : 'Я пойду' }}
+              {{ ev.userGoing ? 'Участвую' : 'Буду участвовать' }}
             </button>
           </div>
-          <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Вписаться</a>
+          <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Получить билет</a>
         </div>
       </div>
     } @else {
-      <p>Сходка не найдена.</p>
+      <p>Событие не найдено.</p>
     }
   `,
   styles: [
@@ -87,12 +88,16 @@ export class EventDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private data: DataService
+    private data: DataService,
+    private analytics: AnalyticsService
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) this.data.getEventById(id).subscribe((ev) => this.event.set(ev ?? null));
+    if (id) {
+      this.analytics.track('event_open', id);
+      this.data.getEventById(id).subscribe((ev) => this.event.set(ev ?? null));
+    }
   }
 
   goingLabel(n: number): string {

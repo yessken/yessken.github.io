@@ -10,12 +10,12 @@ import type { TelegramGroupItem } from '../../core/types/event.model';
   imports: [CommonModule],
   template: `
     <div class="tg-groups">
-      <h1>ТГ группы</h1>
-      <p class="subtitle">Чаты в Telegram, куда добавлен бот. Участников — онлайн.</p>
+      <h1>Сообщества</h1>
+      <p class="subtitle">Городские сообщества и каналы, где появляются новые события.</p>
       @if (loading()) {
         <p class="loading">Загрузка…</p>
       } @else if (groups().length === 0) {
-        <p class="empty">Пока нет групп или не настроен бэкенд.</p>
+        <p class="empty">Сообщества скоро появятся. Следите за обновлениями TUSA.</p>
       } @else {
         <ul class="list">
           @for (g of groups(); track g.id) {

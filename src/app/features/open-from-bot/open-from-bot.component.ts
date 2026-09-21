@@ -5,9 +5,9 @@ import { Component } from '@angular/core';
   standalone: true,
   template: `
     <div class="open-from-bot">
-      <h1>TusaMap</h1>
-      <p>Откройте приложение из Telegram-бота, чтобы увидеть карту сходок Астаны и вписываться на сходки.</p>
-      <a class="tg-link" href="https://t.me/chobby_astanabot" target="_blank" rel="noopener">Открыть в Telegram</a>
+      <h1>TUSA</h1>
+      <p>Откройте TUSA в Telegram, чтобы находить события в Астане и получать билеты без регистрации и паролей.</p>
+      <a class="tg-link" href="https://t.me/chobby_astanabot" target="_blank" rel="noopener">Открыть приложение</a>
     </div>
   `,
   styles: [

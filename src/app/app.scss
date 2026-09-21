@@ -1,12 +1,13 @@
 :host {
-  --tg-bg: #1a1a1e;
-  --tg-text: #e4e4e7;
-  --tg-button: #00FF41;
-  --tg-button-text: #0a0a0c;
-  --tg-surface: #252529;
-  --tg-glow: 0 0 12px #00FF41, 0 0 24px rgba(0, 255, 65, 0.35);
-  --tg-glow-text: 0 0 8px #00FF41;
-  font-family: system-ui, -apple-system, sans-serif;
+  --tg-bg: #101318;
+  --tg-text: #f1f4ee;
+  --tg-button: #c9f24b;
+  --tg-button-text: #11150d;
+  --tg-surface: #1a2025;
+  --tg-glow: 0 8px 28px rgba(201, 242, 75, 0.2);
+  --tg-glow-text: 0 0 8px rgba(201, 242, 75, 0.45);
+  display: block;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   box-sizing: border-box;
 }
 
@@ -20,10 +21,29 @@
 
 .content {
   flex: 1;
-  padding-bottom: 60px;
+  padding: 52px 0 60px;
   min-height: 0;
   min-height: 60vh; /* чтобы карта имела высоту в Telegram WebView на мобильных */
 }
+
+.topbar {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  background: color-mix(in srgb, var(--tg-bg) 92%, transparent);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(14px);
+  z-index: 90;
+}
+
+.brand { display: flex; align-items: baseline; gap: .45rem; color: var(--tg-text); text-decoration: none; letter-spacing: .08em; }
+.brand strong { font-size: 1.05rem; }
+.brand span { color: var(--tg-button); font-size: .58rem; font-weight: 700; letter-spacing: .14em; }
+.live-dot { color: var(--tg-button); font-size: .7rem; }
 
 .bottom-nav {
   position: fixed;
@@ -32,18 +52,24 @@
   right: 0;
   display: flex;
   justify-content: space-around;
-  padding: 0.5rem;
+  padding: 0.45rem 0.25rem calc(0.45rem + env(safe-area-inset-bottom));
   background: var(--tg-bg);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 100;
 }
 
 .bottom-nav a {
+  flex: 1 1 0;
+  min-width: 0;
   font-size: 0.75rem;
   color: var(--tg-text);
   text-decoration: none;
   opacity: 0.7;
   padding: 0.25rem 0.5rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bottom-nav a.active {

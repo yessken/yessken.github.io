@@ -7,7 +7,12 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
-  private useApi = !!environment.apiUrl?.trim();
+  private get useApi(): boolean {
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('mock') === '1') {
+      return false;
+    }
+    return !!environment.apiUrl?.trim();
+  }
 
   constructor(
     private mock: MockDataService,
@@ -36,11 +41,11 @@ export class DataService {
     return of(this.mock.addEvent(event));
   }
 
-  purchaseTicket(eventId: string): Observable<Ticket | null> {
-    if (this.useApi) return this.api.purchaseTicket(eventId);
+  purchaseTicket(eventId: string, paymentMethod: 'kaspi' | 'telegram' = 'kaspi'): Observable<Ticket | null> {
+    if (this.useApi) return this.api.purchaseTicket(eventId, paymentMethod);
     const ev = this.mock.getEventById(eventId);
     if (!ev) return of(null);
-    return of(this.mock.addTicket({ eventId: ev.id, eventTitle: ev.title, eventDate: ev.date, eventPlace: ev.place }));
+    return of(this.mock.addTicket({ eventId: ev.id, eventTitle: ev.title, eventDate: ev.date, eventPlace: ev.place, paymentMethod }));
   }
 
   getTelegramGroups(): Observable<TelegramGroupItem[]> {

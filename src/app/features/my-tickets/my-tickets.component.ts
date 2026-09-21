@@ -10,7 +10,7 @@ import type { Ticket } from '../../core/types/event.model';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="my-tickets">
-      <h1>Мои планы</h1>
+      <h1>Мои билеты</h1>
       @if (tickets().length) {
         <div class="ticket-list">
           @for (t of tickets(); track t.id) {
@@ -25,8 +25,8 @@ import type { Ticket } from '../../core/types/event.model';
           }
         </div>
       } @else {
-        <p>У вас пока нет планов.</p>
-        <a routerLink="/events" queryParamsHandling="preserve">Смотреть сходки</a>
+        <p>Здесь появятся ваши билеты и предстоящие события.</p>
+        <a routerLink="/events" queryParamsHandling="preserve">Открыть каталог событий</a>
       }
     </div>
   `,

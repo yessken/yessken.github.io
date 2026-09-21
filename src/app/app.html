@@ -2,15 +2,19 @@
   <app-open-from-bot />
 } @else {
   <div class="shell">
+    <header class="topbar">
+      <a routerLink="/" class="brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>АСТАНА</span></a>
+      <span class="live-dot">Астана · сейчас</span>
+    </header>
     <main class="content">
       <router-outlet />
     </main>
     <nav class="bottom-nav">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" queryParamsHandling="preserve">Карта</a>
-      <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve">Сходки</a>
-      <a routerLink="/tg-groups" routerLinkActive="active" queryParamsHandling="preserve">ТГ группы</a>
-      <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve">Мои планы</a>
-      <a routerLink="/create-event" routerLinkActive="active" queryParamsHandling="preserve">Создать</a>
+      <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve">События</a>
+      <a routerLink="/tg-groups" routerLinkActive="active" queryParamsHandling="preserve">Сообщества</a>
+      <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve">Мои билеты</a>
+      <a routerLink="/create-event" routerLinkActive="active" queryParamsHandling="preserve">Организатор</a>
       <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve">Профиль</a>
     </nav>
   </div>

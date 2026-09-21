@@ -8,7 +8,7 @@ export class MockDataService {
       id: '1',
       title: 'Ночной концерт в столице',
       description: 'Живая музыка, бар, танцы до утра. Возраст 18+.',
-      date: '2025-03-15',
+      date: '2026-10-15',
       time: '22:00',
       place: 'Клуб «Астана»',
       address: 'ул. Кенесары, 40',
@@ -23,7 +23,7 @@ export class MockDataService {
       id: '2',
       title: 'Джаз под звёздами',
       description: 'Открытая площадка, джаз-бэнд, коктейли.',
-      date: '2025-03-20',
+      date: '2026-10-20',
       time: '20:00',
       place: 'Парк Первого Президента',
       address: 'пр. Республики',
@@ -38,7 +38,7 @@ export class MockDataService {
       id: '3',
       title: 'Техно-вечеринка',
       description: 'DJ-сет, два этажа, лаунж и танцпол.',
-      date: '2025-03-22',
+      date: '2026-10-22',
       time: '23:00',
       place: 'Лофт «Сходка»',
       address: 'ул. Сыганак, 12',
@@ -53,7 +53,7 @@ export class MockDataService {
       id: '4',
       title: 'Stand-up вечер',
       description: 'Стендап комики из Астаны и Алматы.',
-      date: '2025-03-18',
+      date: '2026-10-18',
       time: '19:00',
       place: 'Театр «Жастар»',
       address: 'ул. Есенберлина, 10',
@@ -74,12 +74,33 @@ export class MockDataService {
       id: 't1',
       eventId: '1',
       eventTitle: 'Ночной концерт в столице',
-      eventDate: '2025-03-15',
+      eventDate: '2026-10-15',
       eventPlace: 'Клуб «Астана»',
       qrCode: 'TUSA-T1-XXXX',
       purchasedAt: '2025-03-01T12:00:00',
     },
   ];
+
+  constructor() {
+    if (typeof window === 'undefined') return;
+    const savedEvents = window.localStorage.getItem('tusa-events');
+    if (savedEvents) {
+      try {
+        const events = JSON.parse(savedEvents) as EventItem[];
+        if (Array.isArray(events)) this.events = events;
+      } catch {
+        window.localStorage.removeItem('tusa-events');
+      }
+    }
+    const saved = window.localStorage.getItem('tusa-tickets');
+    if (!saved) return;
+    try {
+      const tickets = JSON.parse(saved) as Ticket[];
+      if (Array.isArray(tickets)) this.tickets = tickets;
+    } catch {
+      window.localStorage.removeItem('tusa-tickets');
+    }
+  }
 
   getEvents(): EventItem[] {
     return [...this.events];
@@ -111,6 +132,9 @@ export class MockDataService {
       id: String(this.events.length + 1),
     };
     this.events.push(newEvent);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('tusa-events', JSON.stringify(this.events));
+    }
     return newEvent;
   }
 
@@ -121,6 +145,9 @@ export class MockDataService {
       purchasedAt: new Date().toISOString(),
     };
     this.tickets.push(newTicket);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('tusa-tickets', JSON.stringify(this.tickets));
+    }
     return newTicket;
   }
 }

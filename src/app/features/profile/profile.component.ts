@@ -27,8 +27,8 @@ import { TelegramService } from '../../core/services/telegram.service';
       <nav>
         <a routerLink="/" queryParamsHandling="preserve">Карта</a>
         <a routerLink="/events" queryParamsHandling="preserve">Сходки</a>
-        <a routerLink="/my-tickets" queryParamsHandling="preserve">Мои планы</a>
-        <a routerLink="/create-event" queryParamsHandling="preserve">Создать сходку</a>
+        <a routerLink="/my-tickets" queryParamsHandling="preserve">Мои билеты</a>
+        <a routerLink="/create-event" queryParamsHandling="preserve">Создать событие</a>
       </nav>
     </div>
   `,

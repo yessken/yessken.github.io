@@ -26,6 +26,7 @@ export interface Ticket {
   eventPlace: string;
   qrCode?: string;
   purchasedAt: string;
+  paymentMethod?: 'kaspi' | 'telegram';
 }
 
 export interface TelegramGroupItem {

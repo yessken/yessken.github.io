@@ -14,8 +14,8 @@ declare const L: typeof import('leaflet');
     <div class="map-container">
       <div #mapRef class="map"></div>
       <div class="map-overlay">
-        <h2>Сходки Астаны</h2>
-        <a routerLink="/events" class="link-list" queryParamsHandling="preserve">Список сходок</a>
+        <h2>События Астаны</h2>
+        <a routerLink="/events" class="link-list" queryParamsHandling="preserve">Открыть каталог</a>
       </div>
     </div>
   `,
