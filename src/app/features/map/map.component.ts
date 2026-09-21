@@ -63,9 +63,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     const delay = this.telegram.isInTelegram ? 450 : 150;
-    requestAnimationFrame(() => {
-      setTimeout(() => this.initMap(), delay);
-    });
+    setTimeout(() => void this.initMap(), delay);
   }
 
   ngOnDestroy(): void {
@@ -110,8 +108,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     try {
       await waitForSize();
-      const win = typeof window !== 'undefined' ? (window as unknown as { L?: typeof L }) : {};
-      const Llib: typeof L = win.L ?? (await import('leaflet').then((m: { default?: typeof L }) => m.default ?? (m as typeof L)));
+      const Llib: typeof L = await import('leaflet').then((m: { default?: typeof L }) => m.default ?? (m as typeof L));
       this.buildMap(Llib, mapEl, []);
       this.data.getEvents().subscribe((events) => {
         this.addMarkers(Llib, events);
@@ -159,7 +156,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     mapEl.style.width = `${w}px`;
     mapEl.style.height = `${h}px`;
 
-    this.map = L.map(mapEl).setView([astana.lat, astana.lng], 12);
+    this.map = L.map(mapEl, {
+      fadeAnimation: false,
+      zoomAnimation: false,
+      markerZoomAnimation: false,
+    }).setView([astana.lat, astana.lng], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png', {
       attribution: '© OpenStreetMap contributors',
       detectRetina: true,
@@ -169,6 +170,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.map?.invalidateSize();
     };
     this.map.whenReady(this.boundInvalidate);
+    this.map.invalidateSize({ pan: false });
     setTimeout(this.boundInvalidate, 300);
     setTimeout(this.boundInvalidate, 800);
 
