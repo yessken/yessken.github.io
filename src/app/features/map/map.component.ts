@@ -21,7 +21,7 @@ declare const L: typeof import('leaflet');
   `,
   styles: [
     `
-      :host { display: block; height: calc(100dvh - 112px); min-height: 0; }
+      :host { display: block; height: 100%; min-height: 0; }
       .map-container { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; }
       .map { width: 100%; height: 100%; min-height: 0; display: block; background: var(--tg-surface, #252529); -webkit-tap-highlight-color: transparent; }
       .map-overlay {
@@ -153,9 +153,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     const container = mapEl.parentElement;
     const rawW = container?.offsetWidth ?? 0;
     const rawH = container?.offsetHeight ?? 0;
-    const viewportH = this.getViewportHeight();
     const w = rawW > 0 ? rawW : window.innerWidth;
-    const h = Math.max(rawH, 300);
+    const h = Math.max(rawH, 280);
     mapEl.style.width = `${w}px`;
     mapEl.style.height = `${h}px`;
 
