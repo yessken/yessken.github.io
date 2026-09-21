@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  /** На продакшене укажи URL своего API */
-  apiUrl: '',
+  /** Временный Cloudflare Tunnel к локальному backend */
+  apiUrl: 'https://odds-pour-surface-assistance.trycloudflare.com',
 };
