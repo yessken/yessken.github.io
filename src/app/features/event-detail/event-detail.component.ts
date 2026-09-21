@@ -33,6 +33,7 @@ import type { EventItem } from '../../core/types/event.model';
               {{ ev.userGoing ? 'Участвую' : 'Буду участвовать' }}
             </button>
           </div>
+          <button type="button" class="btn-share" (click)="share(ev)">{{ shareLabel() }}</button>
           <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Получить билет</a>
         </div>
       </div>
@@ -79,12 +80,14 @@ import type { EventItem } from '../../core/types/event.model';
         font-weight: 500;
         box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
+      .btn-share { display: block; margin: .75rem 0; padding: .65rem 1rem; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; background: transparent; color: var(--tg-text, #e4e4e7); cursor: pointer; }
     `,
   ],
 })
 export class EventDetailComponent implements OnInit {
   event = signal<EventItem | null>(null);
   goingLoading = signal(false);
+  shareLabel = signal('Поделиться событием');
 
   constructor(
     private route: ActivatedRoute,
@@ -117,5 +120,23 @@ export class EventDetailComponent implements OnInit {
         this.event.update((e) => (e ? { ...e, goingCount: res.goingCount, userGoing: res.userGoing } : e));
       }
     });
+  }
+
+  async share(ev: EventItem): Promise<void> {
+    const url = typeof window !== 'undefined' ? window.location.href : '';
+    const text = `${ev.title} — ${ev.date} в ${ev.place}. Билеты в TUSA.`;
+    this.analytics.track('event_share', ev.id);
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        await navigator.share({ title: ev.title, text, url });
+      } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        await navigator.clipboard.writeText(`${text} ${url}`);
+        this.shareLabel.set('Ссылка скопирована');
+        setTimeout(() => this.shareLabel.set('Поделиться событием'), 2200);
+      }
+    } catch {
+      this.shareLabel.set('Не удалось поделиться');
+      setTimeout(() => this.shareLabel.set('Поделиться событием'), 2200);
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export type FunnelEvent = 'catalog_view' | 'event_open' | 'checkout_view' | 'payment_start' | 'purchase_success';
+export type FunnelEvent = 'catalog_view' | 'event_open' | 'checkout_view' | 'payment_start' | 'purchase_success' | 'event_share';
 
 interface StoredFunnelEvent {
   name: FunnelEvent;
@@ -26,6 +26,7 @@ export class AnalyticsService {
       checkout_view: 0,
       payment_start: 0,
       purchase_success: 0,
+      event_share: 0,
     } satisfies Record<FunnelEvent, number>;
     for (const event of this.read()) summary[event.name] += 1;
     return summary;
