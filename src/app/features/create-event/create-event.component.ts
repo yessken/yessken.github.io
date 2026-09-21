@@ -18,9 +18,16 @@ import { DataService } from '../../core/services/data.service';
         <label>Дата <input formControlName="date" type="date" /></label>
         <label>Время <input formControlName="time" type="time" /></label>
         <label>Место <input formControlName="place" type="text" /></label>
-        <label>Адрес <input formControlName="address" type="text" /></label>
-        <label>Широта <input formControlName="lat" type="number" step="any" /></label>
-        <label>Долгота <input formControlName="lng" type="number" step="any" /></label>
+        <label class="address-field">Адрес
+          <input formControlName="address" type="text" autocomplete="street-address" (input)="searchAddress()" placeholder="Начните вводить адрес в Астане" />
+          @if (addressSuggestions().length) {
+            <div class="suggestions">
+              @for (suggestion of addressSuggestions(); track suggestion.display_name) {
+                <button type="button" (click)="selectAddress(suggestion)">{{ suggestion.display_name }}</button>
+              }
+            </div>
+          }
+        </label>
         <label>Категория
           <select formControlName="category">
             <option value="концерт">Концерт</option>
@@ -29,9 +36,13 @@ import { DataService } from '../../core/services/data.service';
           </select>
         </label>
         <label>Цена (₸), 0 = бесплатно <input formControlName="price" type="number" min="0" /></label>
-        <label>URL обложки <input formControlName="imageUrl" type="url" /></label>
+        <label>Обложка события
+          <input type="file" accept="image/png,image/jpeg,image/webp" (change)="selectImage($event)" />
+          @if (imagePreview()) { <img class="image-preview" [src]="imagePreview()" alt="Предпросмотр обложки" /> }
+        </label>
         <label>Имя организатора <input formControlName="organizerName" type="text" /></label>
         <label>Email для связи <input formControlName="organizerEmail" type="email" placeholder="name@example.com" /></label>
+        <label>Телефон для связи <input formControlName="organizerPhone" type="tel" placeholder="+7 700 000 00 00" /></label>
         <fieldset formArrayName="ticketCategories">
           <legend>Тарифы билетов</legend>
           @for (category of ticketCategories.controls; track category; let index = $index) {
@@ -58,6 +69,10 @@ import { DataService } from '../../core/services/data.service';
       form { display: flex; flex-direction: column; gap: 0.75rem; }
       label { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.9rem; }
       input, textarea, select { padding: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+      .address-field { position: relative; }
+      .suggestions { position: absolute; left: 0; right: 0; top: 100%; z-index: 10; background: var(--tg-surface, #252529); border: 1px solid rgba(255,255,255,.15); border-radius: 6px; overflow: hidden; }
+      .suggestions button { width: 100%; margin: 0; padding: .65rem; text-align: left; background: transparent; color: var(--tg-text, #e4e4e7); box-shadow: none; border-radius: 0; font-size: .8rem; }
+      .image-preview { display: block; width: 100%; max-height: 180px; object-fit: cover; margin-top: .5rem; border-radius: 6px; }
       fieldset { border: 1px solid rgba(255,255,255,.14); border-radius: 8px; padding: .75rem; }
       legend { padding: 0 .35rem; font-size: .85rem; }
       .ticket-tier { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: .4rem; margin-bottom: .5rem; }
@@ -82,6 +97,8 @@ import { DataService } from '../../core/services/data.service';
 export class CreateEventComponent {
   form: FormGroup;
   success = signal(false);
+  addressSuggestions = signal<Array<{ display_name: string; lat: string; lon: string }>>([]);
+  imagePreview = signal('');
 
   constructor(
     private fb: FormBuilder,
@@ -102,6 +119,7 @@ export class CreateEventComponent {
       imageUrl: ['https://picsum.photos/400/200'],
       organizerName: ['Организатор'],
       organizerEmail: ['', Validators.email],
+      organizerPhone: [''],
       ticketCategories: this.fb.array([this.createTicketCategory('Стандарт', 0, 100)]),
     });
   }
@@ -122,6 +140,32 @@ export class CreateEventComponent {
     this.ticketCategories.push(this.createTicketCategory());
   }
 
+  async searchAddress(): Promise<void> {
+    const query = String(this.form.get('address')?.value ?? '').trim();
+    if (query.length < 3) { this.addressSuggestions.set([]); return; }
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&countrycodes=kz&city=Astana&q=${encodeURIComponent(query)}`);
+      if (response.ok) this.addressSuggestions.set(await response.json());
+    } catch { this.addressSuggestions.set([]); }
+  }
+
+  selectAddress(suggestion: { display_name: string; lat: string; lon: string }): void {
+    this.form.patchValue({ address: suggestion.display_name, lat: Number(suggestion.lat), lng: Number(suggestion.lon) });
+    this.addressSuggestions.set([]);
+  }
+
+  selectImage(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file || file.size > 5 * 1024 * 1024) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result);
+      this.imagePreview.set(dataUrl);
+      this.form.patchValue({ imageUrl: dataUrl });
+    };
+    reader.readAsDataURL(file);
+  }
+
   onSubmit(): void {
     if (this.form.invalid) return;
     const v = this.form.value;
@@ -138,6 +182,8 @@ export class CreateEventComponent {
       price: v.price ? Number(v.price) : null,
       imageUrl: v.imageUrl || 'https://picsum.photos/400/200',
       organizerName: v.organizerName,
+      organizerEmail: v.organizerEmail,
+      organizerPhone: v.organizerPhone,
       ticketCategories: v.ticketCategories.map((category: { name: string; price: number; capacity: number }) => ({
         id: '',
         eventId: '',
