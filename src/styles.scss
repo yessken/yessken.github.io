@@ -2,8 +2,8 @@
 @import 'leaflet/dist/leaflet.css';
 
 html, body {
-  background: #1a1a1e;
-  color: #e4e4e7;
+  background: #171a1d;
+  color: #e2e5df;
 }
 
 .tusa-marker {
@@ -19,7 +19,7 @@ html, body {
 }
 
 .leaflet-tile-pane {
-  filter: saturate(.62) contrast(.94) brightness(.96);
+  filter: grayscale(.55) saturate(.42) contrast(.9) brightness(.78);
 }
 
 .tusa-marker span {
