@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
     <div class="open-from-bot">
       <h1>TUSA</h1>
       <p>Откройте TUSA в Telegram, чтобы находить события в Астане и получать билеты без регистрации и паролей.</p>
-      <a class="tg-link" href="https://t.me/chobby_astanabot" target="_blank" rel="noopener">Открыть приложение</a>
+      <a class="tg-link" href="https://t.me/tusa_astana_bot" target="_blank" rel="noopener">Открыть приложение</a>
     </div>
   `,
   styles: [

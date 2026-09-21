@@ -1,6 +1,6 @@
 # TusaMap
 
-Карта тусовок Астаны — Telegram Web App. Бот: [@chobby_astanabot](https://t.me/chobby_astanabot).
+Карта событий Астаны — Telegram Web App. Бот: [@tusa_astana_bot](https://t.me/tusa_astana_bot).
 
 **Токен бота** хранится только на бэкенде (переменные окружения), в репозитории его нет.
 
