@@ -38,7 +38,10 @@ import QRCode from 'qrcode';
           <button type="button" class="btn-tools" (click)="toolsVisible.update((visible) => !visible)">Материалы для публикации</button>
           @if (toolsVisible()) {
             <div class="share-tools">
-              @if (qrCode()) { <img class="event-qr" [src]="qrCode()" [alt]="'QR-код события ' + ev.title" /> }
+              @if (qrCode()) {
+                <img class="event-qr" [src]="qrCode()" [alt]="'QR-код события ' + ev.title" />
+                <a class="download-qr" [href]="qrCode()" [download]="'tusa-' + ev.id + '-qr.png'">Скачать QR-код</a>
+              }
               <textarea readonly [value]="shareText(ev)"></textarea>
               <button type="button" class="copy-text" (click)="copyShareText(ev)">{{ copyLabel() }}</button>
             </div>
@@ -93,6 +96,7 @@ import QRCode from 'qrcode';
       .btn-tools, .copy-text { display: block; width: 100%; margin: .5rem 0; padding: .6rem .8rem; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); cursor: pointer; }
       .share-tools { padding: .75rem; margin: .5rem 0 1rem; background: var(--tg-surface, #252529); border-radius: 8px; }
       .event-qr { display: block; width: 150px; height: 150px; margin: 0 auto .75rem; background: white; }
+      .download-qr { display: block; width: fit-content; margin: 0 auto .75rem; color: var(--tg-button, #aabd7e); font-size: .85rem; }
       .share-tools textarea { width: 100%; min-height: 84px; box-sizing: border-box; resize: vertical; padding: .6rem; border: 1px solid rgba(255,255,255,.14); border-radius: 6px; background: transparent; color: var(--tg-text, #e4e4e7); font: inherit; }
     `,
   ],
