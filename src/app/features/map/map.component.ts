@@ -33,9 +33,10 @@ declare const L: typeof import('leaflet');
         justify-content: space-between;
         align-items: center;
         pointer-events: none;
+        z-index: 500;
       }
       .map-overlay * { pointer-events: auto; }
-      h2 { margin: 0; font-size: 1.1rem; background: var(--tg-bg, #1a1a1e); padding: 0.55rem 0.75rem; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.3); }
+      h2 { margin: 0; font-size: 1.1rem; background: rgba(255,255,255,.9); color: #202522; padding: 0.55rem 0.75rem; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.22); }
       .link-list {
         padding: 0.5rem 0.75rem;
         background: var(--tg-button, #00FF41);
