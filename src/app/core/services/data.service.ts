@@ -20,6 +20,8 @@ export class DataService {
     private api: EventsApiService
   ) {}
 
+  get eventsError() { return this.api.eventsError; }
+
   getEvents(category?: string): Observable<EventItem[]> {
     if (this.useApi) return this.api.getEvents(category);
     return of(this.mock.getEvents()).pipe(

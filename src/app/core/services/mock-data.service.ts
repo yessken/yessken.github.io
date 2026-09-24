@@ -18,6 +18,7 @@ export class MockDataService {
       price: 3500,
       imageUrl: 'https://picsum.photos/400/200?random=1',
       organizerName: 'Астана Events',
+      featured: true,
       ticketCategories: [
         { id: '1-standard', eventId: '1', name: 'Стандарт', description: 'Обычный вход', price: 3500, capacity: 300, sold: 46, isActive: true },
         { id: '1-vip', eventId: '1', name: 'VIP', description: 'Отдельная зона и быстрый вход', price: 7000, capacity: 40, sold: 8, isActive: true },
@@ -37,6 +38,7 @@ export class MockDataService {
       price: 0,
       imageUrl: 'https://picsum.photos/400/200?random=2',
       organizerName: 'Jazz Astana',
+      featured: true,
       ticketCategories: [{ id: '2-entry', eventId: '2', name: 'Вход', description: 'Свободная регистрация', price: 0, capacity: 500, sold: 120, isActive: true }],
     },
     {
@@ -88,6 +90,10 @@ export class MockDataService {
       eventPlace: 'Клуб «Астана»',
       qrCode: 'TUSA-T1-XXXX',
       purchasedAt: '2025-03-01T12:00:00',
+      paymentMethod: 'telegram',
+      paymentStatus: 'paid',
+      quantity: 1,
+      totalAmount: 3500,
     },
   ];
 

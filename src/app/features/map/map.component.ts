@@ -13,9 +13,24 @@ declare const L: typeof import('leaflet');
   template: `
     <div class="map-container">
       <div #mapRef class="map"></div>
-      <div class="map-overlay">
-        <h2>События Астаны</h2>
-        <a routerLink="/events" class="link-list" queryParamsHandling="preserve">Открыть каталог</a>
+      <div class="map-header">
+        <div>
+          <span class="map-kicker">ASTANA / LIVE</span>
+          <h1>События<br /><em>рядом.</em></h1>
+        </div>
+        <a routerLink="/events" class="list-button" queryParamsHandling="preserve" aria-label="Открыть список событий">Список</a>
+      </div>
+      <div class="map-sheet">
+        <div>
+          <span class="sheet-kicker">ГОРОД ДВИГАЕТСЯ</span>
+          <strong>Найди свою точку на карте</strong>
+          <div class="legend" aria-label="Легенда категорий">
+            <span><i class="legend-dot concert"></i>Концерты</span>
+            <span><i class="legend-dot party"></i>Вечеринки</span>
+            <span><i class="legend-dot fun"></i>Развлечения</span>
+          </div>
+        </div>
+        <a routerLink="/events" class="sheet-link" queryParamsHandling="preserve">Все события <span aria-hidden="true">→</span></a>
       </div>
     </div>
   `,
@@ -24,28 +39,49 @@ declare const L: typeof import('leaflet');
       :host { display: block; height: 100%; min-height: 0; }
       .map-container { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; }
       .map { width: 100%; height: 100%; min-height: 0; display: block; background: var(--tg-surface, #252529); -webkit-tap-highlight-color: transparent; }
-      .map-overlay {
+      .map-header {
         position: absolute;
         top: 1rem;
-        left: 4.5rem;
+        left: 1rem;
         right: 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        pointer-events: none;
-        z-index: 1000;
+        z-index: 1100;
+        padding: .8rem .9rem;
+        border: 1px solid rgba(242,240,232,.14);
+        border-radius: 5px;
+        background: linear-gradient(90deg, rgba(18,19,19,.92), rgba(18,19,19,.68), rgba(18,19,19,.2));
+        box-shadow: 0 10px 28px rgba(0,0,0,.2);
+        backdrop-filter: blur(8px);
       }
-      .map-overlay * { pointer-events: auto; }
-      h2 { margin: 0; font-size: 1.1rem; background: rgba(255,255,255,.9); color: #202522; padding: 0.55rem 0.75rem; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.22); }
-      .link-list {
-        padding: 0.5rem 0.75rem;
+      @media (max-width: 420px) {
+        .map-header { left: .75rem; right: .75rem; }
+        .map-sheet { left: .75rem; right: .75rem; bottom: .75rem; }
+        .map-sheet strong { font-size: .95rem; }
+      }
+      .map-kicker, .sheet-kicker { display: block; color: #d7f36b; font-size: .62rem; font-weight: 800; letter-spacing: .18em; }
+      h1 { margin: .35rem 0 0; color: #fffdf5; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2rem, 8vw, 3.5rem); font-weight: 500; line-height: .9; text-shadow: 0 2px 4px rgba(0,0,0,.7); }
+      h1 em { color: #d7f36b; font-weight: 400; }
+      .list-button {
+        padding: 0.65rem .9rem;
         background: var(--tg-button, #00FF41);
         color: var(--tg-button-text, #0a0a0c);
-        border-radius: 8px;
+        border-radius: 999px;
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: .78rem;
+        font-weight: 800;
         box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
+      .map-sheet { position: absolute; left: 1rem; right: 1rem; bottom: 1rem; z-index: 1000; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; color: #f2f0e8; background: rgba(18, 19, 19, .9); border: 1px solid rgba(242,240,232,.14); border-radius: 5px; box-shadow: 0 12px 30px rgba(0,0,0,.28); backdrop-filter: blur(16px); }
+      .map-sheet strong { display: block; margin-top: .35rem; font-family: Georgia, 'Times New Roman', serif; font-size: 1.05rem; font-weight: 500; }
+      .legend { display: flex; flex-wrap: wrap; gap: .45rem .7rem; margin-top: .65rem; color: rgba(242,240,232,.7); font-size: .66rem; }
+      .legend span { display: inline-flex; align-items: center; gap: .28rem; }
+      .legend-dot { width: .45rem; height: .45rem; display: inline-block; border-radius: 50%; background: #ef765e; }
+      .legend-dot.party { background: #b28cff; }
+      .legend-dot.fun { background: #f2be68; }
+      .sheet-link { flex: 0 0 auto; color: #d7f36b; font-size: .78rem; font-weight: 700; text-decoration: none; }
+      .sheet-link span { margin-left: .25rem; font-size: 1.1rem; }
     `,
   ],
 })
@@ -120,24 +156,32 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private addMarkers(
     L: typeof import('leaflet'),
-    events: { id: string; title: string; place: string; lat: number; lng: number }[]
+    events: { id: string; title: string; place: string; category?: string; lat: number; lng: number }[]
   ): void {
     if (!this.map) return;
     this.markers.forEach((m) => m.remove());
     this.markers = [];
     events.forEach((ev) => {
+      const featured = (ev as { featured?: boolean }).featured;
+      const categoryClass = ev.category === 'вечеринка' ? ' party' : ev.category === 'развлечения' ? ' fun' : '';
       const markerIcon = L.divIcon({
-        className: 'tusa-marker',
+        className: 'tusa-marker' + categoryClass + (featured ? ' featured' : ''),
         html: '<span></span>',
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
-        popupAnchor: [0, -12],
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14],
       });
-      const marker = L.marker([ev.lat, ev.lng], { icon: markerIcon })
-        .addTo(this.map!)
-        .bindPopup(
-          `<strong>${ev.title}</strong><br>${ev.place}<br><a href="/events/${ev.id}${typeof window !== 'undefined' ? window.location.search : ''}">Подробнее</a>`
-        );
+      const popup = document.createElement('div');
+      const title = document.createElement('strong');
+      title.textContent = ev.title;
+      popup.append(title, document.createElement('br'));
+      if (featured) popup.append('Промо-акция', document.createElement('br'));
+      popup.append(document.createTextNode(ev.place), document.createElement('br'));
+      const link = document.createElement('a');
+      link.href = `/events/${encodeURIComponent(ev.id)}${typeof window !== 'undefined' ? window.location.search : ''}`;
+      link.textContent = 'Подробнее';
+      popup.append(link);
+      const marker = L.marker([ev.lat, ev.lng], { icon: markerIcon }).addTo(this.map!).bindPopup(popup);
       this.markers.push(marker);
     });
   }
@@ -145,7 +189,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private buildMap(
     L: typeof import('leaflet'),
     mapEl: HTMLDivElement,
-    events: { id: string; title: string; place: string; lat: number; lng: number }[]
+    events: { id: string; title: string; place: string; category?: string; lat: number; lng: number }[]
   ): void {
     const astana = { lat: 51.1694, lng: 71.4494 };
     const container = mapEl.parentElement;

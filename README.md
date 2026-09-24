@@ -4,9 +4,27 @@
 
 **Токен бота** хранится только на бэкенде (переменные окружения), в репозитории его нет.
 
+## Revenue plan and first-money target
+
+The project is designed to start with organizer monetization, not a visitor subscription.
+
+Priority path:
+- sell visibility and ticket conversion to local organizers
+- support first 5–10 organizers with low-friction launch offers
+- validate 20 real events and 10 paid ticket sales
+- transition to a commission and featured-placement model
+
+Primary early revenue streams:
+- 5–10% commission on successful ticket sales
+- paid featured placement in discovery rankings
+- organizer toolkit: analytics, guest list, QR check-in
+
+The commercial roadmap is documented in [docs/MONETIZATION_PLAN.md](docs/MONETIZATION_PLAN.md) and the outreach motion is in [docs/SALES_PLAYBOOK.md](docs/SALES_PLAYBOOK.md).
+The first-organizer prospecting workflow and lead tracker are in [docs/CLIENT_PROSPECTING.md](docs/CLIENT_PROSPECTING.md).
+
 ## GitHub Pages
 
-Сайт публикуется на **https://yessken.github.io/** через GitHub Actions при пуше в `main`. В репозитории должны быть в корне: `package.json`, `angular.json`, `src/`, `.github/workflows/deploy-pages.yml`. В настройках репозитория: **Settings → Pages → Source**: GitHub Actions.
+Сайт публикуется на **https://yessken.github.io/** через GitHub Actions при пуше в `main`. В репозитории должны быть в корне: `package.json`, `angular.json`, `src/`, `.github/workflows/deploy-pages.yml`. В настройках репозитории: **Settings → Pages → Source**: GitHub Actions.
 
 ## Development server
 

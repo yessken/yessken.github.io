@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { TelegramService } from './telegram.service';
@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class EventsApiService {
   private readonly base = environment.apiUrl?.replace(/\/$/, '') ?? '';
+  readonly eventsError = signal(false);
 
   constructor(
     private http: HttpClient,
@@ -23,9 +24,10 @@ export class EventsApiService {
 
   getEvents(category?: string): Observable<EventItem[]> {
     if (!this.base) return of([]);
+    this.eventsError.set(false);
     const params = category ? { category } : {};
     return this.http.get<EventItem[]>(`${this.base}/api/events`, { params: params as any, headers: this.headers() }).pipe(
-      catchError(() => of([]))
+      catchError(() => { this.eventsError.set(true); return of([]); })
     );
   }
 
@@ -62,7 +64,8 @@ export class EventsApiService {
       organizerPhone: event.organizerPhone,
       ticketCategories: event.ticketCategories ?? [],
     };
-    return this.http.post<EventItem>(`${this.base}/api/events`, body, { headers: this.headers() }).pipe(
+    const endpoint = this.telegram.initData ? '/api/events' : '/api/events/public';
+    return this.http.post<EventItem>(`${this.base}${endpoint}`, body, { headers: this.headers() }).pipe(
       catchError(() => of(null))
     );
   }

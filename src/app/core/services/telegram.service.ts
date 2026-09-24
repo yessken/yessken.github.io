@@ -7,6 +7,7 @@ interface TelegramWebApp {
   colorScheme: 'light' | 'dark';
   expand: () => void;
   ready: () => void;
+  openInvoice?: (url: string, callback: (status: 'paid' | 'cancelled' | 'failed' | 'pending') => void) => void;
   MainButton: TelegramMainButton;
   BackButton: { show: () => void; hide: () => void; onClick: (cb: () => void) => void };
 }
@@ -87,5 +88,12 @@ export class TelegramService {
 
   getBackButton(): { show: () => void; hide: () => void; onClick: (cb: () => void) => void } | null {
     return this.webApp?.BackButton ?? null;
+  }
+
+  openInvoice(url: string, callback: (status: 'paid' | 'cancelled' | 'failed' | 'pending') => void): boolean {
+    const openInvoice = this.webApp?.openInvoice;
+    if (!openInvoice) return false;
+    openInvoice(url, callback);
+    return true;
   }
 }

@@ -1,19 +1,15 @@
-@if (!telegram.isInTelegram && !telegram.forceApp) {
-  <app-open-from-bot />
-} @else {
-  <div class="shell">
-    <header class="topbar">
-      <a routerLink="/" class="brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>АСТАНА</span></a>
-      <span class="live-dot">Астана · сейчас</span>
-    </header>
-    <main class="content">
-      <router-outlet />
-    </main>
-    <nav class="bottom-nav">
-      <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve">Карта</a>
-      <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve">События</a>
-      <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve">Билеты</a>
-      <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve">Профиль</a>
-    </nav>
-  </div>
-}
+<div class="shell">
+  <header class="topbar">
+    <a routerLink="/" class="brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>АСТАНА</span></a>
+    <span class="live-dot">Астана · сейчас</span>
+  </header>
+  <main class="content">
+    <router-outlet />
+  </main>
+  <nav class="bottom-nav" aria-label="Основная навигация">
+    <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve">Карта</a>
+    <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve">События</a>
+    <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve">Билеты</a>
+    <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve">Профиль</a>
+  </nav>
+</div>

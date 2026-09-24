@@ -51,7 +51,8 @@ import type { EventItem, TicketCategory } from '../../core/types/event.model';
             <button type="button" class="method" [class.selected]="paymentMethod() === 'telegram'" (click)="paymentMethod.set('telegram')">Telegram Pay <small>внутри Telegram</small></button>
           </div>
           <button type="button" class="submit" (click)="purchase()" [disabled]="loading()">{{ loading() ? 'Создаём заказ…' : totalAmount() ? 'Перейти к оплате' : 'Подтвердить участие' }}</button>
-          <p class="hint">Оплата проходит через защищённый платёжный шлюз. Данные карты не хранятся в TUSA.</p>
+          @if (errorMessage()) { <p class="error-message">{{ errorMessage() }}</p> }
+          <p class="hint">Итоговая скидка и сумма подтверждаются сервером при создании заказа.</p>
         }
       </div>
     } @else {
@@ -89,6 +90,7 @@ import type { EventItem, TicketCategory } from '../../core/types/event.model';
       .submit { margin-top: 1rem; width: 100%; padding: .8rem 1rem; border: 0; border-radius: 8px; background: var(--tg-button, #00FF41); color: var(--tg-button-text, #0a0a0c); font-weight: 700; cursor: pointer; }
       .submit:disabled { opacity: .6; cursor: wait; }
       .hint { margin-top: 1rem; font-size: 0.85rem; opacity: 0.8; }
+      .error-message { color: #f27b68; }
       .success { padding: 1rem; background: var(--tg-surface, #252529); border-radius: 10px; }
       .success p { margin: .5rem 0; opacity: .8; }
       .link { display: inline-block; margin-top: 1rem; color: var(--tg-button, #00FF41); text-shadow: var(--tg-glow-text, 0 0 8px #00FF41); }
@@ -104,11 +106,12 @@ export class BuyTicketComponent implements OnInit {
   loading = signal(false);
   success = signal(false);
   paymentPending = signal(false);
+  errorMessage = signal('');
 
   categories = computed(() => this.event()?.ticketCategories?.filter((category) => category.isActive) ?? []);
   selectedCategory = computed(() => this.categories().find((category) => category.id === this.selectedCategoryId()) ?? this.categories()[0]);
   baseAmount = computed(() => (this.selectedCategory()?.price ?? 0) * this.quantity());
-  discountAmount = computed(() => this.promoCode().trim().toUpperCase() === 'TUSA10' ? Math.round(this.baseAmount() * 0.1) : 0);
+  discountAmount = computed(() => 0);
   commissionAmount = computed(() => Math.round((this.baseAmount() - this.discountAmount()) * 0.1));
   totalAmount = computed(() => this.baseAmount() - this.discountAmount() + this.commissionAmount());
   quantities = computed(() => Array.from({ length: Math.min(10, Math.max(1, (this.selectedCategory()?.capacity ?? 1) - (this.selectedCategory()?.sold ?? 0))) }, (_, index) => index + 1));
@@ -134,12 +137,14 @@ export class BuyTicketComponent implements OnInit {
     const ev = this.event();
     if (!ev || this.loading()) return;
     this.loading.set(true);
+    this.errorMessage.set('');
     this.analytics.track('payment_start', ev.id);
     const category = this.selectedCategory();
     if (!category) return;
     this.data.purchaseTicket(ev.id, category.id, this.quantity(), this.promoCode(), this.paymentMethod()).subscribe((ticket) => {
       this.loading.set(false);
       this.success.set(!!ticket);
+      if (!ticket) this.errorMessage.set('Не удалось создать заказ. Проверьте соединение и попробуйте ещё раз.');
       this.paymentPending.set(ticket?.paymentStatus === 'pending');
       if (ticket?.paymentStatus === 'paid') this.analytics.track('purchase_success', ev.id);
     });

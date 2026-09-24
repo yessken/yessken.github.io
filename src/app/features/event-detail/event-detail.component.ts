@@ -15,7 +15,12 @@ import QRCode from 'qrcode';
       <div class="event-detail">
         <img [src]="ev.imageUrl" [alt]="ev.title" class="cover" />
         <div class="body">
-          <span class="category">{{ ev.category }}</span>
+          <div class="heading-row">
+            <span class="category">{{ ev.category }}</span>
+            @if (ev.featured) {
+              <span class="featured-badge">Промо-поднятие</span>
+            }
+          </div>
           <h1>{{ ev.title }}</h1>
           <p class="meta">{{ ev.date }} {{ ev.time }} · {{ ev.place }}</p>
           <p class="address">{{ ev.address }}</p>
@@ -58,7 +63,9 @@ import QRCode from 'qrcode';
       .event-detail { padding-bottom: 80px; }
       .cover { width: 100%; height: 200px; object-fit: cover; }
       .body { padding: 1rem; }
+      .heading-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
       .category { font-size: 0.75rem; text-transform: uppercase; opacity: 0.8; }
+      .featured-badge { display: inline-flex; align-items: center; padding: 0.18rem 0.55rem; border-radius: 999px; background: rgba(0,255,65,0.12); color: var(--tg-button, #00FF41); font-size: 0.65rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
       h1 { margin: 0.25rem 0 0.5rem; font-size: 1.35rem; }
       .meta, .address { margin: 0.25rem 0; font-size: 0.95rem; opacity: 0.9; }
       .description { margin: 1rem 0; }
@@ -91,6 +98,9 @@ import QRCode from 'qrcode';
         text-decoration: none;
         font-weight: 500;
         box-shadow: var(--tg-glow, 0 0 12px #00FF41);
+      }
+      @media (max-width: 699px) {
+        .btn-buy { position: sticky; bottom: 4.5rem; z-index: 5; display: block; text-align: center; }
       }
       .btn-share { display: block; margin: .75rem 0; padding: .65rem 1rem; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; background: transparent; color: var(--tg-text, #e4e4e7); cursor: pointer; }
       .btn-tools, .copy-text { display: block; width: 100%; margin: .5rem 0; padding: .6rem .8rem; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); cursor: pointer; }

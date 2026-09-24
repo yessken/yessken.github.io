@@ -1,13 +1,13 @@
 :host {
-  --tg-bg: #171a1d;
-  --tg-text: #e2e5df;
-  --tg-button: #aabd7e;
-  --tg-button-text: #182016;
-  --tg-surface: #22272b;
-  --tg-glow: 0 4px 14px rgba(170, 189, 126, 0.12);
+  --tg-bg: #121313;
+  --tg-text: #f2f0e8;
+  --tg-button: #d7f36b;
+  --tg-button-text: #171a12;
+  --tg-surface: #1c1e1d;
+  --tg-glow: 0 8px 22px rgba(215, 243, 107, 0.14);
   --tg-glow-text: none;
   display: block;
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
   box-sizing: border-box;
 }
 
@@ -25,7 +25,7 @@
   box-sizing: border-box;
   padding: 52px 0 60px;
   min-height: 0;
-  min-height: 60vh; /* чтобы карта имела высоту в Telegram WebView на мобильных */
+  min-height: 60vh;
   overflow: auto;
 }
 
@@ -37,15 +37,15 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  background: color-mix(in srgb, var(--tg-bg) 92%, transparent);
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: color-mix(in srgb, var(--tg-bg) 94%, transparent);
+  border-bottom: 1px solid rgba(242,240,232,.1);
   backdrop-filter: blur(14px);
   z-index: 90;
 }
 
-.brand { display: flex; align-items: baseline; gap: .45rem; color: var(--tg-text); text-decoration: none; letter-spacing: .08em; }
+.brand { display: flex; align-items: baseline; gap: .45rem; color: var(--tg-text); text-decoration: none; letter-spacing: .12em; }
 .brand strong { font-size: 1.05rem; }
-.brand span { color: var(--tg-button); font-size: .58rem; font-weight: 700; letter-spacing: .14em; }
+.brand span { color: var(--tg-button); font-size: .58rem; font-weight: 700; letter-spacing: .18em; }
 .live-dot { color: var(--tg-button); font-size: .7rem; }
 
 .bottom-nav {
@@ -55,20 +55,20 @@
   right: 0;
   display: flex;
   justify-content: space-around;
-  padding: 0.45rem 0.25rem calc(0.45rem + env(safe-area-inset-bottom));
-  background: var(--tg-bg);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.6rem 0.35rem calc(0.6rem + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--tg-bg) 96%, transparent);
+  border-top: 1px solid rgba(242, 240, 232, 0.1);
   z-index: 100;
 }
 
 .bottom-nav a {
   flex: 1 1 0;
   min-width: 0;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--tg-text);
   text-decoration: none;
-  opacity: 0.7;
-  padding: 0.25rem 0.5rem;
+  opacity: 0.62;
+  padding: 0.35rem 0.5rem;
   text-align: center;
   white-space: nowrap;
 }
@@ -78,4 +78,10 @@
   font-weight: 600;
   color: var(--tg-button);
   text-shadow: var(--tg-glow-text);
+}
+
+h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; letter-spacing: 0; }
+
+@media (min-width: 700px) {
+  .content { padding-left: max(1rem, calc((100vw - 760px) / 2)); padding-right: max(1rem, calc((100vw - 760px) / 2)); }
 }

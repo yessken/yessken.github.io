@@ -2,29 +2,42 @@
 @import 'leaflet/dist/leaflet.css';
 
 html, body {
-  background: #171a1d;
-  color: #e2e5df;
+  background: #121313;
+  color: #f2f0e8;
+  margin: 0;
 }
 
 .tusa-marker {
-  width: 24px !important;
-  height: 24px !important;
+  width: 22px !important;
+  height: 22px !important;
   display: grid;
   place-items: center;
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  background: #f27b68;
-  border: 2px solid #11150d;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, .35);
+  border-radius: 50%;
+  background: #ef765e;
+  border: 3px solid #fffdf5;
+  box-shadow: 0 0 0 2px rgba(18,19,19,.65), 0 4px 12px rgba(0, 0, 0, .45);
 }
 
 .leaflet-tile-pane {
-  filter: saturate(.88) contrast(.98) brightness(1.02);
+  filter: saturate(.52) sepia(.08) contrast(1.04) brightness(.9);
 }
 
 .leaflet-container {
-  background: #e7e5df;
+  background: #c9c6bb;
 }
+
+.leaflet-control-zoom a {
+  background: #1c1e1d !important;
+  color: #f2f0e8 !important;
+  border-color: rgba(242,240,232,.16) !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(18,19,19,.72) !important;
+  color: rgba(242,240,232,.72) !important;
+}
+
+.leaflet-control-attribution a { color: #d7f36b !important; }
 
 .leaflet-tile-pane::before {
   content: 'Загрузка карты…';
@@ -39,8 +52,18 @@ html, body {
 }
 
 .tusa-marker span {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #11150d;
+  background: #fffdf5;
+  border: 1px solid rgba(18,19,19,.8);
 }
+
+.tusa-marker.featured {
+  background: #d7f36b;
+  box-shadow: 0 0 0 5px rgba(215,243,107,.28), 0 0 0 8px rgba(18,19,19,.35), 0 5px 16px rgba(0, 0, 0, .5);
+}
+
+.tusa-marker.featured span { background: #fff; }
+.tusa-marker.party { background: #b28cff; }
+.tusa-marker.fun { background: #f2be68; }
