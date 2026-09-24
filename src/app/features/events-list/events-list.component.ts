@@ -63,7 +63,7 @@ import type { EventItem } from '../../core/types/event.model';
   `,
   styles: [
     `
-      .events-list { padding: 1.5rem 1.25rem 88px; max-width: 720px; margin: 0 auto; }
+      .events-list { padding: 1.5rem 1.25rem 88px; max-width: 1180px; margin: 0 auto; }
       .intro { margin-bottom: 1.5rem; padding: 1rem 0 1.35rem; border-bottom: 1px solid rgba(242,240,232,.12); }
       .date-line { margin: 0 0 .7rem !important; color: var(--tg-button, #d7f36b); font-size: .68rem !important; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
       h1 { margin: 0 0 .85rem; font-size: clamp(2.25rem, 9vw, 4.5rem); line-height: .92; font-weight: 500; }
@@ -95,6 +95,20 @@ import type { EventItem } from '../../core/types/event.model';
       .card h3 { margin: .35rem 0 .4rem; font-size: 1.35rem; font-weight: 500; }
       .meta { margin: 0.25rem 0; font-size: 0.86rem; opacity: 0.62; }
       .price { margin: .75rem 0 0; color: var(--tg-button, #d7f36b); font-size: .92rem; font-weight: 700; }
+      @media (min-width: 700px) {
+        .events-list { padding: 4.5rem clamp(2rem, 5vw, 5rem); }
+        .intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .48fr); column-gap: 4rem; align-items: end; padding-bottom: 2.25rem; }
+        .eyebrow, .date-line, h1 { grid-column: 1; }
+        .intro p:not(.date-line), .organizer-link { grid-column: 2; }
+        h1 { font-size: clamp(3.5rem, 6vw, 6rem); margin-bottom: 0; }
+        .intro p:not(.date-line) { grid-row: 2 / span 2; align-self: center; }
+        .organizer-link { align-self: start; }
+        .filters { margin: 1.75rem 0; }
+        .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+        .card img { height: 190px; }
+        .card { transition: transform .2s ease, border-color .2s ease; }
+        .card:hover { transform: translateY(-4px); border-color: rgba(215,243,107,.5); }
+      }
     `,
   ],
 })

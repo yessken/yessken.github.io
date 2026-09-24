@@ -1,8 +1,22 @@
 <div class="shell">
-  <header class="topbar">
+  <header class="topbar mobile-topbar">
     <a routerLink="/" class="brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>АСТАНА</span></a>
     <span class="live-dot">Астана · сейчас</span>
   </header>
+  <aside class="sidebar">
+    <a routerLink="/" class="brand sidebar-brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>АСТАНА</span></a>
+    <div class="sidebar-label">Навигация</div>
+    <nav class="side-nav" aria-label="Основная навигация">
+      <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve"><span>01</span>События</a>
+      <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve"><span>02</span>Карта города</a>
+      <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve"><span>03</span>Мои билеты</a>
+      <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve"><span>04</span>Профиль</a>
+    </nav>
+    <div class="sidebar-footer">
+      <span class="live-dot">Астана · сейчас</span>
+      <a routerLink="/create-event" queryParamsHandling="preserve">Разместить событие <span aria-hidden="true">↗</span></a>
+    </div>
+  </aside>
   <main class="content">
     <router-outlet />
   </main>
