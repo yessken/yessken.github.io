@@ -72,7 +72,8 @@ export class EventsApiService {
 
   purchaseTicket(eventId: string, ticketCategoryId: string, quantity: number, promoCode: string, paymentMethod: 'kaspi' | 'telegram' = 'kaspi'): Observable<Ticket | null> {
     if (!this.base) return of(null);
-    return this.http.post<Ticket>(`${this.base}/api/tickets`, { eventId, ticketCategoryId, quantity, promoCode: promoCode || null, paymentMethod }, { headers: this.headers() }).pipe(
+    const endpoint = this.telegram.initData ? '/api/tickets' : '/api/tickets/public';
+    return this.http.post<Ticket>(`${this.base}${endpoint}`, { eventId, ticketCategoryId, quantity, promoCode: promoCode || null, paymentMethod }, { headers: this.headers() }).pipe(
       catchError(() => of(null))
     );
   }
