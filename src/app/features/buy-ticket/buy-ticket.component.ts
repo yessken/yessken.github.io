@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { AnalyticsService } from '../../core/services/analytics.service';
+import { TelegramService } from '../../core/services/telegram.service';
 import type { EventItem, TicketCategory } from '../../core/types/event.model';
 
 @Component({
@@ -46,11 +47,15 @@ import type { EventItem, TicketCategory } from '../../core/types/event.model';
           </div>
         } @else {
           <p class="label">Способ оплаты</p>
-          <div class="methods">
-            <button type="button" class="method" [class.selected]="paymentMethod() === 'kaspi'" (click)="paymentMethod.set('kaspi')">Kaspi Pay <small>быстро и привычно</small></button>
-            <button type="button" class="method" [class.selected]="paymentMethod() === 'telegram'" (click)="paymentMethod.set('telegram')">Telegram Pay <small>внутри Telegram</small></button>
-          </div>
-          <button type="button" class="submit" (click)="purchase()" [disabled]="loading()">{{ loading() ? 'Создаём заказ…' : totalAmount() ? 'Перейти к оплате' : 'Подтвердить участие' }}</button>
+          @if (telegram.isInTelegram) {
+            <div class="methods">
+              <button type="button" class="method" [class.selected]="paymentMethod() === 'kaspi'" (click)="paymentMethod.set('kaspi')">Kaspi Pay <small>быстро и привычно</small></button>
+              <button type="button" class="method" [class.selected]="paymentMethod() === 'telegram'" (click)="paymentMethod.set('telegram')">Telegram Pay <small>внутри Telegram</small></button>
+            </div>
+          } @else {
+            <div class="telegram-only"><strong>Оплата проходит в Telegram</strong><span>Откройте бота, чтобы продолжить оформление и получить защищённую оплату.</span></div>
+          }
+          <button type="button" class="submit" (click)="purchase()" [disabled]="loading()">{{ loading() ? 'Открываем Telegram…' : telegram.isInTelegram ? (totalAmount() ? 'Перейти к оплате' : 'Подтвердить участие') : 'Продолжить в Telegram' }}</button>
           @if (errorMessage()) { <p class="error-message">{{ errorMessage() }}</p> }
           <p class="hint">Итоговая скидка и сумма подтверждаются сервером при создании заказа.</p>
         }
@@ -119,7 +124,8 @@ export class BuyTicketComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
+    protected telegram: TelegramService
   ) {}
 
   ngOnInit(): void {
@@ -136,6 +142,13 @@ export class BuyTicketComponent implements OnInit {
   purchase(): void {
     const ev = this.event();
     if (!ev || this.loading()) return;
+    if (!this.telegram.isInTelegram) {
+      const category = this.selectedCategory();
+      if (!category) return;
+      const payload = `event_${ev.id}`.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 64);
+      window.location.href = `https://t.me/tusa_astana_bot?start=${payload}`;
+      return;
+    }
     this.loading.set(true);
     this.errorMessage.set('');
     this.analytics.track('payment_start', ev.id);
