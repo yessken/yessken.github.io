@@ -8,6 +8,7 @@ interface TelegramWebApp {
   expand: () => void;
   ready: () => void;
   openInvoice?: (url: string, callback: (status: 'paid' | 'cancelled' | 'failed' | 'pending') => void) => void;
+  openTelegramLink?: (url: string) => void;
   MainButton: TelegramMainButton;
   BackButton: { show: () => void; hide: () => void; onClick: (cb: () => void) => void };
 }
@@ -94,6 +95,13 @@ export class TelegramService {
     const openInvoice = this.webApp?.openInvoice;
     if (!openInvoice) return false;
     openInvoice(url, callback);
+    return true;
+  }
+
+  openTelegramLink(url: string): boolean {
+    const openLink = this.webApp?.openTelegramLink;
+    if (!openLink) return false;
+    openLink(url);
     return true;
   }
 }
