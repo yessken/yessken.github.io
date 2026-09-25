@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { MockDataService } from './mock-data.service';
 import { EventsApiService } from './events-api.service';
-import type { AdminEventReport, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
+import type { AdminEventReport, AdminSalesSummary, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -51,6 +51,11 @@ export class DataService {
 
   getOrganizerSubscription(): Observable<OrganizerSubscriptionStatus | null> {
     if (this.useApi) return this.api.getOrganizerSubscription();
+    return of(null);
+  }
+
+  getAdminSalesSummary(): Observable<AdminSalesSummary | null> {
+    if (this.useApi) return this.api.getAdminSalesSummary();
     return of(null);
   }
 

@@ -18,6 +18,7 @@ export const routes: Routes = [
   { path: 'events/:id/buy', component: BuyTicketComponent },
   { path: 'my-tickets', component: MyTicketsComponent },
   { path: 'orders', component: OrdersComponent },
+  { path: 'admin', component: OrdersComponent },
   { path: 'tg-groups', component: TgGroupsComponent },
   { path: 'create-event', component: CreateEventComponent },
   { path: 'profile', component: ProfileComponent },

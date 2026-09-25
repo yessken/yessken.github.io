@@ -89,3 +89,13 @@ export interface OrganizerSubscriptionStatus {
   status: string;
   expiresAt?: string | null;
 }
+
+export interface AdminSalesSummary {
+  totalOrders: number;
+  totalTickets: number;
+  paidOrders: number;
+  pendingOrders: number;
+  paidRevenue: number;
+  requestedRefunds: number;
+  activeEvents: number;
+}
