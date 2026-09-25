@@ -12,17 +12,17 @@ import { RouterLink } from '@angular/router';
       </div>
       <section class="welcome">
         <p class="number">01 / 02</p>
-        <h1>Что будем<br /><em>делать?</em></h1>
-        <p class="intro">События Астаны для гостей и тех, кто их создаёт.</p>
+        <h1>Что ищешь<br /><em>сегодня?</em></h1>
+        <p class="intro">Найди событие в Астане или добавь своё в городскую афишу.</p>
         <div class="choices">
           <a routerLink="/events" class="choice primary">
             <span class="choice-index">01</span>
-            <span><strong>Я хочу пойти</strong><small>Найти событие и билет</small></span>
+            <span><strong>Найти событие</strong><small>Выбрать место и билет</small></span>
             <span class="arrow" aria-hidden="true">→</span>
           </a>
           <a routerLink="/create-event" class="choice secondary">
             <span class="choice-index">02</span>
-            <span><strong>Я организатор</strong><small>Создать и разместить событие</small></span>
+            <span><strong>Создать событие</strong><small>Разместить свою афишу</small></span>
             <span class="arrow" aria-hidden="true">→</span>
           </a>
         </div>
