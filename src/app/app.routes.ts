@@ -8,9 +8,10 @@ import { CreateEventComponent } from './features/create-event/create-event.compo
 import { ProfileComponent } from './features/profile/profile.component';
 import { TgGroupsComponent } from './features/tg-groups/tg-groups.component';
 import { OrdersComponent } from './features/orders/orders.component';
+import { StartComponent } from './features/start/start.component';
 
 export const routes: Routes = [
-  { path: '', component: EventsListComponent },
+  { path: '', component: StartComponent },
   { path: 'city-map', component: MapComponent },
   { path: 'map', redirectTo: '' },
   { path: 'events', component: EventsListComponent },
