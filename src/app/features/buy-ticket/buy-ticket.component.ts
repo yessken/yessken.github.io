@@ -142,6 +142,11 @@ export class BuyTicketComponent implements OnInit {
   purchase(): void {
     const ev = this.event();
     if (!ev || this.loading()) return;
+    if (this.paymentMethod() === 'telegram') {
+      const payload = `event_${ev.id}`.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 64);
+      window.location.href = `https://t.me/tusa_astana_bot?start=${payload}`;
+      return;
+    }
     if (!this.telegram.isInTelegram) {
       const category = this.selectedCategory();
       if (!category) return;
