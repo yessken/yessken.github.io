@@ -29,6 +29,7 @@ import { TelegramService } from '../../core/services/telegram.service';
         <a routerLink="/events" queryParamsHandling="preserve">События</a>
         <a routerLink="/my-tickets" queryParamsHandling="preserve">Мои билеты</a>
         <a routerLink="/orders" queryParamsHandling="preserve">Заказы организатора</a>
+        <button type="button" class="subscribe" (click)="subscribe()">Подключить Organizer Pro</button>
         <a routerLink="/create-event" queryParamsHandling="preserve">Для организаторов</a>
         <a routerLink="/tg-groups" queryParamsHandling="preserve">Сообщества</a>
       </nav>
@@ -44,6 +45,7 @@ import { TelegramService } from '../../core/services/telegram.service';
       .username, .tg-id { margin: 0.25rem 0; font-size: 0.9rem; opacity: 0.9; }
       nav { display: flex; flex-direction: column; gap: 0.5rem; }
       nav a { color: var(--tg-button, #00FF41); text-shadow: var(--tg-glow-text, 0 0 6px #00FF41); }
+      .subscribe { width: fit-content; padding: .7rem .85rem; border: 1px solid var(--tg-button, #00FF41); border-radius: 5px; background: transparent; color: var(--tg-button, #00FF41); font: inherit; cursor: pointer; }
     `,
   ],
 })
@@ -51,4 +53,9 @@ export class ProfileComponent {
   user = () => this.telegram.user;
 
   constructor(private telegram: TelegramService) {}
+
+  subscribe(): void {
+    const url = 'https://t.me/tusa_astana_bot?start=subscribe_pro';
+    if (!this.telegram.openTelegramLink(url) && typeof window !== 'undefined') window.location.href = url;
+  }
 }
