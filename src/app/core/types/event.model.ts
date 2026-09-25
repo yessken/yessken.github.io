@@ -82,3 +82,10 @@ export interface AdminEventReport {
   pending: number;
   revenue: number;
 }
+
+export interface OrganizerSubscriptionStatus {
+  telegramUserId: number;
+  plan: string;
+  status: string;
+  expiresAt?: string | null;
+}
