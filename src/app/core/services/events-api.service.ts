@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { TelegramService } from './telegram.service';
-import type { EventItem, Ticket, TelegramGroupItem } from '../types/event.model';
+import type { AdminEventReport, EventItem, OrganizerOrderRow, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -43,6 +43,16 @@ export class EventsApiService {
     return this.http.get<Ticket[]>(`${this.base}/api/tickets/me`, { headers: this.headers() }).pipe(
       catchError(() => of([]))
     );
+  }
+
+  getOrganizerOrders(): Observable<OrganizerOrderRow[]> {
+    if (!this.base) return of([]);
+    return this.http.get<OrganizerOrderRow[]>(`${this.base}/api/tickets/organizer`, { headers: this.headers() }).pipe(catchError(() => of([])));
+  }
+
+  getAdminOrderReport(): Observable<AdminEventReport[]> {
+    if (!this.base) return of([]);
+    return this.http.get<AdminEventReport[]>(`${this.base}/api/admin/tickets/by-event`, { headers: this.headers() }).pipe(catchError(() => of([])));
   }
 
   createEvent(event: Omit<EventItem, 'id'>): Observable<EventItem | null> {

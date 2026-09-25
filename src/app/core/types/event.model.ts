@@ -61,3 +61,24 @@ export interface TelegramGroupItem {
   inviteLink: string;
   memberCount: number;
 }
+
+export interface OrganizerOrderRow {
+  ticketId: string;
+  eventId: string;
+  eventTitle: string;
+  paymentStatus: string;
+  paymentMethod: string;
+  quantity: number;
+  totalAmount: number;
+  purchasedAt: string;
+}
+
+export interface AdminEventReport {
+  eventId: string;
+  eventTitle: string;
+  orders: number;
+  tickets: number;
+  paid: number;
+  pending: number;
+  revenue: number;
+}
