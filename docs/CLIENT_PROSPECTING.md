@@ -113,14 +113,14 @@ These prospects were identified from the public Astana listings on [Давай �
 
 ### Outreach order
 
-1. Stand Up Bar Pozitiv
-2. VkusKino
-3. JAN Theatre
-4. The Bus Music Pub
-5. Quiz, пожалуйста!
-6. LM Kulanshi Art Gallery
-7. Uly Dala Fest
-8. Sxodim Astana as a distribution partner
+1. Quiz, пожалуйста! Astana — confirmed public email, recurring paid games
+2. Sxodim Astana — confirmed public media contact and partnership channel
+3. The Bus Music Pub — ask venue for booking/marketing contact
+4. JAN Theatre — ask BIArt or official channel for marketing contact
+5. VkusKino — ask venue or official channel for event marketing contact
+6. Stand Up Bar Pozitiv — find current public contact before sending
+7. LM Kulanshi Art Gallery — find current workshop contact
+8. Uly Dala Fest — approach only when a current campaign contact is verified
 
 Start with recurring organizers because one successful pilot can become multiple paid campaigns.
 |  |  |  |  |  | New |  |
