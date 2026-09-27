@@ -68,6 +68,34 @@ Search phrases:
 |---|---|---|---|---|---|---|
 |  |  |  |  |  | New |  |
 
+## Public contact shortlist
+
+Checked 2026-09-27. Use only these public business channels for the first outreach; verify availability again before sending.
+
+| Lead | Public contact | Why first | First action | Status |
+|---|---|---|---|---|
+| Quiz, пожалуйста! Astana | [astana@quizplease.kz](mailto:astana@quizplease.kz) · [astana.quizplease.com](https://astana.quizplease.com/) | Recurring paid games with a published schedule | Email a free pilot for one upcoming game | New |
+| Sxodim Astana | [@sxodim_media](https://t.me/sxodim_media) · [Telegram channel](https://t.me/sxodim_astana) · [partnership form](https://tapter.one/kettik.group) | Existing event distribution audience and explicit cooperation channel | Offer a one-event distribution experiment, not a competing catalog | New |
+| JAN Theatre | [Public event listings](https://sxodim.com/astana/events/jan-theatre-spektakli) | Recurring paid performances at BIArt | Ask the venue or official channel for the event marketing contact | Research |
+| VkusKino | [Public event listings](https://sxodim.com/astana/events/vkuskino) | Repeatable paid cinema dinners | Ask the venue or official channel for the event marketing contact | Research |
+| The Bus Music Pub | [Public event example](https://sxodim.com/astana/event/shou-komiki-reshayut-problemy-v-astane) | Recurring concerts and comedy nights | Ask the venue for the public booking/marketing contact | Research |
+
+### Message for Quiz, пожалуйста!
+
+Subject: Бесплатный пилот для ближайшей игры в Астане
+
+Здравствуйте! Увидел расписание игр «Квиз, пожалуйста!» в Астане. Мы запускаем TUSA — сервис событий с переходом к регистрации и оплате через Telegram.
+
+Предлагаем бесплатно протестировать одно ближайшее мероприятие: подготовим страницу, ссылку для вашей аудитории и покажем статистику переходов. Если формат не подойдёт, никаких обязательств нет.
+
+Подскажите, пожалуйста, кто отвечает за продвижение игр? Ссылка на бота: https://t.me/tusa_astana_bot
+
+### Message for Sxodim Astana
+
+Здравствуйте! Мы запускаем TUSA — локальный Telegram-сервис для событий Астаны. Хотим предложить небольшой партнёрский тест: вы направляете один актуальный event или знакомите с организатором, а мы бесплатно готовим страницу, Telegram-путь и базовую статистику.
+
+Не предлагаем заменять ваш каталог. Хотим проверить дополнительный ticketing/distribution layer на одном событии и обсудить процент только при результате. Кому лучше отправить детали?
+
 ## Verified first prospects
 
 These prospects were identified from the public Astana listings on [Давай Сходим](https://sxodim.com/astana). Verify the current event and contact channel before outreach; event dates and availability can change.
