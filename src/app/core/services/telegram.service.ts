@@ -91,6 +91,17 @@ export class TelegramService {
     return this.webApp?.BackButton ?? null;
   }
 
+  onBackButtonClick(callback: () => void): void {
+    this.webApp?.BackButton?.onClick(callback);
+  }
+
+  setBackButtonVisible(visible: boolean): void {
+    const backButton = this.webApp?.BackButton;
+    if (!backButton) return;
+    if (visible) backButton.show();
+    else backButton.hide();
+  }
+
   openInvoice(url: string, callback: (status: 'paid' | 'cancelled' | 'failed' | 'pending') => void): boolean {
     const openInvoice = this.webApp?.openInvoice;
     if (!openInvoice) return false;

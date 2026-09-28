@@ -18,6 +18,18 @@
     </div>
   </aside>
   <main class="content">
+    @if (breadcrumbs().length) {
+      <nav class="breadcrumbs" aria-label="Навигационная цепочка">
+        @for (crumb of breadcrumbs(); track crumb.url ?? crumb.label; let last = $last) {
+          @if (crumb.url && !last) {
+            <a [routerLink]="crumb.url" queryParamsHandling="preserve">{{ crumb.label }}</a>
+          } @else {
+            <span [attr.aria-current]="last ? 'page' : null">{{ crumb.label }}</span>
+          }
+          @if (!last) { <span class="breadcrumb-separator" aria-hidden="true">/</span> }
+        }
+      </nav>
+    }
     <router-outlet />
   </main>
   <nav class="bottom-nav" aria-label="Основная навигация">

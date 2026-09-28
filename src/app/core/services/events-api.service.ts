@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { TelegramService } from './telegram.service';
-import type { AdminEventEngagement, AdminEventReport, AdminSalesSummary, EventInterestStatus, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
+import type { AdminEventReport, AdminSalesSummary, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -65,26 +65,6 @@ export class EventsApiService {
     return this.http.get<OrganizerSubscriptionStatus>(`${this.base}/api/organizer/subscription`, { headers: this.headers() }).pipe(catchError(() => of(null)));
   }
 
-  getEventInterest(eventId: string): Observable<EventInterestStatus | null> {
-    if (!this.base) return of(null);
-    return this.http.get<EventInterestStatus>(`${this.base}/api/events/${eventId}/interest`, { headers: this.headers() }).pipe(catchError(() => of(null)));
-  }
-
-  markEventInterested(eventId: string): Observable<EventInterestStatus | null> {
-    if (!this.base) return of(null);
-    return this.http.post<EventInterestStatus>(`${this.base}/api/events/${eventId}/interest`, {}, { headers: this.headers() }).pipe(catchError(() => of(null)));
-  }
-
-  getAdminEventEngagement(eventId: string): Observable<AdminEventEngagement | null> {
-    if (!this.base) return of(null);
-    return this.http.get<AdminEventEngagement>(`${this.base}/api/admin/events/${eventId}/engagement`, { headers: this.headers() }).pipe(catchError(() => of(null)));
-  }
-
-  trackAnalytics(payload: { name: string; eventId?: string; ref?: string; visitorId?: string }): void {
-    if (!this.base) return;
-    this.http.post(`${this.base}/api/analytics`, payload, { headers: this.headers() }).pipe(catchError(() => of(null))).subscribe();
-  }
-
   createEvent(event: Omit<EventItem, 'id'>): Observable<EventItem | null> {
     if (!this.base) return of(null);
     const body = {
@@ -110,14 +90,6 @@ export class EventsApiService {
     );
   }
 
-  purchaseTicket(eventId: string, ticketCategoryId: string, quantity: number, promoCode: string, paymentMethod: 'kaspi' | 'telegram' = 'kaspi'): Observable<Ticket | null> {
-    if (!this.base) return of(null);
-    const endpoint = this.telegram.initData ? '/api/tickets' : '/api/tickets/public';
-    return this.http.post<Ticket>(`${this.base}${endpoint}`, { eventId, ticketCategoryId, quantity, promoCode: promoCode || null, paymentMethod }, { headers: this.headers() }).pipe(
-      catchError(() => of(null))
-    );
-  }
-
   getTelegramGroups(): Observable<TelegramGroupItem[]> {
     if (!this.base) return of([]);
     return this.http
@@ -125,4 +97,11 @@ export class EventsApiService {
       .pipe(catchError(() => of([])));
   }
 
+  /** Переключить «Я пойду» для сходки. Возвращает актуальные goingCount и userGoing. */
+  setGoing(eventId: string): Observable<{ goingCount: number; userGoing: boolean } | null> {
+    if (!this.base) return of(null);
+    return this.http
+      .post<{ goingCount: number; userGoing: boolean }>(`${this.base}/api/events/${eventId}/going`, {}, { headers: this.headers() })
+      .pipe(catchError(() => of(null)));
+  }
 }

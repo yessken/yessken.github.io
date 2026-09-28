@@ -1,7 +1,4 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, of } from 'rxjs';
-import { environment } from '../../../environments/environment';
 
 export type FunnelEvent = 'catalog_view' | 'event_open' | 'checkout_view' | 'payment_start' | 'purchase_success' | 'event_share';
 
@@ -15,10 +12,6 @@ interface StoredFunnelEvent {
 @Injectable({ providedIn: 'root' })
 export class AnalyticsService {
   private readonly storageKey = 'tusa-funnel-events';
-  private readonly visitorKey = 'tusa-visitor-id';
-  private readonly apiBase = environment.apiUrl?.replace(/\/$/, '') ?? '';
-
-  constructor(private http: HttpClient) {}
 
   track(name: FunnelEvent, eventId?: string, ref?: string): void {
     if (typeof window === 'undefined') return;
@@ -26,17 +19,6 @@ export class AnalyticsService {
     const currentRef = ref ?? (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('ref') ?? undefined : undefined);
     events.push({ name, eventId, ref: currentRef, createdAt: new Date().toISOString() });
     window.localStorage.setItem(this.storageKey, JSON.stringify(events.slice(-500)));
-
-    if (this.apiBase) {
-      this.http.post(`${this.apiBase}/api/analytics`, {
-        name,
-        eventId,
-        ref: currentRef,
-        visitorId: this.getVisitorId(),
-      })
-        .pipe(catchError(() => of(null)))
-        .subscribe();
-    }
   }
 
   getSummary(): Record<FunnelEvent, number> {
@@ -60,16 +42,5 @@ export class AnalyticsService {
     } catch {
       return [];
     }
-  }
-
-  private getVisitorId(): string {
-    let visitorId = window.localStorage.getItem(this.visitorKey);
-    if (!visitorId) {
-      visitorId = typeof crypto !== 'undefined' && 'randomUUID' in crypto
-        ? crypto.randomUUID()
-        : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
-      window.localStorage.setItem(this.visitorKey, visitorId);
-    }
-    return visitorId;
   }
 }

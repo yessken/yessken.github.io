@@ -137,12 +137,7 @@ export class EventsListComponent implements OnInit {
     return [...this.events()]
       .filter((event) => !this.category || event.category === this.category)
       .filter((event) => !this.dateFilter || this.matchesDateFilter(event.date, today, weekendStart, weekendEnd))
-      .filter((event) => {
-        if (!this.priceFilter) return true;
-        const isStarsTicket = (event.ticketCategories ?? []).some((ticket) => (ticket.telegramStarsPrice ?? 0) > 0);
-        if (this.priceFilter === 'free') return !isStarsTicket && (event.price === 0 || event.price === null);
-        return !isStarsTicket && (event.price ?? 0) <= 5000;
-      })
+      .filter((event) => !this.priceFilter || (this.priceFilter === 'free' ? event.price === 0 || event.price === null : (event.price ?? 0) <= 5000))
       .filter((event) => !this.availableOnly || (event.ticketCategories ?? []).some((category) => category.isActive && category.capacity > category.sold))
       .sort((a, b) => Number(b.featured) - Number(a.featured) || a.date.localeCompare(b.date));
   };
@@ -165,8 +160,7 @@ export class EventsListComponent implements OnInit {
   }
 
   priceLabel(event: EventItem): string {
-    const stars = event.ticketCategories?.find((category) => category.isActive && (category.telegramStarsPrice ?? 0) > 0)?.telegramStarsPrice;
-    if (stars) return `${stars} ⭐`;
+    if (event.id === 'tusa-2026' && !event.ticketCategories?.some((category) => category.isActive)) return 'Продажи приостановлены';
     return event.price ? `${event.price} ₸` : 'Бесплатно';
   }
 

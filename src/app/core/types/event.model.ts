@@ -6,9 +6,6 @@ export interface EventItem {
   time: string;
   place: string;
   address: string;
-  addressIsPrivate?: boolean;
-  addressRevealAt?: string | null;
-  isDemo?: boolean;
   lat: number;
   lng: number;
   category: string;
@@ -19,6 +16,10 @@ export interface EventItem {
   organizerPhone?: string;
   featured?: boolean;
   featuredUntil?: string;
+  /** Количество человек, которые нажали «Я пойду» (приходит с API) */
+  goingCount?: number;
+  /** Текущий пользователь нажал «Я пойду» (приходит с API) */
+  userGoing?: boolean;
   ticketCategories?: TicketCategory[];
 }
 
@@ -28,7 +29,6 @@ export interface TicketCategory {
   name: string;
   description?: string;
   price: number;
-  telegramStarsPrice?: number;
   capacity: number;
   sold: number;
   isActive: boolean;
@@ -42,8 +42,8 @@ export interface Ticket {
   eventPlace: string;
   qrCode?: string;
   purchasedAt: string;
-  paymentMethod?: 'kaspi' | 'telegram';
-  paymentStatus?: 'pending' | 'paid' | 'failed' | 'expired' | 'refunded';
+  paymentMethod?: 'telegram' | 'telegram_provider';
+  paymentStatus?: 'pending' | 'checkout' | 'paid' | 'failed' | 'expired' | 'refunded' | 'refund_requested';
   ticketCategoryId?: string;
   ticketCategoryName?: string;
   quantity?: number;
@@ -88,19 +88,6 @@ export interface OrganizerSubscriptionStatus {
   plan: string;
   status: string;
   expiresAt?: string | null;
-}
-
-export interface EventInterestStatus {
-  count: number;
-  interested: boolean;
-}
-
-export interface AdminEventEngagement {
-  eventId: string;
-  views: number;
-  uniqueVisitors: number;
-  interested: number;
-  paidTickets: number;
 }
 
 export interface AdminSalesSummary {

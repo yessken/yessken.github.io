@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { MockDataService } from './mock-data.service';
 import { EventsApiService } from './events-api.service';
-import type { AdminEventEngagement, AdminEventReport, AdminSalesSummary, EventInterestStatus, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
+import type { AdminEventReport, AdminSalesSummary, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -54,18 +54,6 @@ export class DataService {
     return of(null);
   }
 
-  getEventInterest(eventId: string): Observable<EventInterestStatus | null> {
-    return this.useApi ? this.api.getEventInterest(eventId) : of({ count: 0, interested: false });
-  }
-
-  markEventInterested(eventId: string): Observable<EventInterestStatus | null> {
-    return this.useApi ? this.api.markEventInterested(eventId) : of(null);
-  }
-
-  getAdminEventEngagement(eventId: string): Observable<AdminEventEngagement | null> {
-    return this.useApi ? this.api.getAdminEventEngagement(eventId) : of(null);
-  }
-
   getAdminSalesSummary(): Observable<AdminSalesSummary | null> {
     if (this.useApi) return this.api.getAdminSalesSummary();
     return of(null);
@@ -76,22 +64,13 @@ export class DataService {
     return of(this.mock.addEvent(event));
   }
 
-  purchaseTicket(eventId: string, ticketCategoryId: string, quantity: number, promoCode: string, paymentMethod: 'kaspi' | 'telegram' = 'kaspi'): Observable<Ticket | null> {
-    if (this.useApi) return this.api.purchaseTicket(eventId, ticketCategoryId, quantity, promoCode, paymentMethod);
-    const ev = this.mock.getEventById(eventId);
-    if (!ev) return of(null);
-    const category = ev.ticketCategories?.find((item) => item.id === ticketCategoryId);
-    if (!category || category.capacity - category.sold < quantity) return of(null);
-    const baseAmount = category.price * quantity;
-    const discountAmount = promoCode.trim().toUpperCase() === 'TUSA10' ? Math.round(baseAmount * 0.1) : 0;
-    const commissionAmount = Math.round((baseAmount - discountAmount) * 0.1);
-    category.sold += quantity;
-    return of(this.mock.addTicket({ eventId: ev.id, eventTitle: ev.title, eventDate: ev.date, eventPlace: ev.place, paymentMethod, paymentStatus: 'paid', ticketCategoryId: category.id, ticketCategoryName: category.name, quantity, baseAmount, discountAmount, commissionAmount, totalAmount: baseAmount - discountAmount + commissionAmount, promoCode: promoCode || undefined }));
-  }
-
   getTelegramGroups(): Observable<TelegramGroupItem[]> {
     if (this.useApi) return this.api.getTelegramGroups();
     return of([]);
   }
 
+  setGoing(eventId: string): Observable<{ goingCount: number; userGoing: boolean } | null> {
+    if (this.useApi) return this.api.setGoing(eventId);
+    return of(this.mock.setGoing(eventId));
+  }
 }

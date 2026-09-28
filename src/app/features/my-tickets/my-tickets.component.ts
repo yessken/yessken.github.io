@@ -21,7 +21,7 @@ import QRCode from 'qrcode';
               <span class="status" [class]="statusClass(t.paymentStatus)">{{ statusLabel(t.paymentStatus) }}</span>
               @if (qrCodes()[t.id]) { <img class="ticket-qr" [src]="qrCodes()[t.id]" alt="QR-код билета" /> }
               @if (t.qrCode) { <p class="qr">Код входа: {{ t.qrCode }}</p> }
-              <a [routerLink]="['/events', t.eventId]" queryParamsHandling="preserve">О событии</a>
+              <a [routerLink]="['/events', t.eventId]" queryParamsHandling="preserve">О сходке</a>
             </div>
           }
         </div>
@@ -47,7 +47,8 @@ import QRCode from 'qrcode';
       .status { display: inline-block; margin: .4rem 0; padding: .25rem .5rem; border-radius: 999px; font-size: .72rem; font-weight: 700; }
       .status-paid { background: rgba(170, 189, 126, .18); color: var(--tg-button, #aabd7e); }
       .status-pending { background: rgba(242, 190, 104, .18); color: #f2be68; }
-      .status-failed, .status-refunded, .status-expired { background: rgba(242, 123, 104, .18); color: #f27b68; }
+      .status-checkout { background: rgba(242, 190, 104, .18); color: #f2be68; }
+      .status-failed, .status-refunded, .status-expired, .status-refund_requested { background: rgba(242, 123, 104, .18); color: #f27b68; }
       .ticket-qr { display: block; width: min(220px, 70vw); aspect-ratio: 1; margin: .75rem auto; background: #fff; padding: .5rem; border-radius: 8px; }
       .qr { margin: 0.5rem 0; font-family: monospace; }
       .ticket a { color: var(--tg-button, #00FF41); font-size: 0.9rem; text-shadow: var(--tg-glow-text, 0 0 6px #00FF41); }
@@ -69,7 +70,7 @@ export class MyTicketsComponent implements OnInit {
   }
 
   statusLabel(status?: Ticket['paymentStatus']): string {
-    return ({ paid: 'Оплачено', pending: 'Ожидает оплаты', failed: 'Ошибка оплаты', refunded: 'Возврат оформлен', expired: 'Истёк' } as Record<string, string>)[status ?? 'pending'] ?? 'Статус уточняется';
+    return ({ paid: 'Оплачено', pending: 'Счёт выставлен', checkout: 'Подтверждаем оплату', failed: 'Ошибка оплаты', refunded: 'Возврат оформлен', refund_requested: 'Возврат на проверке', expired: 'Счёт истёк' } as Record<string, string>)[status ?? 'pending'] ?? 'Статус уточняется';
   }
 
   statusClass(status?: Ticket['paymentStatus']): string { return `status-${status ?? 'pending'}`; }

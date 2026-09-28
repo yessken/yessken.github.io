@@ -9,6 +9,7 @@ import { ProfileComponent } from './features/profile/profile.component';
 import { TgGroupsComponent } from './features/tg-groups/tg-groups.component';
 import { OrdersComponent } from './features/orders/orders.component';
 import { StartComponent } from './features/start/start.component';
+import { TicketTermsComponent } from './features/ticket-terms/ticket-terms.component';
 
 export const routes: Routes = [
   { path: '', component: StartComponent },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'events', component: EventsListComponent },
   { path: 'events/:id', component: EventDetailComponent },
   { path: 'events/:id/buy', component: BuyTicketComponent },
+  { path: 'terms', component: TicketTermsComponent },
   { path: 'my-tickets', component: MyTicketsComponent },
   { path: 'orders', component: OrdersComponent },
   { path: 'admin', component: OrdersComponent },
