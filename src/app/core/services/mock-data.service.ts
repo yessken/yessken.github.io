@@ -47,7 +47,7 @@ export class MockDataService {
       description: 'DJ-сет, два этажа, лаунж и танцпол.',
       date: '2026-10-22',
       time: '23:00',
-      place: 'Лофт «Сходка»',
+      place: 'Лофт «Туса»',
       address: 'ул. Сыганак, 12',
       lat: 51.1694,
       lng: 71.4494,
@@ -77,9 +77,6 @@ export class MockDataService {
       ticketCategories: [{ id: '4-standard', eventId: '4', name: 'Стандарт', description: 'Место в зале', price: 2500, capacity: 180, sold: 31, isActive: true }],
     },
   ];
-
-  /** В моках: какие сходки «текущий пользователь» отметил «Я пойду» */
-  private userGoingEventIds = new Set<string>();
 
   private tickets: Ticket[] = [
     {
@@ -123,19 +120,7 @@ export class MockDataService {
   }
 
   getEventById(id: string): EventItem | undefined {
-    const ev = this.events.find((e) => e.id === id);
-    if (!ev) return ev;
-    const userGoing = this.userGoingEventIds.has(id);
-    return { ...ev, goingCount: userGoing ? 1 : 0, userGoing };
-  }
-
-  setGoing(eventId: string): { goingCount: number; userGoing: boolean } {
-    if (this.userGoingEventIds.has(eventId)) {
-      this.userGoingEventIds.delete(eventId);
-      return { goingCount: 0, userGoing: false };
-    }
-    this.userGoingEventIds.add(eventId);
-    return { goingCount: 1, userGoing: true };
+    return this.events.find((event) => event.id === id);
   }
 
   getTickets(): Ticket[] {

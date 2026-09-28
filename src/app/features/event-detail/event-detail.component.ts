@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
@@ -23,22 +23,16 @@ import QRCode from 'qrcode';
           </div>
           <h1>{{ ev.title }}</h1>
           <p class="meta">{{ ev.date }} {{ ev.time }} · {{ ev.place }}</p>
-          <p class="address">{{ ev.address }}</p>
+          @if (ev.addressIsPrivate) {
+            <div class="private-venue">
+              <strong>Место проведения · Астана</strong>
+              <span>Точный адрес получат в Telegram только покупатели билета — за 24 часа до события.</span>
+              @if (ev.id === 'tusa-2026') { <small>До начала: {{ countdownLabel() }}</small> }
+            </div>
+          } @else if (ev.address) { <p class="address">{{ ev.address }}</p> }
+          @if (ev.id === 'tusa-2026') { <div class="countdown"><span>До начала</span><strong>{{ countdownLabel() }}</strong></div> }
           <p class="description">{{ ev.description }}</p>
-          <p class="price">{{ ev.price ? ev.price + ' ₸' : 'Бесплатно' }}</p>
-          <div class="going-row">
-            @if (ev.goingCount !== undefined && ev.goingCount > 0) {
-              <span class="going-count">{{ ev.goingCount }} {{ goingLabel(ev.goingCount) }}</span>
-            }
-            <button
-              type="button"
-              class="btn-going"
-              [class.active]="ev.userGoing"
-              (click)="toggleGoing(ev)"
-              [disabled]="goingLoading()">
-              {{ ev.userGoing ? 'Участвую' : 'Буду участвовать' }}
-            </button>
-          </div>
+          <p class="price">{{ priceLabel(ev) }}</p>
           <button type="button" class="btn-share" (click)="share(ev)">{{ shareLabel() }}</button>
           <button type="button" class="btn-tools" (click)="toolsVisible.update((visible) => !visible)">Материалы для публикации</button>
           @if (toolsVisible()) {
@@ -70,25 +64,11 @@ import QRCode from 'qrcode';
       .meta, .address { margin: 0.25rem 0; font-size: 0.95rem; opacity: 0.9; }
       .description { margin: 1rem 0; }
       .price { font-size: 1.1rem; font-weight: 600; margin: 1rem 0; }
-      .going-row { display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0; flex-wrap: wrap; }
-      .going-count { font-size: 0.9rem; opacity: 0.9; }
-      .btn-going {
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        border: 2px solid var(--tg-button, #00FF41);
-        background: transparent;
-        color: var(--tg-button, #00FF41);
-        font-size: 0.95rem;
-        font-weight: 500;
-        cursor: pointer;
-        box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
-      }
-      .btn-going.active {
-        background: var(--tg-button, #00FF41);
-        color: var(--tg-button-text, #0a0a0c);
-        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
-      }
-      .btn-going:disabled { opacity: 0.6; cursor: not-allowed; }
+      .private-venue, .countdown { display: grid; gap: .35rem; margin: 1rem 0; padding: .85rem; background: var(--tg-surface, #252529); border: 1px solid rgba(215,243,107,.18); border-radius: 6px; }
+      .private-venue strong, .countdown strong { color: var(--tg-button, #d7f36b); }
+      .private-venue span, .countdown span { font-size: .8rem; opacity: .72; line-height: 1.4; }
+      .private-venue small { color: var(--tg-button, #d7f36b); font-size: .78rem; font-variant-numeric: tabular-nums; }
+      .countdown strong { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
       .btn-buy {
         display: inline-block;
         padding: 0.75rem 1.5rem;
@@ -111,13 +91,27 @@ import QRCode from 'qrcode';
     `,
   ],
 })
-export class EventDetailComponent implements OnInit {
+export class EventDetailComponent implements OnInit, OnDestroy {
   event = signal<EventItem | null>(null);
-  goingLoading = signal(false);
   shareLabel = signal('Поделиться событием');
   copyLabel = signal('Скопировать текст');
   toolsVisible = signal(false);
   qrCode = signal('');
+  private now = signal(Date.now());
+  private countdownTimer?: ReturnType<typeof setInterval>;
+  countdownLabel = computed(() => {
+    const now = this.now();
+    const ev = this.event();
+    if (!ev) return '';
+    const startsAt = new Date(`${ev.date}T${ev.time || '19:00'}:00+05:00`).getTime();
+    const seconds = Math.max(0, Math.floor((startsAt - now) / 1000));
+    if (seconds <= 0) return 'Событие началось';
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+    return `${days} д ${hours} ч ${minutes} мин ${remainingSeconds} сек`;
+  });
 
   constructor(
     private route: ActivatedRoute,
@@ -126,6 +120,7 @@ export class EventDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.countdownTimer = setInterval(() => this.now.set(Date.now()), 1000);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.analytics.track('event_open', id);
@@ -136,23 +131,13 @@ export class EventDetailComponent implements OnInit {
     }
   }
 
-  goingLabel(n: number): string {
-    const last = n % 10;
-    const last2 = n % 100;
-    if (last === 1 && last2 !== 11) return 'человек идёт';
-    if (last >= 2 && last <= 4 && (last2 < 12 || last2 > 14)) return 'человека идут';
-    return 'человек идут';
+  ngOnDestroy(): void {
+    if (this.countdownTimer) clearInterval(this.countdownTimer);
   }
 
-  toggleGoing(ev: EventItem): void {
-    if (this.goingLoading()) return;
-    this.goingLoading.set(true);
-    this.data.setGoing(ev.id).subscribe((res) => {
-      this.goingLoading.set(false);
-      if (res) {
-        this.event.update((e) => (e ? { ...e, goingCount: res.goingCount, userGoing: res.userGoing } : e));
-      }
-    });
+  priceLabel(ev: EventItem): string {
+    const stars = ev.ticketCategories?.find((category) => (category.telegramStarsPrice ?? 0) > 0)?.telegramStarsPrice;
+    return stars ? `${stars} Telegram Stars` : ev.price ? `${ev.price} ₸` : 'Бесплатно';
   }
 
   async share(ev: EventItem): Promise<void> {

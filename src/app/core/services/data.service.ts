@@ -82,8 +82,4 @@ export class DataService {
     return of([]);
   }
 
-  setGoing(eventId: string): Observable<{ goingCount: number; userGoing: boolean } | null> {
-    if (this.useApi) return this.api.setGoing(eventId);
-    return of(this.mock.setGoing(eventId));
-  }
 }

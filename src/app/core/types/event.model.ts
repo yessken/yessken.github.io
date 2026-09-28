@@ -6,6 +6,9 @@ export interface EventItem {
   time: string;
   place: string;
   address: string;
+  addressIsPrivate?: boolean;
+  addressRevealAt?: string | null;
+  isDemo?: boolean;
   lat: number;
   lng: number;
   category: string;
@@ -16,10 +19,6 @@ export interface EventItem {
   organizerPhone?: string;
   featured?: boolean;
   featuredUntil?: string;
-  /** Количество человек, которые нажали «Я пойду» (приходит с API) */
-  goingCount?: number;
-  /** Текущий пользователь нажал «Я пойду» (приходит с API) */
-  userGoing?: boolean;
   ticketCategories?: TicketCategory[];
 }
 
@@ -29,6 +28,7 @@ export interface TicketCategory {
   name: string;
   description?: string;
   price: number;
+  telegramStarsPrice?: number;
   capacity: number;
   sold: number;
   isActive: boolean;

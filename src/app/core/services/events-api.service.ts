@@ -105,11 +105,4 @@ export class EventsApiService {
       .pipe(catchError(() => of([])));
   }
 
-  /** Переключить «Я пойду» для сходки. Возвращает актуальные goingCount и userGoing. */
-  setGoing(eventId: string): Observable<{ goingCount: number; userGoing: boolean } | null> {
-    if (!this.base) return of(null);
-    return this.http
-      .post<{ goingCount: number; userGoing: boolean }>(`${this.base}/api/events/${eventId}/going`, {}, { headers: this.headers() })
-      .pipe(catchError(() => of(null)));
-  }
 }

@@ -15,30 +15,39 @@ import type { EventItem, TicketCategory } from '../../core/types/event.model';
       <div class="buy-ticket">
         <h1>Получить билет</h1>
         <p class="event-title">{{ ev.title }}</p>
+        @if (!categories().length) {
+          <div class="unavailable"><strong>Продажи пока закрыты</strong><span>{{ ev.addressIsPrivate ? 'Организатор ещё подтверждает место проведения.' : 'Для этого события пока нет активных билетов.' }}</span></div>
+        } @else {
         <p class="label">Категория билета</p>
         <div class="categories">
           @for (category of categories(); track category.id) {
             <button type="button" class="category" [class.selected]="selectedCategoryId() === category.id" (click)="selectedCategoryId.set(category.id)">
               <span>{{ category.name }}</span>
-              <strong>{{ category.price ? (category.price | number) + ' ₸' : 'Бесплатно' }}</strong>
+              <strong>{{ category.telegramStarsPrice ? (category.telegramStarsPrice | number) + ' ⭐' : category.price ? (category.price | number) + ' ₸' : 'Бесплатно' }}</strong>
               <small>Осталось {{ category.capacity - category.sold }}</small>
             </button>
           }
         </div>
+        @if (!isStarsCheckout()) {
         <label class="quantity-label">Количество
           <select [value]="quantity()" (change)="quantity.set(+$any($event.target).value)">
             @for (amount of quantities(); track amount) { <option [value]="amount">{{ amount }}</option> }
           </select>
         </label>
-        <label class="promo-label">Промокод
+        }
+        @if (!isStarsCheckout()) { <label class="promo-label">Промокод
           <input type="text" [value]="promoCode()" (input)="promoCode.set($any($event.target).value)" placeholder="Введите код, если он есть" />
-        </label>
+        </label> }
+        @if (isStarsCheckout()) {
+          <div class="summary stars-summary"><span>Оплата через Telegram Stars</span><strong>{{ selectedCategory().telegramStarsPrice }} ⭐</strong></div>
+        } @else {
         <div class="summary">
           <span>Стоимость билетов <strong>{{ baseAmount() | number }} ₸</strong></span>
           @if (discountAmount()) { <span>Скидка <strong>-{{ discountAmount() | number }} ₸</strong></span> }
           <span>Комиссия TUSA 10% <strong>{{ commissionAmount() | number }} ₸</strong></span>
           <span class="total">Итого <strong>{{ totalAmount() | number }} ₸</strong></span>
         </div>
+        }
         @if (success()) {
           <div class="success">
             <strong>{{ paymentPending() ? 'Заказ создан' : 'Билет оформлен' }}</strong>
@@ -48,16 +57,19 @@ import type { EventItem, TicketCategory } from '../../core/types/event.model';
         } @else {
           <p class="label">Способ оплаты</p>
           @if (telegram.isInTelegram) {
-            <div class="methods">
+            @if (isStarsCheckout()) {
+              <div class="telegram-only"><strong>Telegram Stars</strong><span>Безопасная оплата внутри Telegram.</span></div>
+            } @else { <div class="methods">
               <button type="button" class="method" [class.selected]="paymentMethod() === 'kaspi'" (click)="paymentMethod.set('kaspi')">Kaspi Pay <small>быстро и привычно</small></button>
               <button type="button" class="method" [class.selected]="paymentMethod() === 'telegram'" (click)="paymentMethod.set('telegram')">Telegram Pay <small>внутри Telegram</small></button>
-            </div>
+            </div> }
           } @else {
             <div class="telegram-only"><strong>Оплата проходит в Telegram</strong><span>Откройте бота, чтобы продолжить оформление и получить защищённую оплату.</span></div>
           }
-          <button type="button" class="submit" (click)="purchase()" [disabled]="loading()">{{ loading() ? 'Открываем Telegram…' : telegram.isInTelegram ? (totalAmount() ? 'Перейти к оплате' : 'Подтвердить участие') : 'Продолжить в Telegram' }}</button>
+          <button type="button" class="submit" (click)="purchase()" [disabled]="loading()">{{ loading() ? 'Открываем Telegram…' : isStarsCheckout() ? 'Купить за ' + selectedCategory().telegramStarsPrice + ' ⭐' : telegram.isInTelegram ? (totalAmount() ? 'Перейти к оплате' : 'Подтвердить участие') : 'Продолжить в Telegram' }}</button>
           @if (errorMessage()) { <p class="error-message">{{ errorMessage() }}</p> }
           <p class="hint">Итоговая скидка и сумма подтверждаются сервером при создании заказа.</p>
+        }
         }
       </div>
     } @else {
@@ -70,6 +82,8 @@ import type { EventItem, TicketCategory } from '../../core/types/event.model';
       h1 { margin: 0 0 1rem; font-size: 1.25rem; }
       .event-title { font-weight: 600; margin-bottom: 0.25rem; }
       .categories { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1rem; }
+      .unavailable { display: grid; gap: .4rem; margin: 1rem 0; padding: 1rem; background: var(--tg-surface, #252529); border-left: 3px solid #f2be68; }
+      .unavailable span { font-size: .82rem; opacity: .7; }
       .category { display: grid; grid-template-columns: 1fr auto; gap: .2rem .75rem; padding: .75rem; text-align: left; background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); border: 1px solid rgba(255,255,255,.14); border-radius: 8px; cursor: pointer; }
       .category strong { grid-column: 2; grid-row: 1; }
       .category small { opacity: .65; }
@@ -79,6 +93,8 @@ import type { EventItem, TicketCategory } from '../../core/types/event.model';
       .summary { display: flex; flex-direction: column; gap: .4rem; margin: 1rem 0; font-size: .85rem; opacity: .82; }
       .summary span { display: flex; justify-content: space-between; gap: 1rem; }
       .summary .total { padding-top: .6rem; border-top: 1px solid rgba(255,255,255,.12); font-size: 1rem; opacity: 1; }
+      .stars-summary { align-items: center; padding: 1rem; background: var(--tg-surface, #252529); border-left: 3px solid var(--tg-button); }
+      .stars-summary strong { color: var(--tg-button); font-size: 1.25rem; }
       .methods { display: flex; flex-direction: column; gap: 0.75rem; }
       .label { margin: 0 0 0.5rem; font-size: 0.85rem; opacity: 0.75; }
       .method {
@@ -114,6 +130,7 @@ export class BuyTicketComponent implements OnInit {
   errorMessage = signal('');
 
   categories = computed(() => this.event()?.ticketCategories?.filter((category) => category.isActive) ?? []);
+  isStarsCheckout = computed(() => (this.selectedCategory()?.telegramStarsPrice ?? 0) > 0);
   selectedCategory = computed(() => this.categories().find((category) => category.id === this.selectedCategoryId()) ?? this.categories()[0]);
   baseAmount = computed(() => (this.selectedCategory()?.price ?? 0) * this.quantity());
   discountAmount = computed(() => 0);
@@ -135,6 +152,10 @@ export class BuyTicketComponent implements OnInit {
       this.data.getEventById(id).subscribe((ev) => {
         this.event.set(ev ?? null);
         this.selectedCategoryId.set(ev?.ticketCategories?.[0]?.id ?? '');
+        if (ev?.ticketCategories?.[0]?.telegramStarsPrice) {
+          this.paymentMethod.set('telegram');
+          this.quantity.set(1);
+        }
       });
     }
   }
@@ -142,7 +163,7 @@ export class BuyTicketComponent implements OnInit {
   purchase(): void {
     const ev = this.event();
     if (!ev || this.loading()) return;
-    if (this.paymentMethod() === 'telegram') {
+    if (this.isStarsCheckout() || this.paymentMethod() === 'telegram') {
       const payload = `event_${ev.id}`.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 64);
       const botLink = `https://t.me/tusa_astana_bot?start=${payload}`;
       if (!this.telegram.openTelegramLink(botLink)) window.location.href = botLink;

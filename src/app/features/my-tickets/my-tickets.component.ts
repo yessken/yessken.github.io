@@ -21,7 +21,7 @@ import QRCode from 'qrcode';
               <span class="status" [class]="statusClass(t.paymentStatus)">{{ statusLabel(t.paymentStatus) }}</span>
               @if (qrCodes()[t.id]) { <img class="ticket-qr" [src]="qrCodes()[t.id]" alt="QR-код билета" /> }
               @if (t.qrCode) { <p class="qr">Код входа: {{ t.qrCode }}</p> }
-              <a [routerLink]="['/events', t.eventId]" queryParamsHandling="preserve">О сходке</a>
+              <a [routerLink]="['/events', t.eventId]" queryParamsHandling="preserve">О событии</a>
             </div>
           }
         </div>
