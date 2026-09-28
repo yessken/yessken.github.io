@@ -90,6 +90,19 @@ export interface OrganizerSubscriptionStatus {
   expiresAt?: string | null;
 }
 
+export interface EventInterestStatus {
+  count: number;
+  interested: boolean;
+}
+
+export interface AdminEventEngagement {
+  eventId: string;
+  views: number;
+  uniqueVisitors: number;
+  interested: number;
+  paidTickets: number;
+}
+
 export interface AdminSalesSummary {
   totalOrders: number;
   totalTickets: number;

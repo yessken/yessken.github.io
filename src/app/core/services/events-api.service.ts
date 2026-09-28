@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { TelegramService } from './telegram.service';
-import type { AdminEventReport, AdminSalesSummary, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
+import type { AdminEventEngagement, AdminEventReport, AdminSalesSummary, EventInterestStatus, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -63,6 +63,26 @@ export class EventsApiService {
   getOrganizerSubscription(): Observable<OrganizerSubscriptionStatus | null> {
     if (!this.base) return of(null);
     return this.http.get<OrganizerSubscriptionStatus>(`${this.base}/api/organizer/subscription`, { headers: this.headers() }).pipe(catchError(() => of(null)));
+  }
+
+  getEventInterest(eventId: string): Observable<EventInterestStatus | null> {
+    if (!this.base) return of(null);
+    return this.http.get<EventInterestStatus>(`${this.base}/api/events/${eventId}/interest`, { headers: this.headers() }).pipe(catchError(() => of(null)));
+  }
+
+  markEventInterested(eventId: string): Observable<EventInterestStatus | null> {
+    if (!this.base) return of(null);
+    return this.http.post<EventInterestStatus>(`${this.base}/api/events/${eventId}/interest`, {}, { headers: this.headers() }).pipe(catchError(() => of(null)));
+  }
+
+  getAdminEventEngagement(eventId: string): Observable<AdminEventEngagement | null> {
+    if (!this.base) return of(null);
+    return this.http.get<AdminEventEngagement>(`${this.base}/api/admin/events/${eventId}/engagement`, { headers: this.headers() }).pipe(catchError(() => of(null)));
+  }
+
+  trackAnalytics(payload: { name: string; eventId?: string; ref?: string; visitorId?: string }): void {
+    if (!this.base) return;
+    this.http.post(`${this.base}/api/analytics`, payload, { headers: this.headers() }).pipe(catchError(() => of(null))).subscribe();
   }
 
   createEvent(event: Omit<EventItem, 'id'>): Observable<EventItem | null> {

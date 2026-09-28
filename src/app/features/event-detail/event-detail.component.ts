@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { AnalyticsService } from '../../core/services/analytics.service';
-import type { EventItem } from '../../core/types/event.model';
+import { TelegramService } from '../../core/services/telegram.service';
+import type { AdminEventEngagement, EventInterestStatus, EventItem } from '../../core/types/event.model';
 import QRCode from 'qrcode';
 
 @Component({
@@ -46,6 +47,26 @@ import QRCode from 'qrcode';
             </div>
           }
           <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Получить билет</a>
+          @if (ev.id === 'tusa-2026') {
+            <div class="interest-bar" aria-live="polite">
+              <div class="interest-copy"><strong>{{ interest()?.count ?? 0 }} заинтересовались</strong><small>Это не бронь и не покупка</small></div>
+              @if (telegram.isInTelegram) {
+                <button type="button" class="interest-button" [disabled]="interestLoading() || interest()?.interested" (click)="markInterested(ev)">
+                  {{ interestLoading() ? 'Сохраняю…' : interest()?.interested ? 'Вам интересно ✓' : 'Мне интересно' }}
+                </button>
+              } @else {
+                <button type="button" class="interest-button" (click)="openInterestInTelegram(ev)">Мне интересно</button>
+              }
+            </div>
+            @if (interestError()) { <p class="interest-error">Не удалось отметить интерес. Попробуйте ещё раз.</p> }
+            @if (adminEngagement(); as stats) {
+              <section class="admin-engagement" aria-label="Аналитика организатора">
+                <strong>Аналитика организатора</strong>
+                <span>Открытия: {{ stats.views }}</span><span>Уникальные посетители: {{ stats.uniqueVisitors }}</span>
+                <span>Интерес: {{ stats.interested }}</span><span>Оплаченные билеты: {{ stats.paidTickets }}</span>
+              </section>
+            }
+          }
         </div>
       </div>
     } @else {
@@ -69,6 +90,15 @@ import QRCode from 'qrcode';
       .private-venue span, .countdown span { font-size: .8rem; opacity: .72; line-height: 1.4; }
       .private-venue small { color: var(--tg-button, #d7f36b); font-size: .78rem; font-variant-numeric: tabular-nums; }
       .countdown strong { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+      .interest-bar { position: fixed; left: 1rem; right: 1rem; bottom: calc(3.6rem + env(safe-area-inset-bottom)); z-index: 80; display: flex; justify-content: space-between; align-items: center; gap: .65rem; max-width: 680px; margin: auto; padding: .55rem .7rem .55rem .85rem; background: rgba(28,30,29,.97); border: 1px solid rgba(215,243,107,.25); border-radius: 7px; box-shadow: 0 8px 24px rgba(0,0,0,.32); backdrop-filter: blur(12px); }
+      .interest-copy strong, .interest-copy small { display: block; }
+      .interest-copy strong { color: var(--tg-button, #d7f36b); font-size: .82rem; }
+      .interest-copy small { margin-top: .15rem; opacity: .58; font-size: .62rem; }
+      .interest-button { flex: 0 0 auto; padding: .58rem .75rem; border: 0; border-radius: 5px; background: var(--tg-button, #d7f36b); color: var(--tg-button-text, #171a12); font-size: .72rem; font-weight: 800; }
+      .interest-button:disabled { opacity: .75; }
+      .interest-error { color: #f27b68; font-size: .75rem; }
+      .admin-engagement { display: grid; gap: .35rem; margin: 1rem 0 6rem; padding: .9rem; background: var(--tg-surface, #252529); border: 1px solid rgba(215,243,107,.18); font-size: .78rem; }
+      .admin-engagement strong { color: var(--tg-button, #d7f36b); }
       .btn-buy {
         display: inline-block;
         padding: 0.75rem 1.5rem;
@@ -80,8 +110,9 @@ import QRCode from 'qrcode';
         box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
       @media (max-width: 699px) {
-        .btn-buy { position: sticky; bottom: 4.5rem; z-index: 5; display: block; text-align: center; }
+        .btn-buy { position: sticky; bottom: 8.6rem; z-index: 5; display: block; text-align: center; }
       }
+      @media (min-width: 700px) { .interest-bar { left: auto; right: 2rem; bottom: 1.5rem; } .admin-engagement { margin-bottom: 1rem; } }
       .btn-share { display: block; margin: .75rem 0; padding: .65rem 1rem; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; background: transparent; color: var(--tg-text, #e4e4e7); cursor: pointer; }
       .btn-tools, .copy-text { display: block; width: 100%; margin: .5rem 0; padding: .6rem .8rem; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); cursor: pointer; }
       .share-tools { padding: .75rem; margin: .5rem 0 1rem; background: var(--tg-surface, #252529); border-radius: 8px; }
@@ -93,6 +124,10 @@ import QRCode from 'qrcode';
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
   event = signal<EventItem | null>(null);
+  interest = signal<EventInterestStatus | null>(null);
+  adminEngagement = signal<AdminEventEngagement | null>(null);
+  interestLoading = signal(false);
+  interestError = signal(false);
   shareLabel = signal('Поделиться событием');
   copyLabel = signal('Скопировать текст');
   toolsVisible = signal(false);
@@ -116,7 +151,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
+    protected telegram: TelegramService
   ) {}
 
   ngOnInit(): void {
@@ -126,13 +162,35 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       this.analytics.track('event_open', id);
       this.data.getEventById(id).subscribe((ev) => {
         this.event.set(ev ?? null);
-        if (ev) this.generateQr(ev);
+        if (ev) {
+          this.generateQr(ev);
+          if (ev.id === 'tusa-2026') {
+            this.data.getEventInterest(ev.id).subscribe((result) => this.interest.set(result));
+            this.data.getAdminEventEngagement(ev.id).subscribe((result) => this.adminEngagement.set(result));
+          }
+        }
       });
     }
   }
 
   ngOnDestroy(): void {
     if (this.countdownTimer) clearInterval(this.countdownTimer);
+  }
+
+  markInterested(ev: EventItem): void {
+    if (this.interestLoading() || this.interest()?.interested) return;
+    this.interestLoading.set(true);
+    this.interestError.set(false);
+    this.data.markEventInterested(ev.id).subscribe((result) => {
+      this.interestLoading.set(false);
+      if (result) this.interest.set(result);
+      else this.interestError.set(true);
+    });
+  }
+
+  openInterestInTelegram(ev: EventItem): void {
+    const url = `https://t.me/tusa_astana_bot?start=interest_${encodeURIComponent(ev.id)}`;
+    if (!this.telegram.openTelegramLink(url) && typeof window !== 'undefined') window.location.href = url;
   }
 
   priceLabel(ev: EventItem): string {
