@@ -1,4 +1,4 @@
-import { Component, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ViewChild, ElementRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
@@ -13,6 +13,14 @@ declare const L: typeof import('leaflet');
   template: `
     <div class="map-container">
       <div #mapRef class="map"></div>
+      @if (mapLoading()) {
+        <div class="map-status" role="status">Загружаем карту…</div>
+      } @else if (mapUnavailable()) {
+        <div class="map-status map-error" role="status">
+          <span>Карта временно недоступна</span>
+          <a routerLink="/events" queryParamsHandling="preserve">Открыть список событий →</a>
+        </div>
+      }
       <div class="map-header">
         <div>
           <span class="map-kicker">ASTANA / LIVE</span>
@@ -39,6 +47,9 @@ declare const L: typeof import('leaflet');
       :host { display: block; height: 100%; min-height: 0; }
       .map-container { position: relative; width: 100%; height: 100%; min-height: 0; overflow: hidden; }
       .map { width: 100%; height: 100%; min-height: 0; display: block; background: var(--tg-surface, #252529); -webkit-tap-highlight-color: transparent; }
+      .map-status { position: absolute; top: 50%; left: 50%; z-index: 700; transform: translate(-50%, -50%); padding: .65rem .9rem; border: 1px solid rgba(242,240,232,.14); border-radius: 4px; background: rgba(18,19,19,.84); color: rgba(242,240,232,.74); font-size: .78rem; text-align: center; pointer-events: none; }
+      .map-error { display: grid; gap: .55rem; pointer-events: auto; }
+      .map-error a { color: #d7f36b; font-weight: 700; text-decoration: none; }
       .map-header {
         position: absolute;
         top: 1rem;
@@ -87,6 +98,8 @@ declare const L: typeof import('leaflet');
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapRef') mapRef!: ElementRef<HTMLDivElement>;
+  mapLoading = signal(true);
+  mapUnavailable = signal(false);
   private map: L.Map | null = null;
   private markers: L.Marker[] = [];
   private resizeObserver: ResizeObserver | null = null;
@@ -205,10 +218,25 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       zoomAnimation: false,
       markerZoomAnimation: false,
     }).setView([astana.lat, astana.lng], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png', {
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}{r}.png', {
       attribution: '© OpenStreetMap contributors',
       detectRetina: true,
-    }).addTo(this.map);
+    });
+    tiles.on('load', () => {
+      this.mapLoading.set(false);
+      this.mapUnavailable.set(false);
+    });
+    tiles.on('tileerror', () => {
+      this.mapLoading.set(false);
+      this.mapUnavailable.set(true);
+    });
+    tiles.addTo(this.map);
+    window.setTimeout(() => {
+      if (this.mapLoading()) {
+        this.mapLoading.set(false);
+        this.mapUnavailable.set(true);
+      }
+    }, 12000);
 
     this.boundInvalidate = (): void => {
       this.map?.invalidateSize();
