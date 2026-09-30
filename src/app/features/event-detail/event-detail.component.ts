@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { AnalyticsService } from '../../core/services/analytics.service';
+import { TelegramService } from '../../core/services/telegram.service';
 import type { EventItem } from '../../core/types/event.model';
 import QRCode from 'qrcode';
 
@@ -36,9 +37,11 @@ import QRCode from 'qrcode';
               class="btn-going"
               [class.active]="ev.userGoing"
               (click)="toggleGoing(ev)"
-              [disabled]="goingLoading()">
-              {{ ev.userGoing ? 'Участвую' : 'Буду участвовать' }}
+              [disabled]="goingLoading() || ev.isDemo || !telegram.isInTelegram">
+              {{ ev.userGoing ? 'Вы отметили участие' : 'Буду участвовать' }}
             </button>
+            @if (!telegram.isInTelegram && !ev.isDemo) { <a class="telegram-hint" href="https://t.me/tusa_astana_bot">Откройте TUSA в Telegram, чтобы отметить участие</a> }
+            @if (goingError()) { <p class="going-error" role="alert">Не удалось сохранить отметку. Проверьте соединение и попробуйте ещё раз.</p> }
           </div>
           <button type="button" class="btn-share" (click)="share(ev)">{{ shareLabel() }}</button>
           <button type="button" class="btn-tools" (click)="toolsVisible.update((visible) => !visible)">Материалы для публикации</button>
@@ -78,6 +81,8 @@ import QRCode from 'qrcode';
       .demo-notice { margin: .75rem 0; padding: .7rem .8rem; border-left: 2px solid #f2be68; background: rgba(242,190,104,.08); color: #f2d29b; font-size: .78rem; line-height: 1.45; }
       .going-row { display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0; flex-wrap: wrap; }
       .going-count { font-size: 0.9rem; opacity: 0.9; }
+      .telegram-hint { flex-basis: 100%; color: var(--tg-button, #d7f36b); font-size: .78rem; }
+      .going-error { flex-basis: 100%; margin: 0; color: #f27b68; font-size: .78rem; }
       .btn-going {
         padding: 0.5rem 1rem;
         border-radius: 8px;
@@ -130,6 +135,7 @@ import QRCode from 'qrcode';
 export class EventDetailComponent implements OnInit {
   event = signal<EventItem | null>(null);
   goingLoading = signal(false);
+  goingError = signal(false);
   shareLabel = signal('Поделиться событием');
   copyLabel = signal('Скопировать текст');
   toolsVisible = signal(false);
@@ -138,7 +144,8 @@ export class EventDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
+    protected telegram: TelegramService,
   ) {}
 
   ngOnInit(): void {
@@ -148,6 +155,9 @@ export class EventDetailComponent implements OnInit {
       this.data.getEventById(id).subscribe((ev) => {
         this.event.set(ev ?? null);
         if (ev) this.generateQr(ev);
+      });
+      this.data.getEventGoing(id).subscribe((going) => {
+        if (going) this.event.update((current) => current ? { ...current, ...going } : current);
       });
     }
   }
@@ -170,13 +180,14 @@ export class EventDetailComponent implements OnInit {
   }
 
   toggleGoing(ev: EventItem): void {
-    if (this.goingLoading()) return;
+    if (this.goingLoading() || ev.isDemo || !this.telegram.isInTelegram) return;
     this.goingLoading.set(true);
+    this.goingError.set(false);
     this.data.setGoing(ev.id).subscribe((res) => {
       this.goingLoading.set(false);
       if (res) {
         this.event.update((e) => (e ? { ...e, goingCount: res.goingCount, userGoing: res.userGoing } : e));
-      }
+      } else this.goingError.set(true);
     });
   }
 

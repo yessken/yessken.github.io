@@ -51,6 +51,12 @@ export class EventsApiService {
     );
   }
 
+  getEventGoing(id: string): Observable<{ goingCount: number; userGoing: boolean } | null> {
+    if (!this.base) return of(null);
+    return this.http.get<{ goingCount: number; userGoing: boolean }>(`${this.base}/api/events/${encodeURIComponent(id)}/going`, { headers: this.headers() })
+      .pipe(catchError(() => of(null)));
+  }
+
   getTickets(): Observable<Ticket[]> {
     if (!this.base) return of([]);
     return this.http.get<Ticket[]>(`${this.base}/api/tickets/me`, { headers: this.headers() }).pipe(

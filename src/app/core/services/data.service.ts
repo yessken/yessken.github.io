@@ -35,6 +35,12 @@ export class DataService {
     return of(this.mock.getEventById(id) ?? null);
   }
 
+  getEventGoing(id: string): Observable<{ goingCount: number; userGoing: boolean } | null> {
+    if (this.useApi) return this.api.getEventGoing(id);
+    const event = this.mock.getEventById(id);
+    return of(event ? { goingCount: event.goingCount ?? 0, userGoing: event.userGoing ?? false } : null);
+  }
+
   getTickets(): Observable<Ticket[]> {
     if (this.useApi) return this.api.getTickets();
     return of(this.mock.getTickets());
