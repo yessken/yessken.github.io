@@ -1,33 +1,20 @@
 import { Routes } from '@angular/router';
-import { MapComponent } from './features/map/map.component';
-import { EventsListComponent } from './features/events-list/events-list.component';
-import { EventDetailComponent } from './features/event-detail/event-detail.component';
-import { BuyTicketComponent } from './features/buy-ticket/buy-ticket.component';
-import { MyTicketsComponent } from './features/my-tickets/my-tickets.component';
-import { CreateEventComponent } from './features/create-event/create-event.component';
-import { ProfileComponent } from './features/profile/profile.component';
-import { TgGroupsComponent } from './features/tg-groups/tg-groups.component';
-import { OrdersComponent } from './features/orders/orders.component';
-import { StartComponent } from './features/start/start.component';
-import { TicketTermsComponent } from './features/ticket-terms/ticket-terms.component';
-import { AdminBotLogsComponent } from './features/admin-bot-logs/admin-bot-logs.component';
-import { AdminEventReviewComponent } from './features/admin-event-review/admin-event-review.component';
 
 export const routes: Routes = [
-  { path: '', component: StartComponent },
-  { path: 'city-map', component: MapComponent },
+  { path: '', loadComponent: () => import('./features/start/start.component').then((m) => m.StartComponent) },
+  { path: 'city-map', loadComponent: () => import('./features/map/map.component').then((m) => m.MapComponent) },
   { path: 'map', redirectTo: '' },
-  { path: 'events', component: EventsListComponent },
-  { path: 'events/:id', component: EventDetailComponent },
-  { path: 'events/:id/buy', component: BuyTicketComponent },
-  { path: 'terms', component: TicketTermsComponent },
-  { path: 'my-tickets', component: MyTicketsComponent },
-  { path: 'orders', component: OrdersComponent },
-  { path: 'admin', component: OrdersComponent },
-  { path: 'admin/bot-messages', component: AdminBotLogsComponent },
-  { path: 'admin/event-review', component: AdminEventReviewComponent },
-  { path: 'tg-groups', component: TgGroupsComponent },
-  { path: 'create-event', component: CreateEventComponent },
-  { path: 'profile', component: ProfileComponent },
+  { path: 'events', loadComponent: () => import('./features/events-list/events-list.component').then((m) => m.EventsListComponent) },
+  { path: 'events/:id', loadComponent: () => import('./features/event-detail/event-detail.component').then((m) => m.EventDetailComponent) },
+  { path: 'events/:id/buy', loadComponent: () => import('./features/buy-ticket/buy-ticket.component').then((m) => m.BuyTicketComponent) },
+  { path: 'terms', loadComponent: () => import('./features/ticket-terms/ticket-terms.component').then((m) => m.TicketTermsComponent) },
+  { path: 'my-tickets', loadComponent: () => import('./features/my-tickets/my-tickets.component').then((m) => m.MyTicketsComponent) },
+  { path: 'orders', loadComponent: () => import('./features/orders/orders.component').then((m) => m.OrdersComponent) },
+  { path: 'admin', loadComponent: () => import('./features/orders/orders.component').then((m) => m.OrdersComponent) },
+  { path: 'admin/bot-messages', loadComponent: () => import('./features/admin-bot-logs/admin-bot-logs.component').then((m) => m.AdminBotLogsComponent) },
+  { path: 'admin/event-review', loadComponent: () => import('./features/admin-event-review/admin-event-review.component').then((m) => m.AdminEventReviewComponent) },
+  { path: 'tg-groups', loadComponent: () => import('./features/tg-groups/tg-groups.component').then((m) => m.TgGroupsComponent) },
+  { path: 'create-event', loadComponent: () => import('./features/create-event/create-event.component').then((m) => m.CreateEventComponent) },
+  { path: 'profile', loadComponent: () => import('./features/profile/profile.component').then((m) => m.ProfileComponent) },
   { path: '**', redirectTo: '' },
 ];

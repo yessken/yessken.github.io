@@ -98,7 +98,9 @@ import type { EventItem } from '../../core/types/event.model';
 export class BuyTicketComponent implements OnInit {
   event = signal<EventItem | null>(null);
   termsAccepted = signal(false);
-  activeCategory = computed(() => this.event()?.ticketCategories?.find((category) => category.isActive && category.capacity > category.sold) ?? null);
+  activeCategory = computed(() => this.event()?.ticketSalesEnabled === true
+    ? this.event()?.ticketCategories?.find((category) => category.isActive && category.capacity > category.sold) ?? null
+    : null);
   totalPrice = computed(() => Math.round((this.activeCategory()?.price ?? 0) * 1.1));
 
   constructor(

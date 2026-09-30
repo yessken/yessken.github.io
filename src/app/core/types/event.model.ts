@@ -18,6 +18,7 @@ export interface EventItem {
   status?: 'pending' | 'approved' | 'rejected';
   createdAt?: string;
   isDemo?: boolean;
+  ticketSalesEnabled?: boolean;
   featured?: boolean;
   featuredUntil?: string;
   /** Количество человек, которые нажали «Я пойду» (приходит с API) */

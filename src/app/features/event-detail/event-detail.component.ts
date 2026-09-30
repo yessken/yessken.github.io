@@ -57,6 +57,8 @@ import QRCode from 'qrcode';
           }
           @if (ticketSalesAvailable(ev)) {
             <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Получить билет</a>
+          } @else if (!ev.isDemo && ev.price && ev.id === 'tusa-2026') {
+            <a class="btn-buy interest-link" [href]="ticketInterestLink(ev)">Сообщить, когда билеты появятся</a>
           } @else {
             <span class="btn-buy unavailable" aria-disabled="true">{{ ev.isDemo ? 'Демо — билеты недоступны' : ev.price ? 'Продажи билетов пока не подключены' : 'Вход бесплатный' }}</span>
           }
@@ -111,6 +113,7 @@ import QRCode from 'qrcode';
         box-shadow: var(--tg-glow, 0 0 12px #00FF41);
       }
       .btn-buy.unavailable { background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); box-shadow: none; cursor: not-allowed; }
+      .btn-buy.interest-link { background: var(--tg-surface, #252529); color: var(--tg-button, #d7f36b); border: 1px solid rgba(215,243,107,.42); box-shadow: none; text-align: center; }
       @media (max-width: 699px) {
         .event-detail { padding-bottom: 4.75rem; }
         .btn-buy {
@@ -171,7 +174,11 @@ export class EventDetailComponent implements OnInit {
   }
 
   ticketSalesAvailable(ev: EventItem): boolean {
-    return !ev.isDemo && ev.id === 'tusa-2026' && (ev.ticketCategories ?? []).some((category) => category.isActive && category.capacity > category.sold);
+    return !ev.isDemo && ev.ticketSalesEnabled === true;
+  }
+
+  ticketInterestLink(ev: EventItem): string {
+    return `https://t.me/tusa_astana_bot?start=interest_${encodeURIComponent(ev.id)}`;
   }
 
   priceLabel(ev: EventItem): string {
