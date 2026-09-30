@@ -19,6 +19,10 @@ import type { EventItem } from '../../core/types/event.model';
         <a routerLink="/create-event" class="organizer-link" queryParamsHandling="preserve">Организаторам: разместить событие бесплатно</a>
       </div>
       <div class="filters">
+        <label class="search-label">
+          <span class="visually-hidden">Поиск событий</span>
+          <input type="search" placeholder="Название, место или описание" [value]="searchQuery" (input)="searchQuery = $any($event.target).value" />
+        </label>
         <select (change)="category = $any($event.target).value">
           <option value="">Все категории</option>
           <option value="концерт">Концерт</option>
@@ -71,6 +75,9 @@ import type { EventItem } from '../../core/types/event.model';
       .intro p:not(.date-line) { margin: 0; max-width: 34rem; opacity: .66; font-size: .94rem; line-height: 1.5; }
       .organizer-link { display: inline-block; margin-top: .75rem; color: var(--tg-button, #aabd7e); font-size: .8rem; font-weight: 700; text-decoration: none; }
       .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.2rem; }
+      .search-label { flex: 1 1 100%; }
+      .search-label input { box-sizing: border-box; width: 100%; padding: 0.65rem .9rem; border-radius: 999px; background: var(--tg-surface, #1c1e1d); color: var(--tg-text, #f2f0e8); border: 1px solid rgba(242,240,232,.15); }
+      .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
       .filters select { padding: 0.65rem .75rem; border-radius: 999px; min-width: 140px; background: var(--tg-surface, #1c1e1d); color: var(--tg-text, #f2f0e8); border: 1px solid rgba(242,240,232,.15); }
       .availability { display: inline-flex; align-items: center; gap: .4rem; padding: .55rem .65rem; font-size: .8rem; }
       .state { display: flex; flex-direction: column; gap: .45rem; padding: 1rem; margin: 0 0 1rem; background: var(--tg-surface, #252529); border-radius: 8px; }
@@ -96,6 +103,7 @@ import type { EventItem } from '../../core/types/event.model';
       .meta { margin: 0.25rem 0; font-size: 0.86rem; opacity: 0.62; }
       .price { margin: .75rem 0 0; color: var(--tg-button, #d7f36b); font-size: .92rem; font-weight: 700; }
       @media (min-width: 700px) {
+        .search-label { flex: 1 1 100%; }
         .events-list { padding: 4.5rem clamp(2rem, 5vw, 5rem); }
         .intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .48fr); column-gap: 4rem; align-items: end; padding-bottom: 2.25rem; }
         .eyebrow, .date-line, h1 { grid-column: 1; }
@@ -113,6 +121,7 @@ import type { EventItem } from '../../core/types/event.model';
   ],
 })
 export class EventsListComponent implements OnInit {
+  searchQuery = '';
   category = '';
   dateFilter = '';
   priceFilter = '';
@@ -129,12 +138,15 @@ export class EventsListComponent implements OnInit {
 
   filteredEvents = () => {
     const today = new Date();
+    const query = this.searchQuery.trim().toLocaleLowerCase('ru');
     const day = today.getDay();
     const weekendStart = new Date(today);
     weekendStart.setDate(today.getDate() + (day === 0 ? 0 : 6 - day));
     const weekendEnd = new Date(weekendStart);
     weekendEnd.setDate(weekendStart.getDate() + 1);
     return [...this.events()]
+      .filter((event) => !query || [event.title, event.place, event.address, event.description, event.category]
+        .some((value) => value?.toLocaleLowerCase('ru').includes(query)))
       .filter((event) => !this.category || event.category === this.category)
       .filter((event) => !this.dateFilter || this.matchesDateFilter(event.date, today, weekendStart, weekendEnd))
       .filter((event) => !this.priceFilter || (this.priceFilter === 'free' ? event.price === 0 || event.price === null : (event.price ?? 0) <= 5000))
@@ -142,7 +154,7 @@ export class EventsListComponent implements OnInit {
       .sort((a, b) => Number(b.featured) - Number(a.featured) || a.date.localeCompare(b.date));
   };
 
-  resetFilters(): void { this.category = ''; this.dateFilter = ''; this.priceFilter = ''; this.availableOnly = false; }
+  resetFilters(): void { this.searchQuery = ''; this.category = ''; this.dateFilter = ''; this.priceFilter = ''; this.availableOnly = false; }
 
   reload(): void {
     if (this.data.eventsError()) this.data.getEvents().subscribe((list) => { this.events.set(list); this.loading.set(false); });

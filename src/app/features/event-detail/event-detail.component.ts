@@ -109,7 +109,16 @@ import QRCode from 'qrcode';
       }
       .btn-buy.unavailable { background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); box-shadow: none; cursor: not-allowed; }
       @media (max-width: 699px) {
-        .btn-buy { position: sticky; bottom: 4.5rem; z-index: 5; display: block; text-align: center; }
+        .event-detail { padding-bottom: 4.75rem; }
+        .btn-buy {
+          position: fixed;
+          left: 1rem;
+          right: 1rem;
+          bottom: calc(4.5rem + env(safe-area-inset-bottom));
+          z-index: 95;
+          display: block;
+          text-align: center;
+        }
       }
       .btn-share { display: block; margin: .75rem 0; padding: .65rem 1rem; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; background: transparent; color: var(--tg-text, #e4e4e7); cursor: pointer; }
       .btn-tools, .copy-text { display: block; width: 100%; margin: .5rem 0; padding: .6rem .8rem; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); cursor: pointer; }

@@ -36,6 +36,43 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+## Use this project as a Telegram Mini App starter
+
+This repository is currently the TUSA application, not a generic app generator. Developers can fork/clone it as a starter, replace TUSA branding and event-specific logic, and configure their own Telegram bot and API.
+
+### 1. Create and configure your bot
+
+1. Create a bot with [@BotFather](https://t.me/BotFather) and keep its bot token private.
+2. Host the Angular app on an HTTPS origin.
+3. Set the bot's Web App domain/menu URL to that HTTPS origin in BotFather. The backend calls `setChatMenuButton` on startup when `Telegram:WebAppUrl` is configured.
+4. Set an HTTPS webhook URL that reaches the API and create a separate webhook secret. Do not reuse the bot token as the webhook secret.
+
+### 2. Configure API secrets
+
+In the backend project folder, configure the bot token, public Mini App URL, webhook URL, webhook secret, and numeric admin Telegram ID with .NET User Secrets for local Development. For deployment, use the hosting provider's secret/environment-variable store. Environment variable names use double underscores, for example `Telegram__BotToken`, `Telegram__WebAppUrl`, `Telegram__WebhookUrl`, `Telegram__WebhookSecret`, and `Telegram__AdminUserIds__0`.
+
+Never put bot tokens, payment-provider tokens, or webhook secrets in Angular source, `environment*.ts`, committed `appsettings*.json`, screenshots, or public chat. Rotate a credential immediately if it was exposed.
+
+### 3. Point the frontend to your API
+
+- Local development: set `apiUrl` in [src/environments/environment.ts](src/environments/environment.ts) to the local API origin.
+- Production: set `apiUrl` in [src/environments/environment.prod.ts](src/environments/environment.prod.ts) to the stable HTTPS API origin, then build and deploy the frontend.
+- For Telegram testing, the frontend and webhook must use the current public HTTPS tunnel/domain. Cloudflare Quick Tunnels generate temporary hostnames; use a named tunnel or stable hosting outside short tests.
+
+### 4. Telegram authentication model
+
+The Mini App sends the raw `Telegram.WebApp.initData` string in the `X-Telegram-Init-Data` HTTP header. The API validates Telegram's HMAC signature and `auth_date` using the bot token, then derives the user ID from the verified payload.
+
+Do not authorize a request using `initDataUnsafe`, a client-supplied Telegram ID, username, or role: these do not prove identity. Keep authorization decisions on the API. Admin endpoints require valid `initData` and a user ID listed in `Telegram:AdminUserIds`.
+
+### Starter-specific pieces to replace
+
+- `Tusa2026EventSeeder` and TUSA-specific event IDs, prices, and copy;
+- TUSA event UI and brand assets;
+- organizer/admin policies and the current physical-ticket payment configuration.
+
+Payment providers depend on merchant, product, region, and contract. Do not enable live payments by copying a token alone: first confirm provider availability and permitted use, configure server-side secrets, and test invoice, success, failure, cancellation, refund, and webhook delivery.
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:

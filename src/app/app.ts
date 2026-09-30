@@ -77,6 +77,8 @@ export class App implements OnInit {
 
   private createBreadcrumbs(url: string): Breadcrumb[] {
     const segments = url.split('/').filter(Boolean);
+    if (segments[0] === 'admin' && segments[1] === 'bot-messages')
+      return [{ label: 'Заказы', url: '/admin' }, { label: 'Сообщения боту' }];
     if (segments[0] === 'events' && segments.length >= 2) {
       const trail: Breadcrumb[] = [{ label: 'События', url: '/events' }];
       if (segments.length === 2) trail.push({ label: 'Событие' });

@@ -10,6 +10,7 @@ import { TgGroupsComponent } from './features/tg-groups/tg-groups.component';
 import { OrdersComponent } from './features/orders/orders.component';
 import { StartComponent } from './features/start/start.component';
 import { TicketTermsComponent } from './features/ticket-terms/ticket-terms.component';
+import { AdminBotLogsComponent } from './features/admin-bot-logs/admin-bot-logs.component';
 
 export const routes: Routes = [
   { path: '', component: StartComponent },
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'my-tickets', component: MyTicketsComponent },
   { path: 'orders', component: OrdersComponent },
   { path: 'admin', component: OrdersComponent },
+  { path: 'admin/bot-messages', component: AdminBotLogsComponent },
   { path: 'tg-groups', component: TgGroupsComponent },
   { path: 'create-event', component: CreateEventComponent },
   { path: 'profile', component: ProfileComponent },

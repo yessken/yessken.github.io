@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="48" y1="32" x2="464" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#172554"/>
+      <stop offset="1" stop-color="#0B1224"/>
+    </linearGradient>
+    <linearGradient id="pin" x1="344" y1="69" x2="435" y2="191" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="shadow" x="64" y="68" width="384" height="382" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#020617" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <circle cx="256" cy="256" r="252" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="235" stroke="#FFFFFF" stroke-opacity=".1" stroke-width="2"/>
+  <g filter="url(#shadow)">
+    <path d="M100 245 251 121l151 124" stroke="#F8FAFC" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M137 230v183h228V230L251 137 137 230Z" fill="#F8FAFC"/>
+    <path d="M217 413V302c0-7 6-13 13-13h42c7 0 13 6 13 13v111" fill="#172554"/>
+    <path d="M158 257h40v40h-40zM304 257h40v40h-40z" fill="#C7D2FE"/>
+  </g>
+  <path d="M388 72c-42 0-76 34-76 76 0 58 76 135 76 135s76-77 76-135c0-42-34-76-76-76Z" fill="url(#pin)" stroke="#0B1224" stroke-width="12" stroke-linejoin="round"/>
+  <circle cx="388" cy="148" r="25" fill="#172554"/>
+</svg>

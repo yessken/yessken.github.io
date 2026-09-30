@@ -90,6 +90,13 @@ export interface OrganizerSubscriptionStatus {
   expiresAt?: string | null;
 }
 
+export interface OrganizerSubscriptionOffer {
+  available: boolean;
+  stars: number;
+  durationDays: number;
+  features: string[];
+}
+
 export interface AdminSalesSummary {
   totalOrders: number;
   totalTickets: number;
@@ -98,4 +105,14 @@ export interface AdminSalesSummary {
   paidRevenue: number;
   requestedRefunds: number;
   activeEvents: number;
+}
+
+export interface BotMessageLogRow {
+  id: number;
+  telegramUserId: number;
+  senderName: string;
+  username?: string | null;
+  messageType: string;
+  content: string;
+  receivedAt: string;
 }

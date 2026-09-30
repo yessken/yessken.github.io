@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="lime" x1="118" y1="96" x2="394" y2="410" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8FF91"/>
+      <stop offset="1" stop-color="#C8ED4E"/>
+    </linearGradient>
+    <filter id="glow" x="91" y="73" width="330" height="366" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="124" fill="#121313"/>
+  <circle cx="256" cy="238" r="158" fill="#1C1E1D" stroke="#30342C" stroke-width="3"/>
+  <path d="M256 94c-70.14 0-127 56.86-127 127 0 94 127 197 127 197s127-103 127-197c0-70.14-56.86-127-127-127Z" fill="url(#lime)" filter="url(#glow)"/>
+  <circle cx="256" cy="221" r="77" fill="#121313"/>
+  <path d="M205 190h102v22h-39v75h-24v-75h-39v-22Z" fill="#F5F3E9"/>
+  <text x="256" y="476" text-anchor="middle" fill="#F5F3E9" font-family="Arial,Helvetica,sans-serif" font-size="40" font-weight="700" letter-spacing="11">TUSA</text>
+</svg>

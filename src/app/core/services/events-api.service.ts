@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { TelegramService } from './telegram.service';
-import type { AdminEventReport, AdminSalesSummary, EventItem, OrganizerOrderRow, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
+import type { AdminEventReport, AdminSalesSummary, BotMessageLogRow, EventItem, OrganizerOrderRow, OrganizerSubscriptionOffer, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -60,9 +60,22 @@ export class EventsApiService {
     return this.http.get<AdminSalesSummary>(`${this.base}/api/admin/sales-summary`, { headers: this.headers() }).pipe(catchError(() => of(null)));
   }
 
+  getAdminBotMessages(skip = 0, take = 100): Observable<BotMessageLogRow[] | null> {
+    if (!this.base) return of(null);
+    return this.http.get<BotMessageLogRow[]>(`${this.base}/api/admin/bot-messages`, {
+      params: { skip, take },
+      headers: this.headers(),
+    }).pipe(catchError(() => of(null)));
+  }
+
   getOrganizerSubscription(): Observable<OrganizerSubscriptionStatus | null> {
     if (!this.base) return of(null);
     return this.http.get<OrganizerSubscriptionStatus>(`${this.base}/api/organizer/subscription`, { headers: this.headers() }).pipe(catchError(() => of(null)));
+  }
+
+  getOrganizerSubscriptionOffer(): Observable<OrganizerSubscriptionOffer | null> {
+    if (!this.base) return of(null);
+    return this.http.get<OrganizerSubscriptionOffer>(`${this.base}/api/organizer/subscription/offer`).pipe(catchError(() => of(null)));
   }
 
   createEvent(event: Omit<EventItem, 'id'>): Observable<EventItem | null> {
