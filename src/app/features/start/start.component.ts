@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
         <div class="choices">
           <a routerLink="/events" class="choice primary">
             <span class="choice-index">01</span>
-            <span><strong>Найти событие</strong><small>Выбрать место и билет</small></span>
+            <span><strong>Найти событие</strong><small>Посмотреть афишу и цены</small></span>
             <span class="arrow" aria-hidden="true">→</span>
           </a>
           <a routerLink="/create-event" class="choice secondary">

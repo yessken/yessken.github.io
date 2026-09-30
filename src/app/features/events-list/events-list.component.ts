@@ -52,6 +52,7 @@ import type { EventItem } from '../../core/types/event.model';
             <div class="card-body">
               <div class="card-topline">
                 <span class="category">{{ event.category }}</span>
+                @if (event.isDemo) { <span class="demo-badge">Пример</span> }
                 @if (event.featured) {
                   <span class="featured-badge">Промо</span>
                 }
@@ -98,6 +99,7 @@ import type { EventItem } from '../../core/types/event.model';
       .card-body { padding: 1rem 1.05rem 1.1rem; }
       .card-topline { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
       .category { font-size: 0.75rem; text-transform: uppercase; opacity: 0.8; }
+      .demo-badge { display: inline-flex; align-items: center; padding: .18rem .45rem; border: 1px solid rgba(242,190,104,.38); border-radius: 999px; color: #f2be68; font-size: .62rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
       .featured-badge { display: inline-flex; align-items: center; padding: 0.18rem 0.5rem; border-radius: 999px; background: rgba(0,255,65,0.12); color: var(--tg-button, #00FF41); font-size: 0.65rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
       .card h3 { margin: .35rem 0 .4rem; font-size: 1.35rem; font-weight: 500; }
       .meta { margin: 0.25rem 0; font-size: 0.86rem; opacity: 0.62; }

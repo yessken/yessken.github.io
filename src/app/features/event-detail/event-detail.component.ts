@@ -22,6 +22,7 @@ import QRCode from 'qrcode';
             }
           </div>
           <h1>{{ ev.title }}</h1>
+          @if (ev.isDemo) { <p class="demo-notice" role="note">Демо-пример. Это тестовая карточка, событие и билеты не подтверждены.</p> }
           <p class="meta">{{ ev.date }} {{ ev.time }} · {{ ev.place }}</p>
           <p class="address">{{ ev.address }}</p>
           <p class="description">{{ ev.description }}</p>
@@ -51,14 +52,10 @@ import QRCode from 'qrcode';
               <button type="button" class="copy-text" (click)="copyShareText(ev)">{{ copyLabel() }}</button>
             </div>
           }
-          @if (ev.id === 'tusa-2026') {
-            @if (ticketSalesAvailable(ev)) {
-              <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Получить билет</a>
-            } @else {
-              <span class="btn-buy unavailable" aria-disabled="true">Продажи временно приостановлены</span>
-            }
-          } @else {
+          @if (ticketSalesAvailable(ev)) {
             <a [routerLink]="['/events', ev.id, 'buy']" class="btn-buy" queryParamsHandling="preserve">Получить билет</a>
+          } @else {
+            <span class="btn-buy unavailable" aria-disabled="true">{{ ev.isDemo ? 'Демо — билеты недоступны' : ev.price ? 'Продажи билетов пока не подключены' : 'Вход бесплатный' }}</span>
           }
         </div>
       </div>
@@ -78,6 +75,7 @@ import QRCode from 'qrcode';
       .meta, .address { margin: 0.25rem 0; font-size: 0.95rem; opacity: 0.9; }
       .description { margin: 1rem 0; }
       .price { font-size: 1.1rem; font-weight: 600; margin: 1rem 0; }
+      .demo-notice { margin: .75rem 0; padding: .7rem .8rem; border-left: 2px solid #f2be68; background: rgba(242,190,104,.08); color: #f2d29b; font-size: .78rem; line-height: 1.45; }
       .going-row { display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0; flex-wrap: wrap; }
       .going-count { font-size: 0.9rem; opacity: 0.9; }
       .btn-going {
@@ -163,7 +161,7 @@ export class EventDetailComponent implements OnInit {
   }
 
   ticketSalesAvailable(ev: EventItem): boolean {
-    return (ev.ticketCategories ?? []).some((category) => category.isActive && category.capacity > category.sold);
+    return !ev.isDemo && ev.id === 'tusa-2026' && (ev.ticketCategories ?? []).some((category) => category.isActive && category.capacity > category.sold);
   }
 
   priceLabel(ev: EventItem): string {
@@ -202,7 +200,7 @@ export class EventDetailComponent implements OnInit {
 
   shareText(ev: EventItem): string {
     const url = typeof window !== 'undefined' ? `${window.location.origin}/events/${ev.id}?ref=tusa-event-${ev.id}` : '';
-    return `${ev.title}\n${ev.date} · ${ev.time} · ${ev.place}\nБилеты в TUSA: ${url}`;
+    return `${ev.title}\n${ev.date} · ${ev.time} · ${ev.place}\nПодробнее в TUSA: ${url}`;
   }
 
   async copyShareText(ev: EventItem): Promise<void> {
