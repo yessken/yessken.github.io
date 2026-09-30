@@ -21,6 +21,7 @@ export class DataService {
   ) {}
 
   get eventsError() { return this.api.eventsError; }
+  get eventSubmissionRateLimited() { return this.api.eventSubmissionRateLimited; }
 
   getEvents(category?: string): Observable<EventItem[]> {
     if (this.useApi) return this.api.getEvents(category);

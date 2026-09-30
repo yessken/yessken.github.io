@@ -65,6 +65,8 @@ The Mini App sends the raw `Telegram.WebApp.initData` string in the `X-Telegram-
 
 Do not authorize a request using `initDataUnsafe`, a client-supplied Telegram ID, username, or role: these do not prove identity. Keep authorization decisions on the API. Admin endpoints require valid `initData` and a user ID listed in `Telegram:AdminUserIds`.
 
+Organizer submissions stay unpublished until an administrator reviews them in `/admin/event-review`. When the bot token and admin allowlist are configured, new submissions also trigger a Telegram notification. The browser-accessible demo submission endpoint is still anonymous and only has a basic request-rate cap; add captcha/anti-spam controls or restrict it before inviting unrestricted public submissions.
+
 ### Starter-specific pieces to replace
 
 - `Tusa2026EventSeeder` and TUSA-specific event IDs, prices, and copy;

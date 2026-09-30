@@ -11,6 +11,7 @@ import { OrdersComponent } from './features/orders/orders.component';
 import { StartComponent } from './features/start/start.component';
 import { TicketTermsComponent } from './features/ticket-terms/ticket-terms.component';
 import { AdminBotLogsComponent } from './features/admin-bot-logs/admin-bot-logs.component';
+import { AdminEventReviewComponent } from './features/admin-event-review/admin-event-review.component';
 
 export const routes: Routes = [
   { path: '', component: StartComponent },
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'orders', component: OrdersComponent },
   { path: 'admin', component: OrdersComponent },
   { path: 'admin/bot-messages', component: AdminBotLogsComponent },
+  { path: 'admin/event-review', component: AdminEventReviewComponent },
   { path: 'tg-groups', component: TgGroupsComponent },
   { path: 'create-event', component: CreateEventComponent },
   { path: 'profile', component: ProfileComponent },

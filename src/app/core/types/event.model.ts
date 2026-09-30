@@ -14,6 +14,9 @@ export interface EventItem {
   organizerName: string;
   organizerEmail?: string;
   organizerPhone?: string;
+  organizerTelegramId?: number;
+  status?: 'pending' | 'approved' | 'rejected';
+  createdAt?: string;
   featured?: boolean;
   featuredUntil?: string;
   /** Количество человек, которые нажали «Я пойду» (приходит с API) */

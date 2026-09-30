@@ -66,6 +66,13 @@ import type { OrganizerSubscriptionOffer, OrganizerSubscriptionStatus } from '..
         <a routerLink="/create-event" queryParamsHandling="preserve">Для организаторов</a>
         <a routerLink="/tg-groups" queryParamsHandling="preserve">Сообщества</a>
       </nav>
+      @if (adminToolsAvailable()) {
+        <section class="admin-tools" aria-labelledby="admin-tools-title">
+          <h2 id="admin-tools-title">Управление TUSA</h2>
+          <a routerLink="/admin/event-review" queryParamsHandling="preserve">Очередь модерации</a>
+          <a routerLink="/admin/bot-messages" queryParamsHandling="preserve">Сообщения боту</a>
+        </section>
+      }
     </div>
   `,
   styles: [
@@ -78,6 +85,9 @@ import type { OrganizerSubscriptionOffer, OrganizerSubscriptionStatus } from '..
       .username, .tg-id { margin: 0.25rem 0; font-size: 0.9rem; opacity: 0.9; }
       nav { display: flex; flex-direction: column; gap: 0.5rem; }
       nav a { color: var(--tg-button, #00FF41); text-shadow: var(--tg-glow-text, 0 0 6px #00FF41); }
+      .admin-tools { display: grid; gap: .5rem; margin: 1.25rem 0; padding: .9rem; border: 1px solid rgba(215,243,107,.25); background: rgba(215,243,107,.04); }
+      .admin-tools h2 { margin: 0 0 .2rem; font-size: .9rem; }
+      .admin-tools a { color: var(--tg-button, #d7f36b); font-size: .82rem; }
       .subscribe { width: fit-content; padding: .7rem .85rem; border: 1px solid var(--tg-button, #00FF41); border-radius: 5px; background: transparent; color: var(--tg-button, #00FF41); font: inherit; cursor: pointer; }
       .subscribe:disabled { opacity: .55; cursor: not-allowed; }
       .subscription { display: grid; gap: .25rem; margin: 1rem 0; padding: .85rem; border-left: 3px solid #f2be68; background: var(--tg-surface, #252529); font-size: .85rem; }
@@ -100,12 +110,14 @@ export class ProfileComponent implements OnInit {
   subscription = signal<OrganizerSubscriptionStatus | null>(null);
   offer = signal<OrganizerSubscriptionOffer | null>(null);
   offerLoading = signal(true);
+  adminToolsAvailable = signal(false);
 
   constructor(private telegram: TelegramService, private data: DataService) {}
 
   ngOnInit(): void {
     this.data.getOrganizerSubscription().subscribe((status) => this.subscription.set(status));
     this.data.getOrganizerSubscriptionOffer().subscribe((offer) => { this.offer.set(offer); this.offerLoading.set(false); });
+    this.data.getAdminSalesSummary().subscribe((summary) => this.adminToolsAvailable.set(summary !== null));
   }
 
   subscriptionStatusLabel(plan: OrganizerSubscriptionStatus): string {

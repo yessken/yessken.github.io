@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 import { TelegramService } from './telegram.service';
 import type { AdminEventReport, AdminSalesSummary, BotMessageLogRow, EventItem, OrganizerOrderRow, OrganizerSubscriptionOffer, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
@@ -9,6 +9,7 @@ import { environment } from '../../../environments/environment';
 export class EventsApiService {
   private readonly base = environment.apiUrl?.replace(/\/$/, '') ?? '';
   readonly eventsError = signal(false);
+  readonly eventSubmissionRateLimited = signal(false);
 
   constructor(
     private http: HttpClient,
@@ -29,6 +30,18 @@ export class EventsApiService {
     return this.http.get<EventItem[]>(`${this.base}/api/events`, { params: params as any, headers: this.headers() }).pipe(
       catchError(() => { this.eventsError.set(true); return of([]); })
     );
+  }
+
+  getPendingEvents(): Observable<EventItem[] | null> {
+    if (!this.base) return of(null);
+    return this.http.get<EventItem[]>(`${this.base}/api/events/pending`, { headers: this.headers() })
+      .pipe(catchError(() => of(null)));
+  }
+
+  reviewPendingEvent(id: string, decision: 'approve' | 'reject'): Observable<EventItem | null> {
+    if (!this.base) return of(null);
+    return this.http.post<EventItem>(`${this.base}/api/events/${encodeURIComponent(id)}/${decision}`, {}, { headers: this.headers() })
+      .pipe(catchError(() => of(null)));
   }
 
   getEventById(id: string): Observable<EventItem | null> {
@@ -80,6 +93,7 @@ export class EventsApiService {
 
   createEvent(event: Omit<EventItem, 'id'>): Observable<EventItem | null> {
     if (!this.base) return of(null);
+    this.eventSubmissionRateLimited.set(false);
     const body = {
       title: event.title,
       description: event.description,
@@ -99,7 +113,10 @@ export class EventsApiService {
     };
     const endpoint = this.telegram.initData ? '/api/events' : '/api/events/public';
     return this.http.post<EventItem>(`${this.base}${endpoint}`, body, { headers: this.headers() }).pipe(
-      catchError(() => of(null))
+      catchError((error: HttpErrorResponse) => {
+        this.eventSubmissionRateLimited.set(error.status === 429);
+        return of(null);
+      })
     );
   }
 

@@ -39,18 +39,17 @@ Output:
 
 Goal: make the app sales-ready.
 
-Priority features:
-1. event detail page with buy CTA
-2. ticket checkout flow
-3. order status handling: pending, paid, failed
-4. remaining seats / capacity
-5. organizer dashboard: views, sold, revenue
-6. featured placement toggle
-7. QR or ticket confirmation after payment
+Implemented: event discovery/search, event details, organizer submissions, admin moderation queue and alerts, ticket capacity/order tracking, organizer sales view, Telegram ticket delivery, and basic conversion analytics.
+
+Release blockers (do not describe these as complete):
+1. The production API needs a stable HTTPS host; a Cloudflare Quick Tunnel is temporary and points at a developer machine.
+2. Ticket sales stay disabled until Robokassa approves the merchant account, the Kazakhstan integration is implemented and verified, and a real test payment/refund cycle passes.
+3. A real organizer and live event are needed to validate the end-to-end purchase and support flow.
 
 Output:
-- a real event can be created and purchased
-- organizer can see basic sales data
+- one real organizer submission is reviewed and published;
+- after payment activation, a test buyer can pay, receive a ticket, and request support;
+- the organizer can see the resulting order and sales status.
 
 ### 3. Measurement stream
 
@@ -69,28 +68,20 @@ Output:
 
 ## Weekly plan
 
-### Week 1: pilot setup
-- contact organizers
-- create 3–5 launch listings
-- finalize event data schema and pricing flow
-- prepare the initial organizer dashboard
+### Gate 1: get real supply
+- finish merchant activation paperwork and choose a stable backend host;
+- contact organizers and confirm one pilot event with permission to list it;
+- submit, review, and publish it through the new moderation flow.
 
-### Week 2: revenue flow
-- connect payment and status handling
-- ensure tickets appear only after successful payment
-- track conversion per event
-- close first paid promotion or commission deal
+### Gate 2: prove payment safely
+- implement the approved Kazakhstan provider flow after merchant activation;
+- test success, cancellation, duplicate notifications, expiry, and refund handling;
+- do not turn on live ticket sales until the test cycle and support process pass.
 
-### Week 3: proof and follow-up
-- analyze the first results
-- ask pilot organizers for testimonials and repeat campaigns
-- improve the event-to-checkout flow
-- package the offer for the next 5 organizers
-
-### Week 4: scale proof
-- convert 1–2 pilots into repeat buyers
-- run a featured placement campaign
-- build the basic repeatable commercial motion
+### Gate 3: prove demand
+- invite the organizer's audience to the listing;
+- track listing views, checkout starts, completed sales, and support requests;
+- review actual net revenue and organizer feedback before adding paid promotion or subscriptions.
 
 ## Founder rules
 
@@ -109,11 +100,11 @@ We continue scaling only if we have:
 
 ## Immediate next actions
 
-1. Create organizer contact list
-2. Send first 10 outreach messages
-3. Prepare 3 pilot event listings
-4. Finalize the event checkout flow
-5. Measure event conversion every 48 hours
-6. Convert first pilot into a paid campaign
+1. Complete Robokassa merchant activation and obtain the official Kazakhstan integration requirements.
+2. Choose and configure a stable HTTPS backend host; replace the temporary tunnel in both the API webhook and frontend configuration.
+3. Contact the first 10 organizers and secure one real pilot event.
+4. Run the pilot through submission, moderation, publication, and audience sharing.
+5. Enable checkout only after provider test payments, duplicate-callback protection, cancellation, and refund procedures are verified.
+6. Measure the funnel every 48 hours and report gross and net revenue separately.
 
 This sprint is designed to produce the first real business signal: a paying organizer and a sold ticket.

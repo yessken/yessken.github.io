@@ -1,13 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 
 @Component({
   selector: 'app-create-event',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   template: `
     <div class="create-event">
       <header class="form-hero">
@@ -81,8 +81,14 @@ import { DataService } from '../../core/services/data.service';
           <small>Нажимая кнопку, вы отправляете заявку на модерацию TUSA.</small>
         </div>
       </form>
-      @if (success()) { <p class="success">Заявка отправлена. Мы свяжемся с вами после проверки.</p> }
-      @if (submitError()) { <p class="field-error submit-error">Не удалось отправить заявку. Проверьте соединение и попробуйте ещё раз.</p> }
+      @if (success()) {
+        <section class="success" role="status" aria-labelledby="submission-success-title">
+          <span class="success-mark" aria-hidden="true">✓</span>
+          <div><h2 id="submission-success-title">Заявка принята</h2><p>Событие пока не опубликовано. Администратор проверит информацию и свяжется с вами по указанным контактам.</p><small>Номер заявки: {{ submittedEventId() }}</small></div>
+          <a routerLink="/events">Вернуться к афише</a>
+        </section>
+      }
+      @if (submitError()) { <p class="field-error submit-error" role="alert">{{ data.eventSubmissionRateLimited() ? 'Слишком много заявок с этого соединения. Подождите 10 минут и попробуйте ещё раз.' : 'Не удалось отправить заявку. Проверьте соединение и попробуйте ещё раз.' }}</p> }
     </div>
   `,
   styles: [
@@ -144,7 +150,12 @@ import { DataService } from '../../core/services/data.service';
       .submit-panel button { justify-self: start; min-width: 220px; }
       .submit-panel button span { margin-left: .4rem; font-size: 1.1rem; }
       .submit-panel small { color: rgba(242,240,232,.4); font-size: .68rem; }
-      .success { margin-top: 1rem; color: var(--tg-button, #d7f36b); }
+      .success { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: .75rem; margin-top: 1rem; padding: 1rem; border: 1px solid rgba(215,243,107,.32); background: rgba(215,243,107,.06); color: var(--tg-text, #f2f0e8); }
+      .success-mark { display: grid; width: 1.7rem; height: 1.7rem; place-items: center; border-radius: 50%; background: var(--tg-button, #d7f36b); color: var(--tg-button-text, #121313); font-weight: 900; }
+      .success h2 { margin: 0; color: var(--tg-button, #d7f36b); font-size: 1rem; }
+      .success p { margin: .35rem 0; color: rgba(242,240,232,.75); font-size: .82rem; line-height: 1.5; }
+      .success small { color: rgba(242,240,232,.48); font-size: .7rem; }
+      .success a { grid-column: 2; width: fit-content; color: var(--tg-button, #d7f36b); font-size: .78rem; }
       .submit-error { margin-top: 1rem; }
       @media (min-width: 700px) {
         .create-event { padding: 4.5rem clamp(2rem, 5vw, 5rem); }
@@ -163,6 +174,7 @@ import { DataService } from '../../core/services/data.service';
 export class CreateEventComponent {
   form: FormGroup;
   success = signal(false);
+  submittedEventId = signal('');
   submitting = signal(false);
   submitError = signal(false);
   addressSuggestions = signal<Array<{ display_name: string; lat: string; lon: string }>>([]);
@@ -172,8 +184,7 @@ export class CreateEventComponent {
 
   constructor(
     private fb: FormBuilder,
-    private data: DataService,
-    private router: Router
+    protected data: DataService
   ) {
     this.form = this.fb.group({
       title: ['', Validators.required],
@@ -254,6 +265,7 @@ export class CreateEventComponent {
     if (this.form.invalid) return;
     this.submitting.set(true);
     this.submitError.set(false);
+    this.success.set(false);
     const v = this.form.value;
     this.saveContact(v);
     this.data.createEvent({
@@ -285,7 +297,7 @@ export class CreateEventComponent {
       this.submitting.set(false);
       if (!created) { this.submitError.set(true); return; }
       this.success.set(true);
-      setTimeout(() => this.router.navigate(['/events']), 1500);
+      this.submittedEventId.set(created.id);
     });
   }
 
