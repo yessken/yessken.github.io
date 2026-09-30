@@ -46,8 +46,9 @@ import { DataService } from '../../core/services/data.service';
               @if (addressLoading()) { <small class="field-hint">Ищем адрес…</small> }
               @if (addressSuggestions().length) { <div class="suggestions">@for (suggestion of addressSuggestions(); track suggestion.display_name) { <button type="button" (click)="selectAddress(suggestion)">{{ suggestion.display_name }}</button> }</div> }
             </label>
-            <label class="wide">Обложка события <span class="optional">необязательно</span>
+            <label class="wide">Афиша или фото события <span class="optional">загрузите официальное изображение — мы покажем его без случайной замены</span>
               <input type="file" accept="image/png,image/jpeg,image/webp" (change)="selectImage($event)" />
+              <small class="field-hint">Без загрузки подставим стабильное тематическое фото по категории и отметим его как иллюстрацию.</small>
               @if (imagePreview()) { <img class="image-preview" [src]="imagePreview()" alt="Предпросмотр обложки" /> }
               @if (imageError()) { <small class="field-error">{{ imageError() }}</small> }
             </label>
@@ -198,7 +199,7 @@ export class CreateEventComponent {
       category: ['концерт'],
       price: [0],
       featured: [false],
-      imageUrl: ['https://picsum.photos/400/200'],
+      imageUrl: [''],
       organizerName: [this.savedContact('organizerName')],
       organizerEmail: [this.savedContact('organizerEmail'), Validators.email],
       organizerPhone: [this.savedContact('organizerPhone')],
@@ -228,7 +229,7 @@ export class CreateEventComponent {
       party: { category: 'вечеринка', time: '22:00', price: 5000, title: 'Вечеринка в Астане' },
       comedy: { category: 'развлечения', time: '19:00', price: 2500, title: 'Stand-up вечер' },
     }[template];
-    this.form.patchValue(values);
+    this.form.patchValue({ ...values, imageUrl: this.defaultCover(values.category) });
   }
 
   async searchAddress(): Promise<void> {
@@ -247,18 +248,34 @@ export class CreateEventComponent {
     this.addressSuggestions.set([]);
   }
 
-  selectImage(event: Event): void {
+  async selectImage(event: Event): Promise<void> {
     const file = (event.target as HTMLInputElement).files?.[0];
     this.imageError.set('');
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { this.imageError.set('Файл должен быть меньше 5 МБ.'); return; }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = String(reader.result);
+    if (file.size > 12 * 1024 * 1024) { this.imageError.set('Исходный файл должен быть меньше 12 МБ.'); return; }
+    try {
+      const bitmap = await createImageBitmap(file);
+      const scale = Math.min(1, 1600 / bitmap.width, 1000 / bitmap.height);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      const context = canvas.getContext('2d');
+      if (!context) throw new Error('Canvas is unavailable');
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      bitmap.close();
+      const compressed = await new Promise<Blob>((resolve, reject) =>
+        canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Image compression failed')), 'image/webp', 0.82));
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => reject(new Error('Image could not be read'));
+        reader.readAsDataURL(compressed);
+      });
       this.imagePreview.set(dataUrl);
       this.form.patchValue({ imageUrl: dataUrl });
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      this.imageError.set('Не удалось обработать изображение. Попробуйте JPG, PNG или WebP.');
+    }
   }
 
   onSubmit(): void {
@@ -280,7 +297,7 @@ export class CreateEventComponent {
       category: v.category,
       price: v.price ? Number(v.price) : null,
       featured: Boolean(v.featured),
-      imageUrl: v.imageUrl || 'https://picsum.photos/400/200',
+      imageUrl: v.imageUrl || this.defaultCover(v.category),
       organizerName: v.organizerName,
       organizerEmail: v.organizerEmail,
       organizerPhone: v.organizerPhone,
@@ -304,6 +321,15 @@ export class CreateEventComponent {
   private savedContact(key: 'organizerName' | 'organizerEmail' | 'organizerPhone'): string {
     if (typeof localStorage === 'undefined') return '';
     return localStorage.getItem(`tusa-${key}`) ?? '';
+  }
+
+  private defaultCover(category: string): string {
+    const covers: Record<string, string> = {
+      концерт: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=85',
+      вечеринка: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&q=85',
+      развлечения: 'https://images.unsplash.com/photo-1585699324551-f6c309eedeca?auto=format&fit=crop&w=1200&q=85',
+    };
+    return covers[category] ?? covers['концерт'];
   }
 
   private saveContact(value: { organizerName?: string; organizerEmail?: string; organizerPhone?: string }): void {

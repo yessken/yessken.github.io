@@ -14,8 +14,9 @@ import QRCode from 'qrcode';
   template: `
     @if (event(); as ev) {
       <div class="event-detail">
-        <img [src]="ev.imageUrl" [alt]="ev.title" class="cover" />
+        <img [src]="ev.imageUrl" [alt]="ev.title" class="cover" fetchpriority="high" />
         <div class="body">
+          @if (isIllustrativeImage(ev.imageUrl)) { <p class="image-note">Иллюстративное фото · афиша события ещё не добавлена</p> }
           <div class="heading-row">
             <span class="category">{{ ev.category }}</span>
             @if (ev.featured) {
@@ -81,6 +82,7 @@ import QRCode from 'qrcode';
       .description { margin: 1rem 0; }
       .price { font-size: 1.1rem; font-weight: 600; margin: 1rem 0; }
       .demo-notice { margin: .75rem 0; padding: .7rem .8rem; border-left: 2px solid #f2be68; background: rgba(242,190,104,.08); color: #f2d29b; font-size: .78rem; line-height: 1.45; }
+      .image-note { display: inline-block; margin: .35rem 0 .5rem; color: rgba(242,240,232,.5); font-size: .68rem; }
       .going-row { display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0; flex-wrap: wrap; }
       .going-count { font-size: 0.9rem; opacity: 0.9; }
       .telegram-hint { flex-basis: 100%; color: var(--tg-button, #d7f36b); font-size: .78rem; }
@@ -186,6 +188,8 @@ export class EventDetailComponent implements OnInit {
     return ev.price ? `${ev.price} ₸` : 'Бесплатно';
   }
 
+  isIllustrativeImage(imageUrl: string): boolean { return imageUrl.includes('images.unsplash.com'); }
+
   toggleGoing(ev: EventItem): void {
     if (this.goingLoading() || ev.isDemo || !this.telegram.isInTelegram) return;
     this.goingLoading.set(true);
@@ -200,7 +204,7 @@ export class EventDetailComponent implements OnInit {
 
   async share(ev: EventItem): Promise<void> {
     const url = typeof window !== 'undefined' ? `${window.location.origin}/events/${ev.id}?ref=tusa-event-${ev.id}` : '';
-    const text = `${ev.title} — ${ev.date} в ${ev.place}. Билеты в TUSA.`;
+    const text = `${ev.title} — ${ev.date} в ${ev.place}. Подробнее в TUSA.`;
     this.analytics.track('event_share', ev.id, `tusa-event-${ev.id}`);
     try {
       if (typeof navigator !== 'undefined' && navigator.share) {
