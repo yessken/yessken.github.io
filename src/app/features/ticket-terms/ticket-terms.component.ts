@@ -8,6 +8,11 @@ import { RouterLink } from '@angular/router';
     <main class="terms">
       <span class="eyebrow">TUSA · УСЛОВИЯ</span>
       <h1>Условия событий и билетов</h1>
+      <nav class="legal-links" aria-label="Документы и тарифы">
+        <a href="/tariffs.html">Тарифы в тенге</a>
+        <a href="/offer.html">Договор-оферта</a>
+        <a href="/privacy.html">Политика конфиденциальности</a>
+      </nav>
       <section aria-labelledby="sales-status">
         <h2 id="sales-status">Покупка билета</h2>
         <p>Если на странице события указано, что продажи открыты, билет оформляется через счёт Telegram Bot Payments в тенге с обработкой платежа подключённым сторонним провайдером. Telegram Stars для входа на офлайн-событие не используются. До выставления счёта пользователь должен подтвердить согласие с этими условиями. Если провайдер ещё не настроен, бот не создаёт заказ и не принимает оплату.</p>
@@ -34,6 +39,7 @@ import { RouterLink } from '@angular/router';
     a { color: var(--tg-button, #aabd7e); }
     .version { margin-top: 2rem; font-size: .8rem; opacity: .6; }
     .back { display: inline-block; margin-top: .75rem; }
+    .legal-links { display: flex; flex-wrap: wrap; gap: .55rem 1rem; margin: 0 0 1rem; font-size: .8rem; }
   `],
 })
 export class TicketTermsComponent {}
