@@ -1,8 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
+
+function contactMethodValidator(control: AbstractControl): ValidationErrors | null {
+  const email = String(control.get('organizerEmail')?.value ?? '').trim();
+  const phone = String(control.get('organizerPhone')?.value ?? '').trim();
+  return email || phone ? null : { contactMethodRequired: true };
+}
 
 @Component({
   selector: 'app-create-event',
@@ -75,9 +81,9 @@ import { DataService } from '../../core/services/data.service';
             <label>Email <input formControlName="organizerEmail" type="email" placeholder="name@example.com" /></label>
             <label>Телефон <input formControlName="organizerPhone" type="tel" placeholder="+7 700 000 00 00" /></label>
           </div>
+          @if (contactErrorVisible()) { <p class="field-error" role="alert">Укажите email или телефон — без этого мы не сможем ответить по заявке.</p> }
         </section>
         <div class="submit-panel">
-          <label class="toggle-row"><input type="checkbox" formControlName="featured" /><span>Рассмотреть промо-размещение в подборке</span></label>
           <button type="submit" [disabled]="form.invalid || submitting()">{{ submitting() ? 'Отправляем заявку…' : 'Отправить заявку' }} <span aria-hidden="true">→</span></button>
           <small>Нажимая кнопку, вы отправляете заявку на модерацию TUSA.</small>
         </div>
@@ -128,8 +134,6 @@ import { DataService } from '../../core/services/data.service';
       .image-preview { display: block; width: 100%; max-height: 220px; object-fit: cover; margin-top: .5rem; border-radius: 3px; }
       .field-hint { opacity: .65; font-size: .78rem; }
       .field-error { color: #f27b68; font-size: .78rem; }
-      .toggle-row { display: flex; flex-direction: row; align-items: center; gap: .65rem; font-size: .78rem; font-weight: 400; }
-      .toggle-row input { width: 1rem; height: 1rem; accent-color: var(--tg-button); }
       fieldset { border: 1px solid rgba(242,240,232,.14); border-radius: 3px; padding: 1rem; }
       legend { padding: 0 .35rem; font-size: .85rem; }
       .ticket-tier { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: .4rem; margin-bottom: .5rem; }
@@ -178,6 +182,7 @@ export class CreateEventComponent {
   submittedEventId = signal('');
   submitting = signal(false);
   submitError = signal(false);
+  submitAttempted = signal(false);
   addressSuggestions = signal<Array<{ display_name: string; lat: string; lon: string }>>([]);
   imagePreview = signal('');
   addressLoading = signal(false);
@@ -198,13 +203,12 @@ export class CreateEventComponent {
       lng: [71.4494],
       category: ['концерт'],
       price: [0],
-      featured: [false],
       imageUrl: [''],
       organizerName: [this.savedContact('organizerName')],
       organizerEmail: [this.savedContact('organizerEmail'), Validators.email],
       organizerPhone: [this.savedContact('organizerPhone')],
       ticketCategories: this.fb.array([this.createTicketCategory('Стандарт', 0, 100)]),
-    });
+    }, { validators: [contactMethodValidator] });
   }
 
   get ticketCategories(): FormArray {
@@ -221,6 +225,10 @@ export class CreateEventComponent {
 
   addTicketCategory(): void {
     this.ticketCategories.push(this.createTicketCategory());
+  }
+
+  contactErrorVisible(): boolean {
+    return this.form.hasError('contactMethodRequired') && (this.submitAttempted() || this.form.touched);
   }
 
   applyTemplate(template: 'concert' | 'party' | 'comedy'): void {
@@ -279,7 +287,11 @@ export class CreateEventComponent {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) return;
+    this.submitAttempted.set(true);
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.submitting.set(true);
     this.submitError.set(false);
     this.success.set(false);
@@ -296,7 +308,6 @@ export class CreateEventComponent {
       lng: Number(v.lng),
       category: v.category,
       price: v.price ? Number(v.price) : null,
-      featured: Boolean(v.featured),
       imageUrl: v.imageUrl || this.defaultCover(v.category),
       organizerName: v.organizerName,
       organizerEmail: v.organizerEmail,
