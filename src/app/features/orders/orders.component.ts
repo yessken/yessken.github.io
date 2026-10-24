@@ -56,22 +56,22 @@ export interface AdminEventReport {
   `,
   styles: [`
     .orders { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 6rem; }
-    .heading { padding: 1rem 0 2rem; border-bottom: 1px solid rgba(242,240,232,.12); }
+    .heading { padding: 1rem 0 2rem; border-bottom: 1px solid var(--tg-line); }
     .eyebrow { color: var(--tg-button); font-size: .65rem; font-weight: 800; letter-spacing: .16em; }
     h1 { margin: .6rem 0 .4rem; font-size: clamp(2.4rem, 7vw, 5rem); font-weight: 500; }
     h2 { margin: 0 0 1rem; font-size: 1.15rem; font-weight: 500; }
-    .heading p, .muted, .panel p { color: rgba(242,240,232,.58); font-size: .85rem; }
-    .panel { margin-top: 1rem; padding: 1rem; background: var(--tg-surface); border: 1px solid rgba(242,240,232,.1); border-radius: 4px; }
+    .heading p, .muted, .panel p { color: var(--tg-muted); font-size: .85rem; }
+    .panel { margin-top: 1rem; padding: 1rem; background: var(--tg-surface); border: 1px solid var(--tg-line); border-radius: 4px; }
     .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-top: 1rem; }
-    .kpis article { display: grid; gap: .3rem; padding: 1rem; background: var(--tg-surface); border: 1px solid rgba(242,240,232,.1); }
-    .kpis span, .kpis small { color: rgba(242,240,232,.58); font-size: .72rem; }
+    .kpis article { display: grid; gap: .3rem; padding: 1rem; background: var(--tg-surface); border: 1px solid var(--tg-line); }
+    .kpis span, .kpis small { color: var(--tg-muted); font-size: .72rem; }
     .kpis strong { color: var(--tg-button); font-size: 1.35rem; }
     .rows { display: grid; gap: .5rem; }
-    .row { display: grid; grid-template-columns: minmax(0, 1.5fr) .8fr .8fr .8fr; align-items: center; gap: 1rem; padding: .85rem 0; border-top: 1px solid rgba(242,240,232,.1); font-size: .8rem; }
-    .row small, article small { display: block; margin-top: .25rem; color: rgba(242,240,232,.52); font-size: .7rem; }
+    .row { display: grid; grid-template-columns: minmax(0, 1.5fr) .8fr .8fr .8fr; align-items: center; gap: 1rem; padding: .85rem 0; border-top: 1px solid var(--tg-line); font-size: .8rem; }
+    .row small, article small { display: block; margin-top: .25rem; color: var(--tg-muted); font-size: .7rem; }
     .paid { color: var(--tg-button); } .pending { color: #f2be68; }
     .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; }
-    article { display: grid; gap: .35rem; padding: .9rem; border: 1px solid rgba(242,240,232,.1); }
+    article { display: grid; gap: .35rem; padding: .9rem; border: 1px solid var(--tg-line); background: var(--tg-surface); }
     article strong { color: var(--tg-button); font-size: 1.25rem; }
     .create { display: inline-flex; gap: .7rem; margin-top: 1.2rem; color: var(--tg-button); font-size: .8rem; font-weight: 700; text-decoration: none; }
     @media (max-width: 650px) { .kpis { grid-template-columns: 1fr; } .row { grid-template-columns: 1fr auto; } .row > :nth-child(2) { grid-column: 1; } .row > :nth-child(3), .row > :nth-child(4) { grid-row: 1; } }

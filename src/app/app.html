@@ -1,20 +1,28 @@
 <div class="shell">
   <header class="topbar mobile-topbar">
-    <a routerLink="/" class="brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>АСТАНА</span></a>
-    <span class="live-dot">Астана · сейчас</span>
+    <a routerLink="/" class="brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>{{ i18n.brandCity() }}</span></a>
+    <div class="topbar-right">
+      <div class="lang-switcher" aria-label="Language switcher">
+        <button type="button" [class.active]="i18n.locale() === 'ru'" (click)="i18n.setLocale('ru')">RU</button>
+        <button type="button" [class.active]="i18n.locale() === 'kz'" (click)="i18n.setLocale('kz')">KZ</button>
+        <button type="button" [class.active]="i18n.locale() === 'en'" (click)="i18n.setLocale('en')">EN</button>
+      </div>
+      <span class="live-dot">{{ i18n.t('nav.cityNow') }}</span>
+    </div>
   </header>
   <aside class="sidebar">
-    <a routerLink="/" class="brand sidebar-brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>АСТАНА</span></a>
-    <div class="sidebar-label">Навигация</div>
+    <a routerLink="/" class="brand sidebar-brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>{{ i18n.brandCity() }}</span></a>
+    <div class="sidebar-label">Navigation</div>
     <nav class="side-nav" aria-label="Основная навигация">
-      <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve"><span>01</span>События</a>
-      <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve"><span>02</span>Карта города</a>
-      <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve"><span>03</span>Мои билеты</a>
-      <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve"><span>04</span>Профиль</a>
+      <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve"><span>01</span>{{ i18n.t('nav.events') }}</a>
+      <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve"><span>02</span>{{ i18n.t('nav.map') }}</a>
+      <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve"><span>03</span>{{ i18n.t('nav.tickets') }}</a>
+      <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve"><span>04</span>{{ i18n.t('nav.profile') }}</a>
     </nav>
     <div class="sidebar-footer">
-      <span class="live-dot">Астана · сейчас</span>
-      <a routerLink="/create-event" queryParamsHandling="preserve">Разместить событие <span aria-hidden="true">↗</span></a>
+      <span class="live-dot">{{ i18n.t('nav.cityNow') }}</span>
+      <a routerLink="/create-event" queryParamsHandling="preserve">{{ i18n.t('nav.publish') }} <span aria-hidden="true">↗</span></a>
+      <a class="legal-link" routerLink="/terms">{{ i18n.t('calendar.terms') }}</a>
     </div>
   </aside>
   <main class="content">
@@ -33,9 +41,10 @@
     <router-outlet />
   </main>
   <nav class="bottom-nav" aria-label="Основная навигация">
-    <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve">Карта</a>
-    <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve">События</a>
-    <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve">Билеты</a>
-    <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve">Профиль</a>
+    <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve">{{ i18n.t('nav.events') }}</a>
+    <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve">{{ i18n.t('nav.map') }}</a>
+    <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve">{{ i18n.t('nav.tickets') }}</a>
+    <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve">{{ i18n.t('nav.profile') }}</a>
+    <a routerLink="/terms" routerLinkActive="active">{{ i18n.t('nav.terms') }}</a>
   </nav>
 </div>

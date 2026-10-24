@@ -28,12 +28,12 @@ import { Component } from '@angular/core';
       .tg-link {
         display: inline-block;
         padding: 0.75rem 1.5rem;
-        background: var(--tg-button, #00FF41);
+        background: var(--tg-button, #426c47);
         color: var(--tg-button-text, #0a0a0c);
         border-radius: 8px;
         text-decoration: none;
         font-weight: 500;
-        box-shadow: var(--tg-glow, 0 0 14px #00FF41);
+        box-shadow: var(--tg-glow);
       }
     `,
   ],

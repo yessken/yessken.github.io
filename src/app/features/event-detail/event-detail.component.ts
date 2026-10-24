@@ -76,46 +76,46 @@ import QRCode from 'qrcode';
       .body { padding: 1rem; }
       .heading-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
       .category { font-size: 0.75rem; text-transform: uppercase; opacity: 0.8; }
-      .featured-badge { display: inline-flex; align-items: center; padding: 0.18rem 0.55rem; border-radius: 999px; background: rgba(0,255,65,0.12); color: var(--tg-button, #00FF41); font-size: 0.65rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+      .featured-badge { display: inline-flex; align-items: center; padding: 0.18rem 0.55rem; border-radius: 999px; background: rgba(66,108,71,.1); color: var(--tg-button, #426c47); font-size: 0.65rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
       h1 { margin: 0.25rem 0 0.5rem; font-size: 1.35rem; }
       .meta, .address { margin: 0.25rem 0; font-size: 0.95rem; opacity: 0.9; }
       .description { margin: 1rem 0; }
       .price { font-size: 1.1rem; font-weight: 600; margin: 1rem 0; }
       .demo-notice { margin: .75rem 0; padding: .7rem .8rem; border-left: 2px solid #f2be68; background: rgba(242,190,104,.08); color: #f2d29b; font-size: .78rem; line-height: 1.45; }
-      .image-note { display: inline-block; margin: .35rem 0 .5rem; color: rgba(242,240,232,.5); font-size: .68rem; }
+      .image-note { display: inline-block; margin: .35rem 0 .5rem; color: var(--tg-muted); font-size: .68rem; }
       .going-row { display: flex; align-items: center; gap: 0.75rem; margin: 1rem 0; flex-wrap: wrap; }
       .going-count { font-size: 0.9rem; opacity: 0.9; }
-      .telegram-hint { flex-basis: 100%; color: var(--tg-button, #d7f36b); font-size: .78rem; }
+      .telegram-hint { flex-basis: 100%; color: var(--tg-button, #426c47); font-size: .78rem; }
       .going-error { flex-basis: 100%; margin: 0; color: #f27b68; font-size: .78rem; }
       .btn-going {
         padding: 0.5rem 1rem;
         border-radius: 8px;
-        border: 2px solid var(--tg-button, #00FF41);
+        border: 2px solid var(--tg-button, #426c47);
         background: transparent;
-        color: var(--tg-button, #00FF41);
+        color: var(--tg-button, #426c47);
         font-size: 0.95rem;
         font-weight: 500;
         cursor: pointer;
         box-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
       }
       .btn-going.active {
-        background: var(--tg-button, #00FF41);
+        background: var(--tg-button, #426c47);
         color: var(--tg-button-text, #0a0a0c);
-        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
+        box-shadow: var(--tg-glow);
       }
       .btn-going:disabled { opacity: 0.6; cursor: not-allowed; }
       .btn-buy {
         display: inline-block;
         padding: 0.75rem 1.5rem;
-        background: var(--tg-button, #00FF41);
+        background: var(--tg-button, #426c47);
         color: var(--tg-button-text, #0a0a0c);
         border-radius: 8px;
         text-decoration: none;
         font-weight: 500;
-        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
+        box-shadow: var(--tg-glow);
       }
-      .btn-buy.unavailable { background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); box-shadow: none; cursor: not-allowed; }
-      .btn-buy.interest-link { background: var(--tg-surface, #252529); color: var(--tg-button, #d7f36b); border: 1px solid rgba(215,243,107,.42); box-shadow: none; text-align: center; }
+      .btn-buy.unavailable { background: var(--tg-surface, #ffffff); color: var(--tg-text, #26372b); box-shadow: none; cursor: not-allowed; }
+      .btn-buy.interest-link { background: var(--tg-surface, #ffffff); color: var(--tg-button, #426c47); border: 1px solid rgba(66,108,71,.32); box-shadow: none; text-align: center; }
       @media (max-width: 699px) {
         .event-detail { padding-bottom: 4.75rem; }
         .btn-buy {
@@ -128,12 +128,12 @@ import QRCode from 'qrcode';
           text-align: center;
         }
       }
-      .btn-share { display: block; margin: .75rem 0; padding: .65rem 1rem; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; background: transparent; color: var(--tg-text, #e4e4e7); cursor: pointer; }
-      .btn-tools, .copy-text { display: block; width: 100%; margin: .5rem 0; padding: .6rem .8rem; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: var(--tg-surface, #252529); color: var(--tg-text, #e4e4e7); cursor: pointer; }
-      .share-tools { padding: .75rem; margin: .5rem 0 1rem; background: var(--tg-surface, #252529); border-radius: 8px; }
+      .btn-share { display: block; margin: .75rem 0; padding: .65rem 1rem; border: 1px solid var(--tg-line); border-radius: 8px; background: transparent; color: var(--tg-text, #26372b); cursor: pointer; }
+      .btn-tools, .copy-text { display: block; width: 100%; margin: .5rem 0; padding: .6rem .8rem; border: 1px solid var(--tg-line); border-radius: 8px; background: var(--tg-surface, #ffffff); color: var(--tg-text, #26372b); cursor: pointer; }
+      .share-tools { padding: .75rem; margin: .5rem 0 1rem; background: var(--tg-surface, #ffffff); border: 1px solid var(--tg-line); border-radius: 8px; }
       .event-qr { display: block; width: 150px; height: 150px; margin: 0 auto .75rem; background: white; }
       .download-qr { display: block; width: fit-content; margin: 0 auto .75rem; color: var(--tg-button, #aabd7e); font-size: .85rem; }
-      .share-tools textarea { width: 100%; min-height: 84px; box-sizing: border-box; resize: vertical; padding: .6rem; border: 1px solid rgba(255,255,255,.14); border-radius: 6px; background: transparent; color: var(--tg-text, #e4e4e7); font: inherit; }
+      .share-tools textarea { width: 100%; min-height: 84px; box-sizing: border-box; resize: vertical; padding: .6rem; border: 1px solid var(--tg-line); border-radius: 6px; background: #ffffff; color: var(--tg-text, #26372b); font: inherit; }
     `,
   ],
 })

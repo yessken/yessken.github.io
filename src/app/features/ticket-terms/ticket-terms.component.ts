@@ -30,10 +30,10 @@ import { RouterLink } from '@angular/router';
     </main>
   `,
   styles: [`
-    .terms { max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem 6rem; color: var(--tg-text, #f2f0e8); }
+    .terms { max-width: 760px; margin: 0 auto; padding: 2rem 1.25rem 6rem; color: var(--tg-text, #26372b); }
     .eyebrow { color: var(--tg-button, #aabd7e); font-size: .7rem; font-weight: 800; letter-spacing: .16em; }
     h1 { margin: .7rem 0 2rem; font-size: clamp(2rem, 8vw, 3rem); font-weight: 500; }
-    section { padding: 1rem 0; border-top: 1px solid rgba(242,240,232,.14); }
+    section { padding: 1rem 0; border-top: 1px solid var(--tg-line); }
     h2 { font-size: 1.1rem; font-weight: 600; }
     p { line-height: 1.65; opacity: .82; }
     a { color: var(--tg-button, #aabd7e); }

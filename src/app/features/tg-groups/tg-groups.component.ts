@@ -48,7 +48,7 @@ import type { TelegramGroupItem } from '../../core/types/event.model';
         justify-content: space-between;
         gap: 1rem;
         padding: 1rem;
-        background: var(--tg-surface, #252529);
+        background: var(--tg-surface, #ffffff);
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       }
@@ -58,12 +58,12 @@ import type { TelegramGroupItem } from '../../core/types/event.model';
       .join {
         flex-shrink: 0;
         padding: 0.5rem 1rem;
-        background: var(--tg-button, #00FF41);
+        background: var(--tg-button, #426c47);
         color: var(--tg-button-text, #0a0a0c);
         border-radius: 8px;
         text-decoration: none;
         font-size: 0.9rem;
-        box-shadow: var(--tg-glow, 0 0 12px #00FF41);
+        box-shadow: var(--tg-glow);
       }
     `,
   ],

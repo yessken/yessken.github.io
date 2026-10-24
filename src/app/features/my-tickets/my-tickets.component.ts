@@ -1,7 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
+import { I18nService } from '../../core/services/i18n.service';
 import type { Ticket } from '../../core/types/event.model';
 import QRCode from 'qrcode';
 
@@ -11,7 +12,7 @@ import QRCode from 'qrcode';
   imports: [CommonModule, RouterLink],
   template: `
     <div class="my-tickets">
-      <h1>Мои билеты</h1>
+      <h1>{{ i18n.t('tickets.heading') }}</h1>
       @if (tickets().length) {
         <div class="ticket-list">
           @for (t of tickets(); track t.id) {
@@ -20,14 +21,14 @@ import QRCode from 'qrcode';
               <p class="meta">{{ t.eventDate }} · {{ t.eventPlace }}</p>
               <span class="status" [class]="statusClass(t.paymentStatus)">{{ statusLabel(t.paymentStatus) }}</span>
               @if (qrCodes()[t.id]) { <img class="ticket-qr" [src]="qrCodes()[t.id]" alt="QR-код билета" /> }
-              @if (t.qrCode) { <p class="qr">Код входа: {{ t.qrCode }}</p> }
-              <a [routerLink]="['/events', t.eventId]" queryParamsHandling="preserve">О сходке</a>
+              @if (t.qrCode) { <p class="qr">{{ i18n.t('tickets.entryCode') }} {{ t.qrCode }}</p> }
+              <a [routerLink]="['/events', t.eventId]" queryParamsHandling="preserve">{{ i18n.t('tickets.open') }}</a>
             </div>
           }
         </div>
       } @else {
-        <p>Здесь появятся ваши билеты и предстоящие события.</p>
-        <a routerLink="/events" queryParamsHandling="preserve">Открыть каталог событий</a>
+        <p>{{ i18n.t('tickets.empty') }}</p>
+        <a routerLink="/events" queryParamsHandling="preserve">{{ i18n.t('tickets.catalog') }}</a>
       }
     </div>
   `,
@@ -38,7 +39,7 @@ import QRCode from 'qrcode';
       .ticket-list { display: flex; flex-direction: column; gap: 1rem; }
       .ticket {
         padding: 1rem;
-        background: var(--tg-surface, #252529);
+        background: var(--tg-surface, #ffffff);
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       }
@@ -51,13 +52,14 @@ import QRCode from 'qrcode';
       .status-failed, .status-refunded, .status-expired, .status-refund_requested { background: rgba(242, 123, 104, .18); color: #f27b68; }
       .ticket-qr { display: block; width: min(220px, 70vw); aspect-ratio: 1; margin: .75rem auto; background: #fff; padding: .5rem; border-radius: 8px; }
       .qr { margin: 0.5rem 0; font-family: monospace; }
-      .ticket a { color: var(--tg-button, #00FF41); font-size: 0.9rem; text-shadow: var(--tg-glow-text, 0 0 6px #00FF41); }
+      .ticket a { color: var(--tg-button, #426c47); font-size: 0.9rem; text-shadow: none; }
     `,
   ],
 })
 export class MyTicketsComponent implements OnInit {
   tickets = signal<Ticket[]>([]);
   qrCodes = signal<Record<string, string>>({});
+  protected readonly i18n = inject(I18nService);
 
   constructor(private data: DataService) {}
 
@@ -70,7 +72,15 @@ export class MyTicketsComponent implements OnInit {
   }
 
   statusLabel(status?: Ticket['paymentStatus']): string {
-    return ({ paid: 'Оплачено', pending: 'Счёт выставлен', checkout: 'Подтверждаем оплату', failed: 'Ошибка оплаты', refunded: 'Возврат оформлен', refund_requested: 'Возврат на проверке', expired: 'Счёт истёк' } as Record<string, string>)[status ?? 'pending'] ?? 'Статус уточняется';
+    return ({
+      paid: this.i18n.t('tickets.status.paid'),
+      pending: this.i18n.t('tickets.status.pending'),
+      checkout: this.i18n.t('tickets.status.checkout'),
+      failed: this.i18n.t('tickets.status.failed'),
+      refunded: this.i18n.t('tickets.status.refunded'),
+      refund_requested: this.i18n.t('tickets.status.refundRequested'),
+      expired: this.i18n.t('tickets.status.expired'),
+    } as Record<string, string>)[status ?? 'pending'] ?? this.i18n.t('tickets.status.unknown');
   }
 
   statusClass(status?: Ticket['paymentStatus']): string { return `status-${status ?? 'pending'}`; }

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal 
 import { Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
+import { I18nService } from './core/services/i18n.service';
 import { TelegramService } from './core/services/telegram.service';
 
 interface Breadcrumb {
@@ -18,6 +19,7 @@ interface Breadcrumb {
 })
 export class App implements OnInit {
   protected readonly telegram = inject(TelegramService);
+  protected readonly i18n = inject(I18nService);
   protected readonly breadcrumbs = signal<Breadcrumb[]>([]);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
