@@ -5,6 +5,21 @@
 - [Бизнес-план на русском языке](TUSA_BUSINESS_PLAN_RU.md)
 - [Қазақ тіліндегі бизнес-жоспар](TUSA_BUSINESS_PLAN_KZ.md)
 
+## Delivery Roadmap: modules and challenges
+
+- English: [modules, challenges, payment/receipt decisions, QR and launch gates](TUSA_DELIVERY_ROADMAP_EN.md)
+- Русский: [Roadmap — модули, сложности, платежи/чеки, QR и этапы запуска](TUSA_DELIVERY_ROADMAP_RU.md)
+- Қазақша: [Roadmap — модульдер, қиындықтар, төлем/чек, QR және іске қосу кезеңдері](TUSA_DELIVERY_ROADMAP_KZ.md)
+
+### Visual Roadmap (SVG)
+
+- English: [TUSA delivery roadmap diagram](../presentation-screenshots/tusa-delivery-roadmap-en.svg)
+- Русский: [Диаграмма Roadmap TUSA](../presentation-screenshots/tusa-delivery-roadmap-ru.svg)
+- Қазақша: [TUSA Roadmap диаграммасы](../presentation-screenshots/tusa-delivery-roadmap-kz.svg)
+- [Open English preview](../presentation-screenshots/export-roadmap-en.html) · [Открыть русскую версию](../presentation-screenshots/export-roadmap-ru.html) · [Қазақша нұсқасын ашу](../presentation-screenshots/export-roadmap-kz.html)
+
+![TUSA Astana delivery roadmap diagram](../presentation-screenshots/tusa-delivery-roadmap-en.svg)
+
 ## Diagrams by language
 
 - English: [business model image](../presentation-screenshots/tusa-business-model.svg)

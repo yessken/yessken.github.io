@@ -30,7 +30,7 @@ export interface AdminEventReport {
   imports: [CommonModule, RouterLink],
   template: `
     <div class="orders">
-      <div class="heading"><span class="eyebrow">TUSA / CONTROL</span><h1>Заказы</h1><p>Продажи по вашим событиям и общий обзор для администратора.</p></div>
+      <div class="heading"><span class="eyebrow">УПРАВЛЕНИЕ ПРОДАЖАМИ</span><h1>Заказы</h1><p>Продажи по вашим событиям и общий обзор для администратора.</p></div>
       @if (summary(); as totals) {
         <section class="kpis">
           <article><span>Выручка</span><strong>{{ totals.paidRevenue | number }} ₸</strong><small>{{ totals.paidOrders }} оплаченных заказов</small></article>

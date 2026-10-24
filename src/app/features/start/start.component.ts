@@ -25,7 +25,6 @@ const kazakhWeekdayShort = ['Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб', 'Ж�
     <main class="visitor-home">
       <header class="page-heading">
         <div>
-          <span class="eyebrow">{{ i18n.brandBadge() }} · {{ i18n.t('nav.cityNow') }}</span>
           <h1>{{ i18n.t('calendar.title') }}</h1>
           <p>{{ i18n.t('calendar.subtitle') }}</p>
         </div>
@@ -33,6 +32,10 @@ const kazakhWeekdayShort = ['Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб', 'Ж�
           <span aria-hidden="true">＋</span>{{ i18n.t('calendar.organizer') }} <span class="organizer-arrow" aria-hidden="true">↗</span>
         </a>
       </header>
+
+      @if (events().some((event) => event.isDemo)) {
+        <aside class="demo-banner" role="status">{{ i18n.t('calendar.demoNotice') }}</aside>
+      }
 
       <section class="calendar-panel" aria-label="Event calendar">
         <div class="calendar-toolbar">
@@ -106,6 +109,8 @@ const kazakhWeekdayShort = ['Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб', 'Ж�
     .eyebrow { color: var(--tg-button); font-size: .64rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
     h1 { margin: .45rem 0 .25rem; font-size: clamp(2.1rem, 7vw, 3.3rem); line-height: 1; font-weight: 500; }
     .page-heading p { margin: 0; color: var(--tg-muted); font-size: .9rem; line-height: 1.45; }
+    .demo-banner { margin: -.55rem 0 1rem; padding: .65rem .8rem; border: 1px solid rgba(189,155,89,.3); border-radius: 8px; background: rgba(189,155,89,.09); color: #6c5731; font-size: .75rem; line-height: 1.4; }
+    :host-context(.dark-theme) .demo-banner { color: #f2d29b; }
     .organizer-link { display: inline-flex; align-items: center; gap: .45rem; flex: 0 0 auto; padding: .52rem .72rem; border: 1px solid var(--tg-line); border-radius: 999px; color: var(--tg-muted); font-size: .72rem; font-weight: 650; text-decoration: none; transition: border-color .15s ease, color .15s ease, background .15s ease; }
     .organizer-link > span:first-child { color: var(--tg-button); font-size: 1rem; }
     .organizer-link:hover { border-color: var(--tg-button); color: var(--tg-text); background: rgba(66,108,71,.06); }
@@ -143,7 +148,7 @@ const kazakhWeekdayShort = ['Дс', 'Сс', 'Ср', 'Бс', 'Жм', 'Сб', 'Ж�
     .events-heading h2 { margin: .22rem 0 0; font-size: 1.35rem; font-weight: 500; }
     .all-events-link { color: var(--tg-button); font-size: .75rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
     .event-list { display: grid; gap: .5rem; }
-    .event-row { display: grid; grid-template-columns: 3.3rem .5rem minmax(0,1fr) auto 1rem; align-items: center; gap: .65rem; min-height: 4.3rem; padding: .65rem .75rem; border: 1px solid var(--tg-line); border-radius: 9px; background: #ffffff; color: var(--tg-text); text-decoration: none; transition: border-color .15s ease, transform .15s ease; }
+    .event-row { display: grid; grid-template-columns: 3.3rem .5rem minmax(0,1fr) auto 1rem; align-items: center; gap: .65rem; min-height: 4.3rem; padding: .65rem .75rem; border: 1px solid var(--tg-line); border-radius: 9px; background: var(--tg-surface); color: var(--tg-text); text-decoration: none; transition: border-color .15s ease, transform .15s ease; }
     .event-row:hover { border-color: rgba(66,108,71,.42); transform: translateY(-1px); }
     .event-time { color: var(--tg-button); font-size: .78rem; font-weight: 750; font-variant-numeric: tabular-nums; }
     .event-copy { min-width: 0; }

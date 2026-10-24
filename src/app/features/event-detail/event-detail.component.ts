@@ -133,7 +133,7 @@ import QRCode from 'qrcode';
       .share-tools { padding: .75rem; margin: .5rem 0 1rem; background: var(--tg-surface, #ffffff); border: 1px solid var(--tg-line); border-radius: 8px; }
       .event-qr { display: block; width: 150px; height: 150px; margin: 0 auto .75rem; background: white; }
       .download-qr { display: block; width: fit-content; margin: 0 auto .75rem; color: var(--tg-button, #aabd7e); font-size: .85rem; }
-      .share-tools textarea { width: 100%; min-height: 84px; box-sizing: border-box; resize: vertical; padding: .6rem; border: 1px solid var(--tg-line); border-radius: 6px; background: #ffffff; color: var(--tg-text, #26372b); font: inherit; }
+      .share-tools textarea { width: 100%; min-height: 84px; box-sizing: border-box; resize: vertical; padding: .6rem; border: 1px solid var(--tg-line); border-radius: 6px; background: var(--tg-surface, #ffffff); color: var(--tg-text, #26372b); font: inherit; }
     `,
   ],
 })

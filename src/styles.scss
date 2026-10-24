@@ -9,6 +9,8 @@ html, body {
   overscroll-behavior-y: none;
 }
 
+html[data-theme='dark'], html[data-theme='dark'] body { background: #121313; color: #f2f0e8; }
+
 .tusa-marker {
   width: 22px !important;
   height: 22px !important;
@@ -69,3 +71,16 @@ html, body {
 .tusa-marker.featured span { background: #fff; }
 .tusa-marker.party { background: #a78b70; }
 .tusa-marker.fun { background: #c0a66d; }
+
+.shell.dark-theme .leaflet-control-zoom a {
+  background: #1c1e1d !important;
+  color: #f2f0e8 !important;
+  border-color: rgba(242,240,232,.16) !important;
+}
+
+.shell.dark-theme .leaflet-control-attribution {
+  background: rgba(18,19,19,.82) !important;
+  color: rgba(242,240,232,.72) !important;
+}
+
+.shell.dark-theme .leaflet-control-attribution a { color: #d7f36b !important; }

@@ -17,7 +17,7 @@ function contactMethodValidator(control: AbstractControl): ValidationErrors | nu
   template: `
     <div class="create-event">
       <header class="form-hero">
-        <span class="eyebrow">TUSA / ДЛЯ ОРГАНИЗАТОРОВ</span>
+        <span class="eyebrow">ДЛЯ ОРГАНИЗАТОРОВ</span>
         <h1>Пусть о вашем событии<br /><em>узнают.</em></h1>
         <p class="intro">Разместите ближайшее событие в каталоге Астаны. Мы проверим заявку, подготовим страницу и отправим вам ссылку для публикации.</p>
         <div class="quick-start" aria-label="Быстрый шаблон события">
@@ -120,16 +120,16 @@ function contactMethodValidator(control: AbstractControl): ValidationErrors | nu
       .section-heading h2 { margin: 0; font-size: 1.3rem; font-weight: 500; }
       .section-heading p { margin: .3rem 0 0; color: var(--tg-muted); font-size: .78rem; line-height: 1.4; }
       .field-grid { display: grid; gap: .85rem; }
-      label { display: flex; flex-direction: column; gap: .35rem; color: #435348; font-size: .78rem; font-weight: 700; }
+      label { display: flex; flex-direction: column; gap: .35rem; color: var(--tg-text, #26372b); font-size: .78rem; font-weight: 700; }
       label b { color: var(--tg-button, #426c47); font-weight: 700; }
       .optional { color: var(--tg-muted); font-size: .68rem; font-weight: 400; }
-      input, textarea, select { width: 100%; box-sizing: border-box; padding: .78rem .8rem; color: var(--tg-text, #26372b); background: #ffffff; border: 1px solid var(--tg-line); border-radius: 6px; font: inherit; font-weight: 400; outline: none; }
+      input, textarea, select { width: 100%; box-sizing: border-box; padding: .78rem .8rem; color: var(--tg-text, #26372b); background: var(--tg-surface, #ffffff); border: 1px solid var(--tg-line); border-radius: 6px; font: inherit; font-weight: 400; outline: none; }
       textarea { resize: vertical; min-height: 100px; }
-      input::placeholder, textarea::placeholder { color: #7a867c; }
+      input::placeholder, textarea::placeholder { color: var(--tg-muted, #667368); }
       input:focus, textarea:focus, select:focus { border-color: var(--tg-button, #426c47); box-shadow: 0 0 0 3px rgba(66,108,71,.12); }
       .address-field { position: relative; }
       .suggestions { position: absolute; left: 0; right: 0; top: 100%; z-index: 10; background: var(--tg-surface, #ffffff); border: 1px solid var(--tg-line); border-radius: 6px; overflow: hidden; }
-      .suggestions button { width: 100%; margin: 0; padding: .65rem; text-align: left; background: transparent; color: var(--tg-text, #e4e4e7); box-shadow: none; border: 0; border-radius: 0; font-size: .8rem; }
+      .suggestions button { width: 100%; margin: 0; padding: .65rem; text-align: left; background: transparent; color: var(--tg-text, #26372b); box-shadow: none; border: 0; border-radius: 0; font-size: .8rem; }
       .suggestions button:hover { background: rgba(66,108,71,.08); }
       .image-preview { display: block; width: 100%; max-height: 220px; object-fit: cover; margin-top: .5rem; border-radius: 3px; }
       .field-hint { opacity: .65; font-size: .78rem; }
@@ -158,7 +158,7 @@ function contactMethodValidator(control: AbstractControl): ValidationErrors | nu
       .success { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: .75rem; margin-top: 1rem; padding: 1rem; border: 1px solid rgba(66,108,71,.25); background: rgba(66,108,71,.06); color: var(--tg-text, #26372b); }
       .success-mark { display: grid; width: 1.7rem; height: 1.7rem; place-items: center; border-radius: 50%; background: var(--tg-button, #426c47); color: var(--tg-button-text, #ffffff); font-weight: 900; }
       .success h2 { margin: 0; color: var(--tg-button, #426c47); font-size: 1rem; }
-      .success p { margin: .35rem 0; color: #435348; font-size: .82rem; line-height: 1.5; }
+      .success p { margin: .35rem 0; color: var(--tg-text, #26372b); font-size: .82rem; line-height: 1.5; }
       .success small { color: var(--tg-muted); font-size: .7rem; }
       .success a { grid-column: 2; width: fit-content; color: var(--tg-button, #426c47); font-size: .78rem; }
       .submit-error { margin-top: 1rem; }

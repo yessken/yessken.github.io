@@ -15,11 +15,6 @@ export class DataService {
     return !!environment.apiUrl?.trim();
   }
 
-  private get allowLocalDemoFallback(): boolean {
-    if (typeof window === 'undefined') return false;
-    return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  }
-
   constructor(
     private mock: MockDataService,
     private api: EventsApiService
@@ -31,7 +26,7 @@ export class DataService {
   getEvents(category?: string): Observable<EventItem[]> {
     if (this.useApi) return this.api.getEvents(category).pipe(switchMap((list) => {
       const today = new Date().toISOString().slice(0, 10);
-      if (this.allowLocalDemoFallback && !list.some((event) => event.date >= today)) {
+      if (this.api.eventsError() || !list.some((event) => event.date >= today)) {
         const samples = this.mock.getEvents().filter((event) => event.date >= today);
         return of(category ? samples.filter((event) => event.category === category) : samples);
       }
@@ -43,7 +38,7 @@ export class DataService {
   }
 
   getEventById(id: string): Observable<EventItem | null> {
-    if (this.useApi) return this.api.getEventById(id).pipe(switchMap((event) => of(event ?? (this.allowLocalDemoFallback ? this.mock.getEventById(id) ?? null : null))));
+    if (this.useApi) return this.api.getEventById(id).pipe(switchMap((event) => of(event ?? this.mock.getEventById(id) ?? null)));
     return of(this.mock.getEventById(id) ?? null);
   }
 
@@ -54,7 +49,7 @@ export class DataService {
   }
 
   getTickets(): Observable<Ticket[]> {
-    if (this.useApi) return this.api.getTickets();
+    if (this.useApi) return this.api.getTickets().pipe(switchMap((tickets) => of(this.api.ticketsError() ? this.mock.getTickets() : tickets)));
     return of(this.mock.getTickets());
   }
 

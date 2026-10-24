@@ -1,8 +1,9 @@
-import { Component, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ViewChild, ElementRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DataService } from '../../core/services/data.service';
 import { TelegramService } from '../../core/services/telegram.service';
+import { I18nService } from '../../core/services/i18n.service';
 
 declare const L: typeof import('leaflet');
 
@@ -17,6 +18,7 @@ declare const L: typeof import('leaflet');
         <div>
           <span class="map-kicker">ASTANA / LIVE</span>
           <h1>События<br /><em>рядом.</em></h1>
+          @if (demoData()) { <span class="map-demo-flag">{{ i18n.t('map.demoNotice') }}</span> }
         </div>
         <a routerLink="/events" class="list-button" queryParamsHandling="preserve" aria-label="Открыть список событий">Список</a>
       </div>
@@ -61,6 +63,7 @@ declare const L: typeof import('leaflet');
         .map-sheet strong { font-size: .95rem; }
       }
       .map-kicker, .sheet-kicker { display: block; color: #c5d8b1; font-size: .62rem; font-weight: 800; letter-spacing: .18em; }
+      .map-demo-flag { display: inline-block; margin-top: .55rem; padding: .25rem .45rem; border: 1px solid rgba(229,198,133,.35); border-radius: 999px; background: rgba(189,155,89,.16); color: #f0d7a3; font-size: .62rem; font-weight: 700; }
       h1 { margin: .35rem 0 0; color: #fffdf5; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2rem, 8vw, 3.5rem); font-weight: 500; line-height: .9; text-shadow: 0 2px 4px rgba(0,0,0,.7); }
       h1 em { color: #c5d8b1; font-weight: 400; }
       .list-button {
@@ -86,6 +89,8 @@ declare const L: typeof import('leaflet');
   ],
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
+  protected readonly i18n = inject(I18nService);
+  readonly demoData = signal(false);
   @ViewChild('mapRef') mapRef!: ElementRef<HTMLDivElement>;
   private map: L.Map | null = null;
   private markers: L.Marker[] = [];
@@ -147,6 +152,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       const Llib: typeof L = await import('leaflet').then((m: { default?: typeof L }) => m.default ?? (m as typeof L));
       this.buildMap(Llib, mapEl, []);
       this.data.getEvents().subscribe((events) => {
+        this.demoData.set(events.some((event) => event.isDemo));
         this.addMarkers(Llib, events);
       });
     } catch (err) {

@@ -1,4 +1,4 @@
-<div class="shell">
+<div class="shell" [class.dark-theme]="theme.isDark()">
   <header class="topbar mobile-topbar">
     <a routerLink="/" class="brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>{{ i18n.brandCity() }}</span></a>
     <div class="topbar-right">
@@ -7,32 +7,37 @@
         <button type="button" [class.active]="i18n.locale() === 'kz'" (click)="i18n.setLocale('kz')">KZ</button>
         <button type="button" [class.active]="i18n.locale() === 'en'" (click)="i18n.setLocale('en')">EN</button>
       </div>
-      <span class="live-dot">{{ i18n.t('nav.cityNow') }}</span>
+      <button class="theme-toggle" type="button"
+        [attr.aria-label]="i18n.t(theme.isDark() ? 'theme.switchToLight' : 'theme.switchToDark')"
+        [title]="i18n.t(theme.isDark() ? 'theme.switchToLight' : 'theme.switchToDark')"
+        (click)="theme.toggle()"><span aria-hidden="true">{{ theme.isDark() ? '☼' : '☾' }}</span></button>
     </div>
   </header>
   <aside class="sidebar">
     <a routerLink="/" class="brand sidebar-brand" queryParamsHandling="preserve"><strong>TUSA</strong><span>{{ i18n.brandCity() }}</span></a>
-    <div class="sidebar-label">Navigation</div>
-    <nav class="side-nav" aria-label="Основная навигация">
+    <div class="sidebar-label">{{ i18n.t('nav.section') }}</div>
+    <nav class="side-nav" [attr.aria-label]="i18n.t('nav.mainAria')">
       <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve"><span>01</span>{{ i18n.t('nav.events') }}</a>
       <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve"><span>02</span>{{ i18n.t('nav.map') }}</a>
       <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve"><span>03</span>{{ i18n.t('nav.tickets') }}</a>
       <a routerLink="/profile" routerLinkActive="active" queryParamsHandling="preserve"><span>04</span>{{ i18n.t('nav.profile') }}</a>
     </nav>
     <div class="sidebar-footer">
-      <span class="live-dot">{{ i18n.t('nav.cityNow') }}</span>
       <a routerLink="/create-event" queryParamsHandling="preserve">{{ i18n.t('nav.publish') }} <span aria-hidden="true">↗</span></a>
       <a class="legal-link" routerLink="/terms">{{ i18n.t('calendar.terms') }}</a>
+      <button class="theme-toggle sidebar-theme-toggle" type="button"
+        [attr.aria-label]="i18n.t(theme.isDark() ? 'theme.switchToLight' : 'theme.switchToDark')"
+        (click)="theme.toggle()"><span aria-hidden="true">{{ theme.isDark() ? '☼' : '☾' }}</span>{{ i18n.t(theme.isDark() ? 'theme.switchToLight' : 'theme.switchToDark') }}</button>
     </div>
   </aside>
   <main class="content">
     @if (breadcrumbs().length) {
       <nav class="breadcrumbs" aria-label="Навигационная цепочка">
-        @for (crumb of breadcrumbs(); track crumb.url ?? crumb.label; let last = $last) {
+        @for (crumb of breadcrumbs(); track crumb.url ?? crumb.key; let last = $last) {
           @if (crumb.url && !last) {
-            <a [routerLink]="crumb.url" queryParamsHandling="preserve">{{ crumb.label }}</a>
+            <a [routerLink]="crumb.url" queryParamsHandling="preserve">{{ i18n.t(crumb.key) }}</a>
           } @else {
-            <span [attr.aria-current]="last ? 'page' : null">{{ crumb.label }}</span>
+            <span [attr.aria-current]="last ? 'page' : null">{{ i18n.t(crumb.key) }}</span>
           }
           @if (!last) { <span class="breadcrumb-separator" aria-hidden="true">/</span> }
         }
@@ -40,7 +45,7 @@
     }
     <router-outlet />
   </main>
-  <nav class="bottom-nav" aria-label="Основная навигация">
+  <nav class="bottom-nav" [attr.aria-label]="i18n.t('nav.mainAria')">
     <a routerLink="/events" routerLinkActive="active" queryParamsHandling="preserve">{{ i18n.t('nav.events') }}</a>
     <a routerLink="/city-map" routerLinkActive="active" queryParamsHandling="preserve">{{ i18n.t('nav.map') }}</a>
     <a routerLink="/my-tickets" routerLinkActive="active" queryParamsHandling="preserve">{{ i18n.t('nav.tickets') }}</a>

@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1600 1510" role="img" aria-labelledby="title description" style="max-width:1600px;height:auto;display:block;margin:auto">
+  <title id="title">TUSA Astana — delivery roadmap</title>
+  <desc id="description">A visual roadmap of eight business and technical modules, their main challenges, acceptance evidence, and launch gates.</desc>
+  <defs>
+    <linearGradient id="hero" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#426c47"/><stop offset="1" stop-color="#31543a"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#243529" flood-opacity=".08"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#587b52"/></marker>
+    <style>
+      text { font-family: Inter, 'Segoe UI', Arial, sans-serif; }
+      .eyebrow { fill:#65805d; font-size:15px; font-weight:800; letter-spacing:3px; }
+      .heading { fill:#26372b; font-size:39px; font-weight:750; letter-spacing:-.8px; }
+      .subtitle { fill:#68746a; font-size:18px; }
+      .card-title { fill:#26372b; font-size:23px; font-weight:750; }
+      .body { fill:#68746a; font-size:16px; }
+      .label { fill:#63825b; font-size:12px; font-weight:850; letter-spacing:1.7px; }
+      .done { fill:#35573a; font-size:14px; font-weight:700; }
+      .number { fill:#fff; font-size:16px; font-weight:800; }
+      .gate { fill:#26372b; font-size:15px; font-weight:700; }
+      .gate-note { fill:#68746a; font-size:13px; }
+      .white-title { fill:#fff; font-size:21px; font-weight:750; }
+      .white-copy { fill:#e0eadb; font-size:14px; }
+    </style>
+  </defs>
+  <rect width="1600" height="1510" fill="#f5f6f0"/><circle cx="1495" cy="65" r="175" fill="#eaf0e3"/><circle cx="75" cy="1450" r="175" fill="#edf1e8"/>
+  <text x="100" y="72" class="eyebrow">BUSINESS · PRODUCT · OPERATIONS</text>
+  <text x="100" y="130" class="heading">TUSA Astana — delivery roadmap</text>
+  <text x="100" y="168" class="subtitle">Prove supply first. Enable safe ticketing next. Scale only when the evidence is real.</text>
+  <rect x="100" y="195" width="1400" height="54" rx="16" fill="#eaf0e4"/>
+  <circle cx="128" cy="222" r="7" fill="#55794e"/><text x="148" y="228" class="done">First pilot → clear seller &amp; receipt roles → verified payment → one-use admission → repeatable economics</text>
+
+  <!-- serpentine connectors -->
+  <path d="M770 354h56" stroke="#587b52" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M1465 464v30q0 18-18 18H1400" fill="none" stroke="#78936c" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M830 614h-56" stroke="#587b52" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M135 724v30q0 18 18 18h46" fill="none" stroke="#78936c" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M770 874h56" stroke="#587b52" stroke-width="4" marker-end="url(#arrow)"/>
+  <path d="M1465 984v30q0 18-18 18H1400" fill="none" stroke="#78936c" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M830 1134h-56" stroke="#587b52" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <!-- 01 -->
+  <g filter="url(#shadow)"><rect x="100" y="274" width="670" height="190" rx="20" fill="#fff" stroke="#e2e8de" stroke-width="2"/><rect x="100" y="274" width="12" height="190" rx="6" fill="#55794e"/></g>
+  <circle cx="151" cy="317" r="20" fill="#55794e"/><text x="151" y="323" text-anchor="middle" class="number">01</text>
+  <text x="185" y="324" class="card-title">First organizer pilot</text>
+  <text x="135" y="369" class="label">CHALLENGE</text><text x="135" y="393" class="body">Permission, responsibilities, ticket inventory, and event-day owner.</text>
+  <rect x="130" y="416" width="610" height="32" rx="10" fill="#eaf0e4"/><text x="147" y="437" class="done">DONE · accepted pilot terms + verified event + named door lead</text>
+
+  <!-- 02 -->
+  <g filter="url(#shadow)"><rect x="830" y="274" width="670" height="190" rx="20" fill="#fff" stroke="#e2e8de" stroke-width="2"/><rect x="830" y="274" width="12" height="190" rx="6" fill="#bd9b59"/></g>
+  <circle cx="881" cy="317" r="20" fill="#55794e"/><text x="881" y="323" text-anchor="middle" class="number">02</text>
+  <text x="915" y="324" class="card-title">Payment provider + receipt</text>
+  <text x="865" y="369" class="label">CHALLENGE</text><text x="865" y="393" class="body">KZT eligibility, seller identity, fiscalization, fees, and refunds.</text>
+  <rect x="860" y="416" width="610" height="32" rx="10" fill="#eaf0e4"/><text x="877" y="437" class="done">DONE · written merchant/provider approval + receipt owner</text>
+
+  <!-- 03 -->
+  <g filter="url(#shadow)"><rect x="830" y="534" width="670" height="190" rx="20" fill="#fff" stroke="#e2e8de" stroke-width="2"/><rect x="830" y="534" width="12" height="190" rx="6" fill="#bd9b59"/></g>
+  <circle cx="881" cy="577" r="20" fill="#55794e"/><text x="881" y="583" text-anchor="middle" class="number">03</text>
+  <text x="915" y="584" class="card-title">Order &amp; money lifecycle</text>
+  <text x="865" y="629" class="label">CHALLENGE</text><text x="865" y="653" class="body">Retries, expiry, duplicate callbacks, refunds, and seat holds.</text>
+  <rect x="860" y="676" width="610" height="32" rx="10" fill="#eaf0e4"/><text x="877" y="697" class="done">DONE · lifecycle tests pass + settlement reconciles</text>
+
+  <!-- 04 -->
+  <g filter="url(#shadow)"><rect x="100" y="534" width="670" height="190" rx="20" fill="#fff" stroke="#e2e8de" stroke-width="2"/><rect x="100" y="534" width="12" height="190" rx="6" fill="#55794e"/></g>
+  <circle cx="151" cy="577" r="20" fill="#55794e"/><text x="151" y="583" text-anchor="middle" class="number">04</text>
+  <text x="185" y="584" class="card-title">Ticket QR model</text>
+  <text x="135" y="629" class="label">CHALLENGE</text><text x="135" y="653" class="body">QR is a reference, not proof; one order can contain many attendees.</text>
+  <rect x="130" y="676" width="610" height="32" rx="10" fill="#eaf0e4"/><text x="147" y="697" class="done">DONE · random token per admission + revoke + single-use test</text>
+
+  <!-- 05 -->
+  <g filter="url(#shadow)"><rect x="100" y="794" width="670" height="190" rx="20" fill="#fff" stroke="#e2e8de" stroke-width="2"/><rect x="100" y="794" width="12" height="190" rx="6" fill="#55794e"/></g>
+  <circle cx="151" cy="837" r="20" fill="#55794e"/><text x="151" y="843" text-anchor="middle" class="number">05</text>
+  <text x="185" y="844" class="card-title">Scanner + venue operations</text>
+  <text x="135" y="889" class="label">CHALLENGE</text><text x="135" y="913" class="body">Staff roles, connectivity, duplicate gates, queues, and fallback.</text>
+  <rect x="130" y="936" width="610" height="32" rx="10" fill="#eaf0e4"/><text x="147" y="957" class="done">DONE · venue rehearsal + scoped access + incident runbook</text>
+
+  <!-- 06 -->
+  <g filter="url(#shadow)"><rect x="830" y="794" width="670" height="190" rx="20" fill="#fff" stroke="#e2e8de" stroke-width="2"/><rect x="830" y="794" width="12" height="190" rx="6" fill="#78936c"/></g>
+  <circle cx="881" cy="837" r="20" fill="#55794e"/><text x="881" y="843" text-anchor="middle" class="number">06</text>
+  <text x="915" y="844" class="card-title">External ticket sellers</text>
+  <text x="865" y="889" class="label">CHALLENGE</text><text x="865" y="913" class="body">Their QR and inventory cannot be validated by decoding a code.</text>
+  <rect x="860" y="936" width="610" height="32" rx="10" fill="#eaf0e4"/><text x="877" y="957" class="done">DONE · official outbound link first; integrate by written API deal</text>
+
+  <!-- 07 -->
+  <g filter="url(#shadow)"><rect x="830" y="1054" width="670" height="190" rx="20" fill="#fff" stroke="#e2e8de" stroke-width="2"/><rect x="830" y="1054" width="12" height="190" rx="6" fill="#78936c"/></g>
+  <circle cx="881" cy="1097" r="20" fill="#55794e"/><text x="881" y="1103" text-anchor="middle" class="number">07</text>
+  <text x="915" y="1104" class="card-title">Launch operations &amp; safety</text>
+  <text x="865" y="1149" class="label">CHALLENGE</text><text x="865" y="1173" class="body">Support, privacy, hosting, backups, refunds, and incident ownership.</text>
+  <rect x="860" y="1196" width="610" height="32" rx="10" fill="#eaf0e4"/><text x="877" y="1217" class="done">DONE · stable HTTPS + restore test + support checklist</text>
+
+  <!-- 08 -->
+  <g filter="url(#shadow)"><rect x="100" y="1054" width="670" height="190" rx="20" fill="#fff" stroke="#e2e8de" stroke-width="2"/><rect x="100" y="1054" width="12" height="190" rx="6" fill="#55794e"/></g>
+  <circle cx="151" cy="1097" r="20" fill="#55794e"/><text x="151" y="1103" text-anchor="middle" class="number">08</text>
+  <text x="185" y="1104" class="card-title">Measure, learn, repeat</text>
+  <text x="135" y="1149" class="label">CHALLENGE</text><text x="135" y="1173" class="body">Clicks are not ticket sales; gross ticket value is not TUSA revenue.</text>
+  <rect x="130" y="1196" width="610" height="32" rx="10" fill="#eaf0e4"/><text x="147" y="1217" class="done">DONE · reconciled funnel + net economics + repeat decision</text>
+
+  <!-- gates -->
+  <rect x="100" y="1280" width="1400" height="150" rx="24" fill="url(#hero)"/>
+  <text x="140" y="1320" class="white-title">Launch gates — evidence before scale</text>
+  <text x="140" y="1355" class="white-copy">A  Real organizer &amp; event  ·  B  Seller/receipt/refund owners  ·  C  Payment + refund test  ·  D  QR + check-in rehearsal</text>
+  <text x="140" y="1384" class="white-copy">E  Measured pilot economics  ·  F  Partner API agreement before any external-ticket validation promise</text>
+  <text x="140" y="1413" class="white-copy">For major concerts already sold elsewhere: start with an official outbound link; the seller remains responsible for ticket and entry.</text>
+  <text x="100" y="1470" fill="#7b857b" font-size="14">TUSA Astana · delivery roadmap</text>
+  <text x="1500" y="1470" text-anchor="end" fill="#7b857b" font-size="14">DISCOVER → VERIFY → ADMIT → REPEAT</text>
+</svg>

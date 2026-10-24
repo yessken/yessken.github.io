@@ -8,8 +8,24 @@ export type TranslationKey =
   | 'nav.tickets'
   | 'nav.profile'
   | 'nav.publish'
-  | 'nav.cityNow'
   | 'nav.terms'
+  | 'nav.section'
+  | 'nav.mainAria'
+  | 'theme.switchToDark'
+  | 'theme.switchToLight'
+  | 'breadcrumb.home'
+  | 'breadcrumb.events'
+  | 'breadcrumb.event'
+  | 'breadcrumb.ticket'
+  | 'breadcrumb.orders'
+  | 'breadcrumb.review'
+  | 'breadcrumb.botMessages'
+  | 'breadcrumb.map'
+  | 'breadcrumb.tickets'
+  | 'breadcrumb.groups'
+  | 'breadcrumb.createEvent'
+  | 'breadcrumb.profile'
+  | 'breadcrumb.terms'
   | 'home.whatToday'
   | 'home.findEvent'
   | 'home.createEvent'
@@ -24,6 +40,8 @@ export type TranslationKey =
   | 'calendar.allEvents'
   | 'calendar.organizer'
   | 'calendar.terms'
+  | 'calendar.demoNotice'
+  | 'map.demoNotice'
   | 'events.heading'
   | 'events.subtitle'
   | 'events.organizer'
@@ -58,6 +76,7 @@ export type TranslationKey =
   | 'tickets.status.unknown'
   | 'tickets.open'
   | 'tickets.entryCode'
+  | 'tickets.demoNotice'
   | 'orders.heading'
   | 'orders.subtitle'
   | 'orders.sales'
@@ -73,8 +92,24 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'nav.tickets': 'Мои билеты',
     'nav.profile': 'Профиль',
     'nav.publish': 'Разместить событие',
-    'nav.cityNow': 'Астана · сейчас',
     'nav.terms': 'Условия',
+    'nav.section': 'Навигация',
+    'nav.mainAria': 'Основная навигация',
+    'theme.switchToDark': 'Включить тёмную тему',
+    'theme.switchToLight': 'Включить светлую тему',
+    'breadcrumb.home': 'Главная',
+    'breadcrumb.events': 'События',
+    'breadcrumb.event': 'Событие',
+    'breadcrumb.ticket': 'Билет',
+    'breadcrumb.orders': 'Заказы',
+    'breadcrumb.review': 'Проверка заявок',
+    'breadcrumb.botMessages': 'Сообщения боту',
+    'breadcrumb.map': 'Карта города',
+    'breadcrumb.tickets': 'Мои билеты',
+    'breadcrumb.groups': 'Сообщества',
+    'breadcrumb.createEvent': 'Новое событие',
+    'breadcrumb.profile': 'Профиль',
+    'breadcrumb.terms': 'Условия',
     'home.whatToday': 'Что ищешь',
     'home.findEvent': 'Найти событие',
     'home.createEvent': 'Создать событие',
@@ -89,6 +124,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'calendar.allEvents': 'Все события',
     'calendar.organizer': 'Вы организатор?',
     'calendar.terms': 'Условия и правила',
+    'calendar.demoNotice': 'Показаны демо-события: данные хранятся только в приложении и не подтверждают реальные продажи.',
+    'map.demoNotice': 'Демо-карта · примеры событий',
     'events.heading': 'Вечер начинается',
     'events.subtitle': 'События, которые хочется запомнить. Выбирай по настроению, месту и бюджету.',
     'events.organizer': 'Организаторам: разместить событие бесплатно',
@@ -123,6 +160,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tickets.status.unknown': 'Статус уточняется',
     'tickets.open': 'О сходке',
     'tickets.entryCode': 'Код входа:',
+    'tickets.demoNotice': 'Демо-билет. QR-код не даёт права на вход.',
     'orders.heading': 'Заказы',
     'orders.subtitle': 'Продажи по вашим событиям и общий обзор для администратора.',
     'orders.sales': 'Выручка',
@@ -137,8 +175,24 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'nav.tickets': 'Билеттерім',
     'nav.profile': 'Профиль',
     'nav.publish': 'Іс-шақты орналастыру',
-    'nav.cityNow': 'Астана · қазір',
     'nav.terms': 'Шарттар',
+    'nav.section': 'Мәзір',
+    'nav.mainAria': 'Негізгі мәзір',
+    'theme.switchToDark': 'Қараңғы тақырыпты қосу',
+    'theme.switchToLight': 'Ашық тақырыпты қосу',
+    'breadcrumb.home': 'Басты бет',
+    'breadcrumb.events': 'Іс-шақтар',
+    'breadcrumb.event': 'Іс-шақ',
+    'breadcrumb.ticket': 'Билет',
+    'breadcrumb.orders': 'Тапсырыстар',
+    'breadcrumb.review': 'Өтінімдерді тексеру',
+    'breadcrumb.botMessages': 'Бот хабарламалары',
+    'breadcrumb.map': 'Қала картасы',
+    'breadcrumb.tickets': 'Билеттерім',
+    'breadcrumb.groups': 'Қауымдастықтар',
+    'breadcrumb.createEvent': 'Жаңа іс-шақ',
+    'breadcrumb.profile': 'Профиль',
+    'breadcrumb.terms': 'Шарттар',
     'home.whatToday': 'Бүгін не іздейсіз?',
     'home.findEvent': 'Іс-шақты табу',
     'home.createEvent': 'Іс-шақты жасау',
@@ -153,6 +207,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'calendar.allEvents': 'Барлық іс-шақтар',
     'calendar.organizer': 'Сіз ұйымдастырушысыз ба?',
     'calendar.terms': 'Шарттар мен ережелер',
+    'calendar.demoNotice': 'Демо іс-шақтар көрсетіліп тұр. Мәліметтер тек осы қолданбада сақталады және нақты сатылымды білдірмейді.',
+    'map.demoNotice': 'Демо карта · үлгі іс-шақтар',
     'events.heading': 'Кеш басталады',
     'events.subtitle': 'Ұмытылмайтын іс-шақтар. Әуенге, орынға және бюджетке қарай таңдаңыз.',
     'events.organizer': 'Ұйымдастырушылар: іс-шақты тегін орналастырыңыз',
@@ -187,6 +243,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tickets.status.unknown': 'Статус уточняется',
     'tickets.open': 'Орын туралы',
     'tickets.entryCode': 'Кіру коды:',
+    'tickets.demoNotice': 'Демо билет. Бұл QR-кодпен іс-шаққа кіруге болмайды.',
     'orders.heading': 'Заказы',
     'orders.subtitle': 'Оқиғаларыңыз бойынша сатылымдар және әкімшілік шолу.',
     'orders.sales': 'Түсім',
@@ -201,8 +258,24 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'nav.tickets': 'My tickets',
     'nav.profile': 'Profile',
     'nav.publish': 'Publish event',
-    'nav.cityNow': 'Astana · now',
     'nav.terms': 'Terms',
+    'nav.section': 'Menu',
+    'nav.mainAria': 'Main navigation',
+    'theme.switchToDark': 'Switch to dark theme',
+    'theme.switchToLight': 'Switch to light theme',
+    'breadcrumb.home': 'Home',
+    'breadcrumb.events': 'Events',
+    'breadcrumb.event': 'Event',
+    'breadcrumb.ticket': 'Ticket',
+    'breadcrumb.orders': 'Orders',
+    'breadcrumb.review': 'Submission review',
+    'breadcrumb.botMessages': 'Bot messages',
+    'breadcrumb.map': 'City map',
+    'breadcrumb.tickets': 'My tickets',
+    'breadcrumb.groups': 'Communities',
+    'breadcrumb.createEvent': 'New event',
+    'breadcrumb.profile': 'Profile',
+    'breadcrumb.terms': 'Terms',
     'home.whatToday': 'What are you looking for',
     'home.findEvent': 'Find an event',
     'home.createEvent': 'Create an event',
@@ -217,6 +290,8 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'calendar.allEvents': 'All events',
     'calendar.organizer': 'Are you an organizer?',
     'calendar.terms': 'Terms and policies',
+    'calendar.demoNotice': 'Showing demo events. These examples are stored only in this app and do not represent real ticket sales.',
+    'map.demoNotice': 'Demo map · sample events',
     'events.heading': 'The evening starts',
     'events.subtitle': 'Events worth remembering. Choose by mood, location, and budget.',
     'events.organizer': 'For organizers: publish an event for free',
@@ -251,6 +326,7 @@ const translations: Record<Locale, Record<TranslationKey, string>> = {
     'tickets.status.unknown': 'Status pending',
     'tickets.open': 'View event',
     'tickets.entryCode': 'Entry code:',
+    'tickets.demoNotice': 'Demo ticket. This QR code is not valid for event entry.',
     'orders.heading': 'Orders',
     'orders.subtitle': 'Sales for your events and a summary for administrators.',
     'orders.sales': 'Revenue',
@@ -284,11 +360,7 @@ export class I18nService {
 
   brandCity(): string {
     const current = this.locale();
-    return current === 'en' ? 'Astana' : current === 'kz' ? 'Астана' : 'АСТАНА';
-  }
-
-  brandBadge(): string {
-    return this.locale() === 'en' ? 'TUSA / Astana' : this.locale() === 'kz' ? 'TUSA / Астана' : 'TUSA / АСТАНА';
+    return current === 'en' ? 'Astana' : 'Астана';
   }
 
   setLocale(locale: Locale): void {

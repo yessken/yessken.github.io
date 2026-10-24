@@ -19,9 +19,10 @@ import QRCode from 'qrcode';
             <div class="ticket">
               <h3>{{ t.eventTitle }}</h3>
               <p class="meta">{{ t.eventDate }} · {{ t.eventPlace }}</p>
+              @if (t.isDemo) { <p class="demo-ticket" role="note">{{ i18n.t('tickets.demoNotice') }}</p> }
               <span class="status" [class]="statusClass(t.paymentStatus)">{{ statusLabel(t.paymentStatus) }}</span>
-              @if (qrCodes()[t.id]) { <img class="ticket-qr" [src]="qrCodes()[t.id]" alt="QR-код билета" /> }
-              @if (t.qrCode) { <p class="qr">{{ i18n.t('tickets.entryCode') }} {{ t.qrCode }}</p> }
+              @if (!t.isDemo && qrCodes()[t.id]) { <img class="ticket-qr" [src]="qrCodes()[t.id]" alt="QR-код билета" /> }
+              @if (!t.isDemo && t.qrCode) { <p class="qr">{{ i18n.t('tickets.entryCode') }} {{ t.qrCode }}</p> }
               <a [routerLink]="['/events', t.eventId]" queryParamsHandling="preserve">{{ i18n.t('tickets.open') }}</a>
             </div>
           }
@@ -45,6 +46,8 @@ import QRCode from 'qrcode';
       }
       .ticket h3 { margin: 0 0 0.25rem; font-size: 1.1rem; }
       .meta { margin: 0.25rem 0; font-size: 0.9rem; opacity: 0.9; }
+      .demo-ticket { margin: .5rem 0; padding: .55rem .7rem; border: 1px solid rgba(189,155,89,.3); border-radius: 7px; background: rgba(189,155,89,.1); color: #6c5731; font-size: .75rem; }
+      :host-context(.dark-theme) .demo-ticket { color: #f2d29b; }
       .status { display: inline-block; margin: .4rem 0; padding: .25rem .5rem; border-radius: 999px; font-size: .72rem; font-weight: 700; }
       .status-paid { background: rgba(170, 189, 126, .18); color: var(--tg-button, #aabd7e); }
       .status-pending { background: rgba(242, 190, 104, .18); color: #f2be68; }

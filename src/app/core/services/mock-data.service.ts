@@ -3,12 +3,21 @@ import { EventItem, Ticket } from '../types/event.model';
 
 @Injectable({ providedIn: 'root' })
 export class MockDataService {
+  private demoDate(daysAhead: number): string {
+    const date = new Date();
+    date.setDate(date.getDate() + daysAhead);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   private events: EventItem[] = [
     {
       id: '1',
       title: 'Ночной концерт в столице',
       description: 'Живая музыка, бар, танцы до утра. Возраст 18+.',
-      date: '2026-10-28',
+      date: this.demoDate(1),
       time: '22:00',
       place: 'Клуб «Астана»',
       address: 'ул. Кенесары, 40',
@@ -29,7 +38,7 @@ export class MockDataService {
       id: '2',
       title: 'Джаз под звёздами',
       description: 'Открытая площадка, джаз-бэнд, коктейли.',
-      date: '2026-10-25',
+      date: this.demoDate(3),
       time: '20:00',
       place: 'Парк Первого Президента',
       address: 'пр. Республики',
@@ -47,7 +56,7 @@ export class MockDataService {
       id: '3',
       title: 'Техно-вечеринка',
       description: 'DJ-сет, два этажа, лаунж и танцпол.',
-      date: '2026-10-29',
+      date: this.demoDate(5),
       time: '23:00',
       place: 'Лофт «Сходка»',
       address: 'ул. Сыганак, 12',
@@ -67,7 +76,7 @@ export class MockDataService {
       id: '4',
       title: 'Stand-up вечер',
       description: 'Стендап комики из Астаны и Алматы.',
-      date: '2026-10-31',
+      date: this.demoDate(7),
       time: '19:00',
       place: 'Театр «Жастар»',
       address: 'ул. Есенберлина, 10',
@@ -84,7 +93,7 @@ export class MockDataService {
       id: '5',
       title: 'TUSA Night Market',
       description: 'Локальные бренды, уличная еда, музыка и мастер-классы до позднего вечера.',
-      date: '2026-11-02',
+      date: this.demoDate(9),
       time: '18:30',
       place: 'Район Музейная площадь',
       address: 'ул. Тауелсиздик, 14',
@@ -105,7 +114,7 @@ export class MockDataService {
       id: '6',
       title: 'Фестиваль спорта и wellness',
       description: 'Йога, фитнес-демо, локальные бренды и открытая зона для семейного отдыха.',
-      date: '2026-11-08',
+      date: this.demoDate(12),
       time: '10:00',
       place: 'Парк культуры',
       address: 'ул. Сакена Сейфуллина, 8',
@@ -125,7 +134,7 @@ export class MockDataService {
       id: '7',
       title: 'Клубный brunch с диджеями',
       description: 'Утренний brunch, живой сет и атмосферный лофт в центре города.',
-      date: '2026-11-14',
+      date: this.demoDate(16),
       time: '12:00',
       place: 'Лофт «Северный»',
       address: 'пр. Мангилик Ел, 55',
@@ -148,7 +157,7 @@ export class MockDataService {
       id: 't1',
       eventId: '1',
       eventTitle: 'Ночной концерт в столице',
-      eventDate: '2026-10-15',
+      eventDate: this.demoDate(1),
       eventPlace: 'Клуб «Астана»',
       qrCode: 'TUSA-T1-XXXX',
       purchasedAt: '2026-03-01T12:00:00',
@@ -156,12 +165,13 @@ export class MockDataService {
       paymentStatus: 'paid',
       quantity: 1,
       totalAmount: 3500,
+      isDemo: true,
     },
     {
       id: 't2',
       eventId: '5',
       eventTitle: 'TUSA Night Market',
-      eventDate: '2026-11-02',
+      eventDate: this.demoDate(9),
       eventPlace: 'Район Музейная площадь',
       qrCode: 'TUSA-T2-FAST',
       purchasedAt: '2026-03-10T18:50:00',
@@ -170,12 +180,13 @@ export class MockDataService {
       ticketCategoryName: 'Fast Track',
       quantity: 2,
       totalAmount: 5200,
+      isDemo: true,
     },
     {
       id: 't3',
       eventId: '6',
       eventTitle: 'Фестиваль спорта и wellness',
-      eventDate: '2026-11-08',
+      eventDate: this.demoDate(12),
       eventPlace: 'Парк культуры',
       qrCode: 'TUSA-T3-pass',
       purchasedAt: '2026-03-11T09:12:00',
@@ -184,6 +195,7 @@ export class MockDataService {
       ticketCategoryName: 'Family Pass',
       quantity: 1,
       totalAmount: 4200,
+      isDemo: true,
     },
   ];
 
@@ -193,7 +205,10 @@ export class MockDataService {
     if (savedEvents) {
       try {
         const events = JSON.parse(savedEvents) as EventItem[];
-        if (Array.isArray(events)) this.events = events;
+        if (Array.isArray(events)) {
+          const demoEvents = events.map((event) => ({ ...event, isDemo: true, ticketSalesEnabled: false }));
+          this.events = [...this.events, ...demoEvents.filter((saved) => !this.events.some((event) => event.id === saved.id))];
+        }
       } catch {
         window.localStorage.removeItem('tusa-events');
       }
@@ -229,13 +244,15 @@ export class MockDataService {
   }
 
   getTickets(): Ticket[] {
-    return [...this.tickets];
+    return this.tickets.map((ticket) => ({ ...ticket, isDemo: true }));
   }
 
   addEvent(event: Omit<EventItem, 'id'>): EventItem {
     const newEvent: EventItem = {
       ...event,
       id: String(this.events.length + 1),
+      isDemo: true,
+      ticketSalesEnabled: false,
     };
     this.events.push(newEvent);
     if (typeof window !== 'undefined') {
@@ -249,6 +266,7 @@ export class MockDataService {
       ...ticket,
       id: 't' + (this.tickets.length + 1),
       purchasedAt: new Date().toISOString(),
+      isDemo: true,
     };
     this.tickets.push(newTicket);
     if (typeof window !== 'undefined') {

@@ -13,7 +13,7 @@ import type { OrganizerSubscriptionOffer, OrganizerSubscriptionStatus } from '..
   template: `
     <main class="profile-page">
       <header class="page-heading">
-        <span class="eyebrow">TUSA / ЛИЧНЫЙ КАБИНЕТ</span>
+        <span class="eyebrow">ЛИЧНЫЙ КАБИНЕТ</span>
         <h1>Профиль</h1>
         <p>Всё важное о ваших событиях и билетах — в одном месте.</p>
       </header>
@@ -105,7 +105,7 @@ import type { OrganizerSubscriptionOffer, OrganizerSubscriptionStatus } from '..
     .pro-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: .8rem; }
     .pro-heading h2 { margin: .35rem 0 0; font-size: 1.35rem; font-weight: 500; }
     .pro-price { flex: 0 0 auto; padding: .35rem .5rem; border-radius: 5px; background: rgba(66,108,71,.1); color: var(--tg-button, #426c47); font-size: .7rem; white-space: nowrap; }
-    .pro-description { margin: .7rem 0; color: #526256; font-size: .82rem; line-height: 1.5; }
+    .pro-description { margin: .7rem 0; color: var(--tg-muted); font-size: .82rem; line-height: 1.5; }
     .pro-note { margin: .65rem 0; color: var(--tg-muted); font-size: .72rem; line-height: 1.5; }
     .subscribe { display: inline-flex; align-items: center; justify-content: center; gap: .7rem; min-height: 42px; margin-top: .25rem; padding: .65rem .85rem; border: 0; border-radius: 5px; background: var(--tg-button, #426c47); color: var(--tg-button-text, #ffffff); font: inherit; font-size: .8rem; font-weight: 800; text-decoration: none; cursor: pointer; }
     .secondary-action { border: 1px solid rgba(66,108,71,.35); background: transparent; color: var(--tg-button, #426c47); }

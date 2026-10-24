@@ -103,8 +103,8 @@ import type { EventItem } from '../../core/types/event.model';
     .category { color: var(--tg-muted); }
     .pending { color: #f2be68; }
     .request-card h2 { margin: .55rem 0 .3rem; font-size: 1.4rem; font-weight: 500; }
-    .event-meta, .address { margin: .25rem 0; color: #526256; font-size: .84rem; line-height: 1.45; }
-    .description { margin: .8rem 0; color: #435348; font-size: .88rem; line-height: 1.6; white-space: pre-wrap; }
+    .event-meta, .address { margin: .25rem 0; color: var(--tg-muted); font-size: .84rem; line-height: 1.45; }
+    .description { margin: .8rem 0; color: var(--tg-text); font-size: .88rem; line-height: 1.6; white-space: pre-wrap; }
     .price { margin-top: .75rem; color: var(--tg-button, #426c47); font-weight: 800; }
     .contact { margin-top: 1rem; padding: .8rem; border-left: 2px solid rgba(66,108,71,.45); background: rgba(66,108,71,.05); }
     .contact h3 { margin: 0 0 .35rem; font-size: .75rem; color: var(--tg-muted); text-transform: uppercase; letter-spacing: .08em; }

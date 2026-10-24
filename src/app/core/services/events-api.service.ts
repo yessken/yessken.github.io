@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, of } from 'rxjs';
+import { Observable, catchError, of, timeout } from 'rxjs';
 import { TelegramService } from './telegram.service';
 import type { AdminEventReport, AdminSalesSummary, BotMessageLogRow, EventItem, OrganizerOrderRow, OrganizerSubscriptionOffer, OrganizerSubscriptionStatus, Ticket, TelegramGroupItem } from '../types/event.model';
 import { environment } from '../../../environments/environment';
@@ -9,6 +9,7 @@ import { environment } from '../../../environments/environment';
 export class EventsApiService {
   private readonly base = environment.apiUrl?.replace(/\/$/, '') ?? '';
   readonly eventsError = signal(false);
+  readonly ticketsError = signal(false);
   readonly eventSubmissionRateLimited = signal(false);
 
   constructor(
@@ -28,6 +29,7 @@ export class EventsApiService {
     this.eventsError.set(false);
     const params = category ? { category } : {};
     return this.http.get<EventItem[]>(`${this.base}/api/events`, { params: params as any, headers: this.headers() }).pipe(
+      timeout({ first: 5000 }),
       catchError(() => { this.eventsError.set(true); return of([]); })
     );
   }
@@ -47,6 +49,7 @@ export class EventsApiService {
   getEventById(id: string): Observable<EventItem | null> {
     if (!this.base) return of(null);
     return this.http.get<EventItem>(`${this.base}/api/events/${id}`, { headers: this.headers() }).pipe(
+      timeout({ first: 5000 }),
       catchError(() => of(null))
     );
   }
@@ -59,8 +62,13 @@ export class EventsApiService {
 
   getTickets(): Observable<Ticket[]> {
     if (!this.base) return of([]);
+    this.ticketsError.set(false);
     return this.http.get<Ticket[]>(`${this.base}/api/tickets/me`, { headers: this.headers() }).pipe(
-      catchError(() => of([]))
+      timeout({ first: 5000 }),
+      catchError(() => {
+        this.ticketsError.set(true);
+        return of([]);
+      })
     );
   }
 

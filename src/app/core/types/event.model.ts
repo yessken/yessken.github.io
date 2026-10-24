@@ -57,6 +57,8 @@ export interface Ticket {
   commissionAmount?: number;
   totalAmount?: number;
   promoCode?: string;
+  /** Frontend-only sample ticket; never grants admission. */
+  isDemo?: boolean;
 }
 
 export interface TelegramGroupItem {

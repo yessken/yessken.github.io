@@ -3,10 +3,12 @@ import { Router, RouterOutlet, RouterLink, RouterLinkActive, NavigationEnd } fro
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { I18nService } from './core/services/i18n.service';
+import type { TranslationKey } from './core/services/i18n.service';
+import { ThemeService } from './core/services/theme.service';
 import { TelegramService } from './core/services/telegram.service';
 
 interface Breadcrumb {
-  label: string;
+  key: TranslationKey;
   url?: string;
 }
 
@@ -20,6 +22,7 @@ interface Breadcrumb {
 export class App implements OnInit {
   protected readonly telegram = inject(TelegramService);
   protected readonly i18n = inject(I18nService);
+  protected readonly theme = inject(ThemeService);
   protected readonly breadcrumbs = signal<Breadcrumb[]>([]);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
@@ -80,32 +83,32 @@ export class App implements OnInit {
   private createBreadcrumbs(url: string): Breadcrumb[] {
     const segments = url.split('/').filter(Boolean);
     if (segments[0] === 'admin' && segments[1] === 'event-review')
-      return [{ label: 'Заказы', url: '/admin' }, { label: 'Модерация заявок' }];
+      return [{ key: 'breadcrumb.orders', url: '/admin' }, { key: 'breadcrumb.review' }];
     if (segments[0] === 'admin' && segments[1] === 'bot-messages')
-      return [{ label: 'Заказы', url: '/admin' }, { label: 'Сообщения боту' }];
+      return [{ key: 'breadcrumb.orders', url: '/admin' }, { key: 'breadcrumb.botMessages' }];
     if (segments[0] === 'events' && segments.length >= 2) {
-      const trail: Breadcrumb[] = [{ label: 'События', url: '/events' }];
-      if (segments.length === 2) trail.push({ label: 'Событие' });
+      const trail: Breadcrumb[] = [{ key: 'breadcrumb.events', url: '/events' }];
+      if (segments.length === 2) trail.push({ key: 'breadcrumb.event' });
       else if (segments[2] === 'buy') {
-        trail.push({ label: 'Событие', url: `/events/${segments[1]}` });
-        trail.push({ label: 'Билет' });
+        trail.push({ key: 'breadcrumb.event', url: `/events/${segments[1]}` });
+        trail.push({ key: 'breadcrumb.ticket' });
       }
       return trail;
     }
 
-    const labels: Record<string, string> = {
-      events: 'События',
-      'city-map': 'Карта',
-      'my-tickets': 'Мои билеты',
-      orders: 'Заказы',
-      admin: 'Заказы',
-      'tg-groups': 'Сообщества',
-      'create-event': 'Новое событие',
-      profile: 'Профиль',
-      terms: 'Условия',
+    const labels: Record<string, TranslationKey> = {
+      events: 'breadcrumb.events',
+      'city-map': 'breadcrumb.map',
+      'my-tickets': 'breadcrumb.tickets',
+      orders: 'breadcrumb.orders',
+      admin: 'breadcrumb.orders',
+      'tg-groups': 'breadcrumb.groups',
+      'create-event': 'breadcrumb.createEvent',
+      profile: 'breadcrumb.profile',
+      terms: 'breadcrumb.terms',
     };
     const currentLabel = labels[segments[0]];
-    return currentLabel ? [{ label: 'Главная', url: '/' }, { label: currentLabel }] : [];
+    return currentLabel ? [{ key: 'breadcrumb.home', url: '/' }, { key: currentLabel }] : [];
   }
 
   private parentRoute(url: string): string | null {

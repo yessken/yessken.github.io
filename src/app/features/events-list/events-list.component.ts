@@ -13,7 +13,6 @@ import type { EventItem } from '../../core/types/event.model';
   template: `
     <div class="events-list">
       <div class="intro">
-        <span class="eyebrow">{{ i18n.brandBadge() }}</span>
         <p class="date-line">{{ i18n.brandCity().toUpperCase() }} / {{ todayLabel() }}</p>
         <h1>{{ i18n.t('events.heading') }}<br /><em>здесь.</em></h1>
         <p>{{ i18n.t('events.subtitle') }}</p>
